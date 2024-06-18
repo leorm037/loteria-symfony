@@ -1,0 +1,41 @@
+services:
+    mariadb:
+        container_name: loteria-mariadb
+        image: mariadb:latest
+        working_dir: /app
+        ports:
+            - 3306:3306
+        environment:
+            - MARIADB_ROOT_PASSWORD=loteria
+            - MARIADB_DATABASE=loteria
+            - MARIADB_USER=loteria
+            - MARIADB_PASSWORD=loteria
+        volumes:
+            - type: volume
+              source: mariadb
+              target: /var/lib/mysql
+            - .:/app
+            
+    phpmyadmin:
+        container_name: loteria-phpmyadmin
+        image: phpmyadmin:latest
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=loteria
+            - MYSQL_USER=loteria
+            - MYSQL_PASSWORD=loteria
+            - PMA_HOST=db
+            - PMA_PORT=3306
+            - PMA_USER=loteria
+            - PMA_PASSWORD=loteria
+            - PMA_PMADB=loteria
+#            - PMA_ARBITRARY=0
+        ports:
+            - 8080:80
+        depends_on:
+            - mariadb
+        links:
+            - mariadb:db
+
+volumes:
+    mariadb:
