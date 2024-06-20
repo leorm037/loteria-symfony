@@ -18,7 +18,6 @@ use Symfony\Component\Uid\Uuid;
 
 abstract class AbstractEntity
 {
-
     #[ORM\PrePersist]
     public function prePersist(): void
     {

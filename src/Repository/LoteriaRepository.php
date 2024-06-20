@@ -21,18 +21,11 @@ use Symfony\Component\Uid\Uuid;
  */
 class LoteriaRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Loteria::class);
     }
 
-    /**
-     * 
-     * @param Loteria $loteria
-     * @param bool $flush
-     * @return void
-     */
     public function save(Loteria $loteria, bool $flush = false): void
     {
         $this->getEntityManager()->persist($loteria);
@@ -43,7 +36,6 @@ class LoteriaRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
      * @return Loteria[]|null
      */
     public function getAll(): ?array
@@ -55,11 +47,6 @@ class LoteriaRepository extends ServiceEntityRepository
         ;
     }
 
-    /**
-     * 
-     * @param Uuid $uuid
-     * @return Loteria|null
-     */
     public function findByUuid(Uuid $uuid): ?Loteria
     {
         return $this->createQueryBuilder('l')

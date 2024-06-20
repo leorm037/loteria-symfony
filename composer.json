@@ -105,6 +105,9 @@
         ],
         "code:fix": [
             "php-cs-fixer fix --ansi"
+        ],
+        "fixtures": [
+            "bin/console doctrine:fixtures:load --purge-exclusions=PURGE-EXCLUSIONS -n --ansi"
         ]
     },
     "conflict": {

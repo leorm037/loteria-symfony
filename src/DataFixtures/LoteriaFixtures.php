@@ -17,7 +17,6 @@ use Doctrine\Persistence\ObjectManager;
 
 class LoteriaFixtures extends Fixture
 {
-
     public function load(ObjectManager $manager): void
     {
         $loterias = [
@@ -34,7 +33,7 @@ class LoteriaFixtures extends Fixture
                     ->setNome($item['nome'])
                     ->setApiUrl($item['apiUrl'])
             ;
-            
+
             $manager->persist($loteria);
         }
 
