@@ -1,5 +1,11 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
+    assets:
+        version: '%env(APP_VERSION)%'
+        packages:
+            bootstrap:
+                base_path: '/assets/bootstrap-5.3.3-dist'
+                
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true
 

@@ -23,28 +23,25 @@ use Symfony\Component\Validator\Constraints\File;
 
 class ApostaImportarType extends AbstractType
 {
-
     public function __construct(
-            private LoteriaRepository $loteriaRepository
-    )
-    {
-        
+        private LoteriaRepository $loteriaRepository
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('loteria', ChoiceType::class, [
-                        'label' => 'Loteria',
-                        'choices' => $this->loteriaRepository->getAll(),
-                        'choice_value' => 'uuid',
-                        'choice_label' => 'nome',
-                        'placeholder' => 'Selecione uma loteria',
-                        'required' => true
+                    'label' => 'Loteria',
+                    'choices' => $this->loteriaRepository->getAll(),
+                    'choice_value' => 'uuid',
+                    'choice_label' => 'nome',
+                    'placeholder' => 'Selecione uma loteria',
+                    'required' => true,
                 ])
                 ->add('numero', IntegerType::class, [
                     'label' => 'Número do concurso',
-                    'required' => true
+                    'required' => true,
                 ])
                 ->add('arquivoPlanilhaCsv', FileType::class, [
                     'label' => 'Planilha CSV com as apostas',
@@ -55,11 +52,26 @@ class ApostaImportarType extends AbstractType
                             'maxSize' => '10240k',
                             'mimeTypes' => [
                                 'text/csv',
-                                'text/plain'
+                                'text/plain',
                             ],
-                            'mimeTypesMessage' => 'Selecione um arquivo de planilha no formato CSV'
-                        ])
-                    ]
+                            'mimeTypesMessage' => 'Selecione um arquivo de planilha no formato CSV',
+                        ]),
+                    ],
+                ])
+                ->add('arquivoComprovantePdf', FileType::class, [
+                    'label' => 'Arquivo PDF com as apostas',
+                    'help' => 'O arquivo PDF deve ter as imagens dos comprovantes.',
+                    'required' => true,
+                    'constraints' => [
+                        new File([
+                            'maxSize' => '10240k',
+                            'mimeTypes' => [
+                                'application/pdf',
+                                'application/x-pdf',
+                            ],
+                            'mimeTypesMessage' => 'Selecione um arquivo no formato PDF com os comprovantes.',
+                        ]),
+                    ],
                 ])
         ;
     }

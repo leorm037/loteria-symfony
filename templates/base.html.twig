@@ -1,17 +1,30 @@
+{# templates/base.html.twig #}
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}" data-bs-theme="light">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <meta name="generator" content="">
+        
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        
+        <title>{% block title %}Loteria{% endblock %}</title>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% block stylesheets %}
+            <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
+            <link href="" rel="stylesheet">
         {% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
+        {% block javascripts_footer %}
+            
+            <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
+        {% endblock %}
     </body>
 </html>

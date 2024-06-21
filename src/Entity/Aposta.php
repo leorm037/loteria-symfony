@@ -26,7 +26,6 @@ class Aposta
     private ?int $id = null;
 
     /**
-     * 
      * @var array<string>
      */
     #[ORM\Column]
@@ -55,7 +54,6 @@ class Aposta
     }
 
     /**
-     * 
      * @return array<string>
      */
     public function getDezenas(): array
@@ -64,9 +62,7 @@ class Aposta
     }
 
     /**
-     * 
      * @param array<string> $dezenas
-     * @return static
      */
     public function setDezenas(array $dezenas): static
     {

@@ -22,11 +22,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class ApostaController extends AbstractController
 {
     public function __construct(
-            
-    )
-    {
+    ) {
     }
-    
+
     #[Route('', name: 'index')]
     public function index(): Response
     {
@@ -34,18 +32,18 @@ class ApostaController extends AbstractController
             'controller_name' => 'ApostaController',
         ]);
     }
-    
+
     #[Route('/importar', name: 'importar')]
     public function importar(Request $request): Response
     {
         $apostaImportarDTO = new ApostaImportarDTO();
-        
+
         $form = $this->createForm(ApostaImportarType::class, $apostaImportarDTO);
         $form->handleRequest($request);
-        
+
         return $this->render('aposta/importar.html.twig', [
             'form' => $form,
-            'apostaImportar' => $apostaImportarDTO
+            'apostaImportar' => $apostaImportarDTO,
         ]);
     }
 }

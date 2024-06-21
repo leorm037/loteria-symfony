@@ -1,8 +1,12 @@
 <?php
 
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
+ *     This file is part of Loteria.
+ *
+ *     (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ *     This source file is subject to the MIT license that is bundled
+ *     with this source code in the file LICENSE.
  */
 
 namespace App\DTO;
@@ -14,7 +18,8 @@ class ApostaImportarDTO
     private Loteria $loteria;
     private int $numero;
     private string $arquivoPlanilhaCsv;
-    
+    private string $arquivoComprovantePdf;
+
     public function getLoteria(): Loteria
     {
         return $this->loteria;
@@ -43,5 +48,15 @@ class ApostaImportarDTO
     public function setArquivoPlanilhaCsv(string $arquivoPlanilhaCsv): void
     {
         $this->arquivoPlanilhaCsv = $arquivoPlanilhaCsv;
+    }
+
+    public function getArquivoComprovantePdf(): string
+    {
+        return $this->arquivoComprovantePdf;
+    }
+
+    public function setArquivoComprovantePdf(string $arquivoComprovantePdf): void
+    {
+        $this->arquivoComprovantePdf = $arquivoComprovantePdf;
     }
 }

@@ -46,7 +46,7 @@ class AbstractFileUploadService
             $file->move($this->getTargetDirectory(), $filename);
         } catch (FileException $e) {
             $this->logger->error(
-                'Erro ao tentar mover o arquivo ' . $originalFilename, [
+                'Erro ao tentar mover o arquivo '.$originalFilename, [
                     'fileOriginal' => $file->getFileInfo(),
                     'targetDirectory' => $this->getTargetDirectory(),
                     'message' => $e->getMessage(),
