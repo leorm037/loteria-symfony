@@ -11,28 +11,21 @@
 
 namespace App\Entity;
 
-use App\Repository\ApostaArquivoRepository;
+use App\Repository\ArquivoTipoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity(repositoryClass: ApostaArquivoRepository::class)]
+#[ORM\Entity(repositoryClass: ArquivoTipoRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class ApostaArquivo extends AbstractEntity
+class ArquivoTipo extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $arquivo = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $caminho = null;
-
-    #[ORM\Column(type: 'uuid')]
-    protected ?Uuid $uuid = null;
+    #[ORM\Column(length: 60)]
+    private ?string $nome = null;
 
     #[ORM\Column]
     protected ?\DateTimeImmutable $createdAt = null;
@@ -45,38 +38,14 @@ class ApostaArquivo extends AbstractEntity
         return $this->id;
     }
 
-    public function getArquivo(): ?string
+    public function getNome(): ?string
     {
-        return $this->arquivo;
+        return $this->nome;
     }
 
-    public function setArquivo(string $arquivo): static
+    public function setNome(string $nome): static
     {
-        $this->arquivo = $arquivo;
-
-        return $this;
-    }
-
-    public function getCaminho(): ?string
-    {
-        return $this->caminho;
-    }
-
-    public function setCaminho(string $caminho): static
-    {
-        $this->caminho = $caminho;
-
-        return $this;
-    }
-
-    public function getUuid(): ?Uuid
-    {
-        return $this->uuid;
-    }
-
-    public function setUuid(Uuid $uuid): static
-    {
-        $this->uuid = $uuid;
+        $this->nome = $nome;
 
         return $this;
     }

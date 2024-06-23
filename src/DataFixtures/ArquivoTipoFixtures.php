@@ -11,15 +11,25 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\ArquivoTipo;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class AppFixtures extends Fixture
+class ArquivoTipoFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
+        $arquivosTipos = [
+            'Comprovante de apostas',
+            'Planilha de apostas',
+        ];
+
+        foreach ($arquivosTipos as $item) {
+            $arquivoTipo = new ArquivoTipo();
+            $arquivoTipo->setNome($item);
+
+            $manager->persist($arquivoTipo);
+        }
 
         $manager->flush();
     }

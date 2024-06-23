@@ -11,32 +11,33 @@
 
 namespace App\Repository;
 
-use App\Entity\Aposta;
+use App\Entity\ArquivoTipo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Aposta>
+ * @extends ServiceEntityRepository<ArquivoTipo>
  */
-class ApostaRepository extends ServiceEntityRepository
+class ArquivoTipoRepository extends ServiceEntityRepository
 {
 
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Aposta::class);
+        parent::__construct($registry, ArquivoTipo::class);
     }
 
-    public function save(Aposta $aposta, bool $flush = false): void
+    public function findByNome(string $nome): ?ArquivoTipo
     {
-        $this->getEntityManager()->persist($aposta);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        return $this->createQueryBuilder('a')
+                        ->where('a.nome = :nome')
+                        ->setParameter('nome', $nome)
+                        ->getQuery()
+                        ->getOneOrNullResult()
+        ;
     }
 
     //    /**
-    //     * @return Aposta[] Returns an array of Aposta objects
+    //     * @return ArquivoTipo[] Returns an array of ArquivoTipo objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -49,7 +50,7 @@ class ApostaRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
-    //    public function findOneBySomeField($value): ?Aposta
+    //    public function findOneBySomeField($value): ?ArquivoTipo
     //    {
     //        return $this->createQueryBuilder('a')
     //            ->andWhere('a.exampleField = :val')

@@ -17,14 +17,29 @@
 
         {% block stylesheets %}
             <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
-            <link href="" rel="stylesheet">
+            <link href="{{ asset('font/bootstrap-icons.min.css', 'bootstrap-icon') }}" rel="stylesheet">            
+        {% endblock %}
+        {% block javascripts_header %}
+
+            <script type="text/javascript">
+                const BASE_URL = "{{ app.request.schemeAndHttpHost ~ app.request.baseUrl }}";
+            </script>
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <main class="mb-3">
+            {% include '_flash.html.twig' %}
+            <div class="container-fluid">
+                {% block body %}{% endblock %}
+            </div>
+        </main>
+        <footer class="mt-auto">
+        </footer>
         {% block javascripts_footer %}
             
+            <script src="{{ asset('jquery-3.7.1.min.js', 'jquery') }}"></script>
             <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
+            <script type="text/javascript" src="https://kit.fontawesome.com/403477f2af.js" crossorigin="anonymous"></script>
         {% endblock %}
     </body>
 </html>

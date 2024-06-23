@@ -11,22 +11,32 @@
 
 namespace App\Repository;
 
-use App\Entity\ApostaArquivo;
+use App\Entity\Arquivo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<ApostaArquivo>
+ * @extends ServiceEntityRepository<Arquivo>
  */
-class ApostaArquivoRepository extends ServiceEntityRepository
+class ArquivoRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ApostaArquivo::class);
+        parent::__construct($registry, Arquivo::class);
+    }
+
+    public function save(Arquivo $arquivo, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($arquivo);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 
     //    /**
-    //     * @return ApostaArquivo[] Returns an array of ApostaArquivo objects
+    //     * @return Arquivo[] Returns an array of Arquivo objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -39,8 +49,7 @@ class ApostaArquivoRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
-
-    //    public function findOneBySomeField($value): ?ApostaArquivo
+    //    public function findOneBySomeField($value): ?Arquivo
     //    {
     //        return $this->createQueryBuilder('a')
     //            ->andWhere('a.exampleField = :val')

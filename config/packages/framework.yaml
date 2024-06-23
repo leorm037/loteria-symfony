@@ -5,6 +5,10 @@ framework:
         packages:
             bootstrap:
                 base_path: '/assets/bootstrap-5.3.3-dist'
+            bootstrap-icon:
+                base_path: '/assets/bootstrap-icons-1.11.3'
+            jquery:
+                base_path: '/assets/jquery'
                 
     secret: '%env(APP_SECRET)%'
     #csrf_protection: true

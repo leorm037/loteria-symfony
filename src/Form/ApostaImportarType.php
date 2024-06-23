@@ -38,15 +38,21 @@ class ApostaImportarType extends AbstractType
                     'choice_label' => 'nome',
                     'placeholder' => 'Selecione uma loteria',
                     'required' => true,
+                    'attr' => [
+                        'autofocus' => true,
+                    ],
                 ])
                 ->add('numero', IntegerType::class, [
                     'label' => 'Número do concurso',
                     'required' => true,
                 ])
                 ->add('arquivoPlanilhaCsv', FileType::class, [
-                    'label' => 'Planilha CSV com as apostas',
-                    'help' => 'Cada linha deve ser uma aposta e as dezenas devem ser separadas por vírgula.',
+                    'label' => 'Planilhas com os jogos',
+                    'help' => 'Cada linha deve ser uma aposta e as dezenas devem ser separadas por ponto e vírgula.',
                     'required' => true,
+                    'attr' => [
+                        'accept' => 'text/csv,text/plain',
+                    ],
                     'constraints' => [
                         new File([
                             'maxSize' => '10240k',
@@ -59,9 +65,12 @@ class ApostaImportarType extends AbstractType
                     ],
                 ])
                 ->add('arquivoComprovantePdf', FileType::class, [
-                    'label' => 'Arquivo PDF com as apostas',
+                    'label' => 'Comprovantes dos jogos',
                     'help' => 'O arquivo PDF deve ter as imagens dos comprovantes.',
                     'required' => true,
+                    'attr' => [
+                        'accept' => 'application/pdf,application/x-pdf',
+                    ],
                     'constraints' => [
                         new File([
                             'maxSize' => '10240k',

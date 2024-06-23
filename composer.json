@@ -96,15 +96,21 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "code:analyse": [
+        "code:analyze": [
             "phpstan analyse -c phpstan.neon --ansi"
         ],
         "code:fix": [
             "php-cs-fixer fix --ansi"
         ],
-        "fixtures": [
+        "loteria:fixtures": [
             "bin/console doctrine:fixtures:load --purge-exclusions=PURGE-EXCLUSIONS -n --ansi"
         ]
+    },
+    "scripts-aliases": {
+        "code:analyze": ["stan", "analyze", "analise"]
+    },
+    "scripts-descriptions": {
+	"loteria:fixtures": "Carrega dados iniciais para desenvolvimento e testes."	
     },
     "conflict": {
         "symfony/symfony": "*"
