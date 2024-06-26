@@ -35,27 +35,43 @@ class ApostaRepository extends ServiceEntityRepository
         }
     }
 
-    //    /**
-    //     * @return Aposta[] Returns an array of Aposta objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-    //    public function findOneBySomeField($value): ?Aposta
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * @return Aposta[]|null
+     */
+    public function findMinhasApostas()
+    {
+        return $this->createQueryBuilder('a')
+                        ->select('l,c,a')
+                        ->innerJoin('a.concurso', 'c', Join::WITH, 'a.concurso = c.id')
+                        ->innerJoin('c.loteria', 'l', Join::WITH, 'c.loteria = l.id')
+                        ->addOrderBy('l.nome', 'ASC')
+                        ->addOrderBy('c.numero', 'DESC')
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
+
+//    /**
+//     * @return Aposta[] Returns an array of Aposta objects
+//     */
+//    public function findByExampleField($value): array
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->orderBy('a.id', 'ASC')
+//            ->setMaxResults(10)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
+//    public function findOneBySomeField($value): ?Aposta
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.exampleField = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getOneOrNullResult()
+//        ;
+//    }
 }

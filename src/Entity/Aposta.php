@@ -54,7 +54,7 @@ class Aposta extends AbstractEntity
     private ?Arquivo $planilha = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'arquivo_comprovante_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'arquivo_comprovante_id', referencedColumnName: 'id', nullable: true)]
     private ?Arquivo $comprovante = null;
 
     public function getId(): ?int
