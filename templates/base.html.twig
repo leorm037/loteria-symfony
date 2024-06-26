@@ -27,6 +27,29 @@
         {% endblock %}
     </head>
     <body>
+        <header class="mb-3">
+            <nav id="menu" class="navbar navbar-expand-lg bg-loteria">
+                <div class="container-fluid">
+                    <a class="navbar-brand navbar-bg-loteria" href="{{ path('app_aposta_importar') }}">
+                        <i class="fa-solid fa-clover"></i> Loteria
+                    </a>
+                    <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Navigation menu">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarMenu">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            {% include '_menu.html.twig' %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <nav id="breadcrumb" aria-label="breadcrumb" class="bg-loteria-secondary shadow border-bottom border-loteria" style="--bs-breadcrumb-divider: '>';">
+                <ol class="breadcrumb m-0 p-2">
+                    <li class="breadcrumb-item"><a href="{{ path('app_aposta_importar') }}" class="text-decoration-none"><i class="bi bi-house-fill"></i> Página inicial</a></li>
+                    {% block breadcrumb %}{% endblock %}
+                </ol>
+            </nav>
+        </header>
         <main class="mb-3">
             {% include '_flash.html.twig' %}
             <div class="container-fluid">
