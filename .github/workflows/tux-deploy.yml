@@ -31,7 +31,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /deploy/loteria-symfony
-            composer install --no-dev --no-progress -a                
+            composer install --no-dev --no-progress -a -o
             composer dump-env prod
             sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
             cd /var/www/loteria
