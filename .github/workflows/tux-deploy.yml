@@ -13,7 +13,6 @@ jobs:
     steps:      
       - name: "Obter o código"
         uses: actions/checkout@v4
-
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -23,7 +22,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "."
           target: "/deploy/loteria-symfony"
-
       - name: "Construção da aplicação"
         uses: appleboy/ssh-action@v1.0.3
         with:
