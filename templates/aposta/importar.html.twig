@@ -3,6 +3,11 @@
 
 {% block title %}{{ parent() }} :: Aposta :: Importar{% endblock %}
 
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ path('app_aposta_index') }}" class="text-decoration-none"><i class="bi bi-ticket-perforated"></i> Aposta</a></li>
+    <li class="breadcrumb-item active"><i class="bi bi-upload"></i> Importar apostas</li>
+{% endblock %}
+
 {% block body %}
     {{ form_start(form) }}
     <div class="card shadow-sm">

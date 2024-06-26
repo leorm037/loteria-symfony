@@ -50,8 +50,10 @@ class ApostaController extends AbstractController
     #[Route('', name: 'index')]
     public function index(): Response
     {
+        $apostas = $this->apostaRepository->findMinhasApostas();
+        
         return $this->render('aposta/index.html.twig', [
-                    'controller_name' => 'ApostaController',
+                    'apostas' => $apostas,
         ]);
     }
 
@@ -71,6 +73,8 @@ class ApostaController extends AbstractController
 
             if ($comprovanteArquivo) {
                 $comprovante = $this->comprovanteSalvar($comprovanteArquivo);
+            } else {
+                $comprovante = null;
             }
 
             if ($planilhaArquivo) {
