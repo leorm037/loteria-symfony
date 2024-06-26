@@ -67,7 +67,7 @@ class ApostaImportarType extends AbstractType
                 ->add('arquivoComprovantePdf', FileType::class, [
                     'label' => 'Comprovantes dos jogos',
                     'help' => 'O arquivo PDF deve ter as imagens dos comprovantes.',
-                    'required' => true,
+                    'required' => false,
                     'attr' => [
                         'accept' => 'application/pdf,application/x-pdf',
                     ],
