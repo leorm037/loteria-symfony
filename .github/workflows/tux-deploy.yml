@@ -1,0 +1,41 @@
+name: "Tux"
+
+on:
+  push: 
+    branches: [ "main ]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:      
+      - name: "Obter o código"
+        uses: actions/checkout@v4
+
+      - name: "Copiar código"
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          source: "."
+          target: "/deploy/loteria-symfony"
+
+        - name: "Construção da aplicação"
+          uses: appleboy/ssh-action@v1.0.3
+            with:
+              host: ${{ secrets.SSH_HOST }}
+              username: ${{ secrets.SSH_USERNAME }}
+              key: ${{ secrets.SSH_KEY }}
+              port: ${{ secrets.SSH_PORT }}
+              script: |
+                cd /deploy/loteria-symfony
+                composer install --no-dev --no-progress -a                
+                composer dump-env prod
+                sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
+                cd /var/www/loteria
+                APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear
+                sudo chown -R www-data: .
