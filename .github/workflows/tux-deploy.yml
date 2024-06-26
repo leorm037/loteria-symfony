@@ -24,18 +24,18 @@ jobs:
           source: "."
           target: "/deploy/loteria-symfony"
 
-        - name: "Construção da aplicação"
-          uses: appleboy/ssh-action@v1.0.3
-            with:
-              host: ${{ secrets.SSH_HOST }}
-              username: ${{ secrets.SSH_USERNAME }}
-              key: ${{ secrets.SSH_KEY }}
-              port: ${{ secrets.SSH_PORT }}
-              script: |
-                cd /deploy/loteria-symfony
-                composer install --no-dev --no-progress -a                
-                composer dump-env prod
-                sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
-                cd /var/www/loteria
-                APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear
-                sudo chown -R www-data: .
+      - name: "Construção da aplicação"
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /deploy/loteria-symfony
+            composer install --no-dev --no-progress -a                
+            composer dump-env prod
+            sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
+            cd /var/www/loteria
+            APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear
+            sudo chown -R www-data: .
