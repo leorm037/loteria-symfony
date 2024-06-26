@@ -3,6 +3,8 @@ framework:
     assets:
         version: '%env(APP_VERSION)%'
         packages:
+            css:
+                base_path: '/assets/css'
             bootstrap:
                 base_path: '/assets/bootstrap-5.3.3-dist'
             bootstrap-icon:

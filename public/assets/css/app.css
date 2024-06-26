@@ -1,0 +1,51 @@
+:root {
+    --green: #198754;
+    --green-100: #d1e7dd;
+    --green-200: #a3cfbb;
+    --green-300: #75b798;
+    --green-400: #479f76;
+    --green-500: #198754;
+    --green-600: #146c43;
+    --green-700: #0f5132;
+    --green-800: #0a3622;
+    --green-900: #051b11;
+}
+
+.navbar-nav {
+    --bs-nav-link-hover-color: #fff!important;
+}
+
+.bg-loteria {
+    background-color: var(--green)!important;
+}
+
+.text-loteria, .nav-link {
+    color: var(--green-100)!important;
+}
+
+.bg-loteria-secondary {
+    background-color: var(--green-100);
+}
+
+.card-header {
+    background-color: var(--green-100)!important;
+}
+
+.card-footer {
+    background-color: var(--green-100)!important;
+}
+
+.border-loteria {
+    --bs-border-opacity: 1;
+    border-color: var(--green)!important;
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+    color: var(--green-100);
+}
+
+.navbar-bg-loteria {
+    color: var(--green-100)!important;
+    border-color: var(--green-100)!important;
+    background-color: transparent;
+}
