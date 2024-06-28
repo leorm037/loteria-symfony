@@ -46,7 +46,7 @@
             </nav>
             <nav id="breadcrumb" aria-label="breadcrumb" class="bg-loteria-secondary shadow border-bottom border-loteria" style="--bs-breadcrumb-divider: '>';">
                 <ol class="breadcrumb m-0 p-2">
-                    <li class="breadcrumb-item"><a href="{{ path('app_index') }}" class="text-decoration-none"><i class="bi bi-house-fill"></i> Página inicial</a></li>
+                    <li class="breadcrumb-item"><a data-loading="true" href="{{ path('app_index') }}" class="text-decoration-none"><i class="bi bi-house-fill"></i> Página inicial</a></li>
                     {% block breadcrumb %}{% endblock %}
                 </ol>
             </nav>
@@ -71,6 +71,8 @@
         {% block javascripts_footer %}
             
             <script src="{{ asset('jquery-3.7.1.min.js', 'jquery') }}"></script>
+            <script src="{{ asset('loadingoverlay.min.js', 'jquery-loading-overlay') }}"></script>
+            <script src="{{ asset('loading.overlay.setup.js', 'js') }}"></script
             <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
             <script type="text/javascript" src="https://kit.fontawesome.com/403477f2af.js" crossorigin="anonymous"></script>
         {% endblock %}

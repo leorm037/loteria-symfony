@@ -11,10 +11,10 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div><h1 class="h4 m-0"><i class="bi bi-ticket-perforated"></i> Aposta</h1></div>
                 <div>
-                    <a href="{{ path('app_aposta_importar') }}" class="btn btn-primary btn-sm bg-gradient shadow-sm">
+                    <a data-loading="true" href="{{ path('app_aposta_importar') }}" class="btn btn-primary btn-sm bg-gradient shadow-sm">
                         <i class="bi bi-box-arrow-in-down"></i> Importar
                     </a>
-                    <a href="{{ path('app_aposta_importar') }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                    <a data-loading="true" href="{{ path('app_aposta_importar') }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
                         <i class="bi bi-plus"></i> Novo
                     </a>
                 </div>
@@ -26,16 +26,24 @@
                     <thead>
                         <tr>
                             <th>Loteria</th>
-                            <th>Concurso</th>
-                            <th>Dezenas</th>
+                            <th class="text-end">Concurso</th>
+                            <th class="text-end">Apuração</th>
+                            <th class="text-end">Dezenas</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
                     {% for aposta in apostas %}
                         <tr>
                             <td>{{ aposta.concurso.loteria.nome }}</td>
-                            <td>{{ aposta.concurso.numero }}</td>
-                            <td>{{ aposta.dezenas|join(', ') }}</td>
+                            <td class="text-end">{{ aposta.concurso.numero }}</td>
+                            <td class="text-end">{{ (aposta.concurso.apuracao) ? aposta.concurso.apuracao|date('d/m/Y','America/Sao_Paulo') : "Não apurado" }}</td>
+                            <td class="text-end">{{ aposta.dezenas|join(', ') }}</td>
+                            <td class="text-center">
+                                <a data-loading="true" role="button" class="btn btn-sm btn-danger" href="#">
+                                    <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
+                                </a>
+                            </td>
                         </tr>
                     {% else %}
                         <tr>
