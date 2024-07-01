@@ -50,7 +50,7 @@ class Aposta extends AbstractEntity
     private ?Concurso $concurso = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'arquivo_planilha_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'arquivo_planilha_id', referencedColumnName: 'id', nullable: true)]
     private ?Arquivo $planilha = null;
 
     #[ORM\ManyToOne]

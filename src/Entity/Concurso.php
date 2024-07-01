@@ -56,6 +56,12 @@ class Concurso extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?Loteria $loteria = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $rateioPremio = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?array $dezenas = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -165,6 +171,30 @@ class Concurso extends AbstractEntity
     public function setLoteria(?Loteria $loteria): static
     {
         $this->loteria = $loteria;
+
+        return $this;
+    }
+
+    public function getRateioPremio(): ?array
+    {
+        return $this->rateioPremio;
+    }
+
+    public function setRateioPremio(?array $rateioPremio): static
+    {
+        $this->rateioPremio = $rateioPremio;
+
+        return $this;
+    }
+
+    public function getDezenas(): ?array
+    {
+        return $this->dezenas;
+    }
+
+    public function setDezenas(?array $dezenas): static
+    {
+        $this->dezenas = $dezenas;
 
         return $this;
     }

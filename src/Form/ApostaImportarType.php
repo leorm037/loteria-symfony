@@ -33,7 +33,7 @@ class ApostaImportarType extends AbstractType
         $builder
                 ->add('loteria', ChoiceType::class, [
                     'label' => 'Loteria',
-                    'choices' => $this->loteriaRepository->getAll(),
+                    'choices' => $this->loteriaRepository->findAllOrderByNome(),
                     'choice_value' => 'uuid',
                     'choice_label' => 'nome',
                     'placeholder' => 'Selecione uma loteria',

@@ -38,12 +38,22 @@ class LoteriaRepository extends ServiceEntityRepository
     /**
      * @return Loteria[]|null
      */
-    public function getAll(): ?array
+    public function findAllOrderByNome(): ?array
     {
         return $this->createQueryBuilder('l')
                         ->orderBy('l.nome', 'ASC')
                         ->getQuery()
                         ->getResult()
+        ;
+    }
+    
+    public function findBySlug(string $slugUrl): ?Loteria
+    {
+        return $this->createQueryBuilder('l')
+                        ->where('l.slugUrl = :slugUrl')
+                        ->setParameter('slugUrl', $slugUrl)
+                        ->getQuery()
+                        ->getOneOrNullResult()
         ;
     }
 
