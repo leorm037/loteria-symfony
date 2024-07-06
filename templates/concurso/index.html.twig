@@ -1,0 +1,72 @@
+{# templates/concurso/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active"><i class="bi bi-suit-club-fill"></i> Concurso</li>
+{% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div><h1 class="h4 m-0"><i class="bi bi-suit-club-fill"></i> Concurso</h1></div>
+                <div>
+                    <a data-loading="true" href="#" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                        <i class="bi bi-plus"></i> Novo
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="loteria" class="form-label">Loteria</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="loteria_icon"><i class="bi bi-flower2 icon-rotate-45"></i></span>
+                    <select name="loteria" id="loteria" class="form-select" aria-label="Loteria" aria-describedby="loteria_icon">
+                        <option value{% if not app.request.get('loteria') %} selected{% endif %}>Selecione uma loteria</option>
+                        {% for loteria in loterias %}
+                            <option value="{{ loteria.uuid }}"{% if loteria.uuid == app.request.get('loteria') %} selected{% endif %}>{{ loteria.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-end">Concurso</th>
+                            <th class="text-end">Apuração</th>
+                            <th class="text-end">Dezenas</th>
+                            <th>Local</th>
+                            <th>Município</th>
+                            <th>UF</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    {% for concurso in concursos %}
+                        <tr>
+                            <td class="text-end">{{ concurso.numero }}</td>
+                            <td class="text-end">{{ concurso.apuracao|date('d/m/Y','America/Sao_Paulo') }}</td>
+                            <td class="text-end">{{ concurso.dezenas|join(', ') }}</td>
+                            <td>{{ concurso.local }}</td>
+                            <td>{{ concurso.municipio }}</td>
+                            <td>{{ concurso.uf }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3" class="text-center">Nenhum registro encontrado</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts_footer %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('concurso/index.js', 'js') }}"></script>
+{% endblock %}

@@ -16,6 +16,7 @@ use App\Entity\Loteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Concurso>
@@ -39,6 +40,23 @@ class ConcursoRepository extends ServiceEntityRepository
                         ->innerJoin('c.loteria', 'l', Join::WITH, 'c.loteria = l.id')
                         ->getQuery()
                         ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * 
+     * @param Uuid $uuid
+     * @return type
+     */
+    public function findByLoteriaUuid(Uuid $uuid)
+    {
+        return $this->createQueryBuilder('c')
+                        ->select('c,l')
+                        ->andWhere('l.uuid = :uuid')
+                        ->setParameter('uuid', $uuid->toBinary())
+                        ->innerJoin('c.loteria', 'l', Join::WITH, 'c.loteria = l.id')
+                        ->getQuery()
+                        ->getResult()
         ;
     }
 
