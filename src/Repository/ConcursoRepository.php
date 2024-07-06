@@ -48,13 +48,12 @@ class ConcursoRepository extends ServiceEntityRepository
      * @param Uuid $uuid
      * @return type
      */
-    public function findByLoteriaUuid(Uuid $uuid)
+    public function findByLoteria(Loteria $loteria)
     {
         return $this->createQueryBuilder('c')
-                        ->select('c,l')
-                        ->andWhere('l.uuid = :uuid')
-                        ->setParameter('uuid', $uuid->toBinary())
-                        ->innerJoin('c.loteria', 'l', Join::WITH, 'c.loteria = l.id')
+                        ->andWhere('c.loteria = :loteria')
+                        ->setParameter('loteria', $loteria)
+                        ->addOrderBy('c.numero', 'ASC')
                         ->getQuery()
                         ->getResult()
         ;

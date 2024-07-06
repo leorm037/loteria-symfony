@@ -42,7 +42,8 @@ class ConcursoController extends AbstractController
         
         if($loteriaUuid) {
             $uuid = Uuid::fromString($loteriaUuid);
-            $concursos = $this->concursoRepository->findByLoteriaUuid($uuid);
+            $loteria = $this->loteriaRepository->findByUuid($uuid);
+            $concursos = $this->concursoRepository->findByLoteria($loteria);
         }
         
         return $this->render('concurso/index.html.twig', [
