@@ -20,14 +20,17 @@ class ArquivoTipoFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $arquivosTipos = [
-            'Comprovante de apostas',
-            'Planilha de apostas',
+            ['Comprovante de apostas em PDF','i-filetype-pdf'],
+            ['Comprovante de apostas em PNG','bi bi-filetype-png'],
+            ['Planilha de apostas','bi bi-filetype-csv']
         ];
 
         foreach ($arquivosTipos as $item) {
             $arquivoTipo = new ArquivoTipo();
-            $arquivoTipo->setNome($item);
-
+            
+            $arquivoTipo->setNome($item[0]);
+            $arquivoTipo->setIcone($item[1]);
+            
             $manager->persist($arquivoTipo);
         }
 

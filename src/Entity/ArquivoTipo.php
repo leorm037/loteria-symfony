@@ -33,6 +33,9 @@ class ArquivoTipo extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\Column(length: 64, options: ['default' => 'bi bi-file'])]
+    private ?string $icone = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +73,18 @@ class ArquivoTipo extends AbstractEntity
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getIcone(): ?string
+    {
+        return $this->icone;
+    }
+
+    public function setIcone(string $icone): static
+    {
+        $this->icone = $icone;
 
         return $this;
     }

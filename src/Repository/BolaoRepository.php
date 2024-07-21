@@ -13,6 +13,7 @@ namespace App\Repository;
 
 use App\Entity\Bolao;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,9 +21,33 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BolaoRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bolao::class);
+    }
+
+    public function save(Bolao $bolao, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($bolao);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function list()
+    {
+        return $this->createQueryBuilder('b')
+                        ->select('b,c,l')
+                        ->innerJoin('b.concurso', 'c', Join::WITH, 'b.concurso = c.id')
+                        ->innerJoin('c.loteria', 'l', Join::WITH, 'c.loteria = l.id')
+                        ->addOrderBy('l.nome', 'ASC')
+                        ->addOrderBy('c.numero', 'DESC')
+                        ->addOrderBy('b.nome', 'ASC')
+                        ->getQuery()
+                        ->getResult()
+        ;
     }
 
     //    /**
@@ -39,7 +64,6 @@ class BolaoRepository extends ServiceEntityRepository
     //            ->getResult()
     //        ;
     //    }
-
     //    public function findOneBySomeField($value): ?Bolao
     //    {
     //        return $this->createQueryBuilder('b')
