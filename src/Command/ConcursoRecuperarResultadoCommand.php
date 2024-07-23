@@ -18,6 +18,7 @@ use App\Repository\ConcursoRepository;
 use App\Repository\LoteriaRepository;
 use App\Service\ConcursoSorteioService;
 use DateInterval;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -71,9 +72,9 @@ class ConcursoRecuperarResultadoCommand extends Command
 
         $loteriaSlug = $input->getArgument('loteria');
         $concursoNumero = $input->getOption('concurso');
-        
+
         if ($loteriaSlug) {
-            $this->recuperarUltimoConcursoLoteria($loteriaSlug, $concursoNumero);
+            $this->recuperarConcursoLoteria($loteriaSlug, $concursoNumero);
         } else {
             $this->recuperarUltimoConcurso();
         }
@@ -86,20 +87,20 @@ class ConcursoRecuperarResultadoCommand extends Command
     private function recuperarUltimoConcurso(): void
     {
         $loterias = $this->loteriaRepository->findAllOrderByNome();
-        
-        if(null === $loterias) {
+
+        if (null === $loterias) {
             $this->mensagens[] = ['status' => 'info', 'message' => 'Nenhuma loteria encontrada.'];
             $this->logger->info("Nenhuma loteria encontrada ao recuperar resultado dos concursos");
-            
+
             return;
         }
-        
+
         foreach ($loterias as $loteria) {
             $this->gravarSorteio($loteria);
         }
     }
-    
-    private function recuperarUltimoConcursoLoteria(string $loteriaSlug, int $concursoNumero = null): void
+
+    private function recuperarConcursoLoteria(string $loteriaSlug, int $concursoNumero = null): void
     {
         $loteria = $this->loteriaRepository->findBySlug($loteriaSlug);
 
@@ -114,27 +115,38 @@ class ConcursoRecuperarResultadoCommand extends Command
 
         $this->gravarSorteio($loteria, $concursoNumero);
     }
-    
+
     private function gravarSorteio(Loteria $loteria, int $numero = null): void
     {
-        $key = 'json_'.$loteria->getId().'_'.$numero;
+        $key = 'json_' . $loteria->getId() . '_' . $numero;
 
         /** @var Concurso $sorteio */
         $sorteio = $this->cache->get($key, function (ItemInterface $item) use ($loteria, $numero) {
             $item->expiresAfter(new DateInterval('P1D'));
-            
-            return ConcursoSorteioService::getConcurso($loteria, $numero);
+
+            try {
+                return ConcursoSorteioService::getConcurso($loteria, $numero);
+            } catch (Exception $e) {
+                $this->mensagens[] = ['status' => 'error', 'message' => $e->getMessage()];
+                $this->logger->info($e->getMessage());
+
+                return null;
+            }
         });
 
+        if (!$sorteio) {
+            return;
+        }
+
         $concurso = $this->concursoRepository->findByLoteriaAndNumero(
-            $loteria,
-            $sorteio->getNumero()
+                $loteria,
+                $sorteio->getNumero()
         );
-        
+
         if (null === $concurso) {
             $loteria = $this->loteriaRepository->find($sorteio->getLoteria()->getId());
             $sorteio->setLoteria($loteria);
-            
+
             $this->concursoRepository->save($sorteio, true);
 
             $this->messages[] = [
