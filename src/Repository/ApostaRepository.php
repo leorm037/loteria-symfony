@@ -15,6 +15,7 @@ use App\Entity\Aposta;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Aposta>
@@ -39,14 +40,13 @@ class ApostaRepository extends ServiceEntityRepository
     /**
      * @return Aposta[]|null
      */
-    public function findMinhasApostas()
+    public function findApostasByUuidBolao(Uuid $uuid)
     {
         return $this->createQueryBuilder('a')
-                        ->select('l,c,a')
-                        ->innerJoin('a.concurso', 'c', Join::WITH, 'a.concurso = c.id')
-                        ->innerJoin('c.loteria', 'l', Join::WITH, 'c.loteria = l.id')
-                        ->addOrderBy('l.nome', 'ASC')
-                        ->addOrderBy('c.numero', 'DESC')
+                        ->select('a,b')
+                        ->where('b.uuid = :uuid')
+                        ->setParameter('uuid', $uuid->toBinary())
+                        ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
                         ->getQuery()
                         ->getResult()
         ;

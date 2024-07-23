@@ -46,6 +46,12 @@ class Bolao extends AbstractEntity
     #[Assert\NotBlank(message: 'Informe o Concurso do bolão.')]
     private ?Concurso $concurso = null;
 
+    #[ORM\ManyToOne]
+    private ?Arquivo $arquivoComprovantePdf = null;
+
+    #[ORM\ManyToOne]
+    private ?Arquivo $arquivoPlanilhaCsv = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +113,30 @@ class Bolao extends AbstractEntity
     public function setConcurso(?Concurso $concurso): static
     {
         $this->concurso = $concurso;
+
+        return $this;
+    }
+
+    public function getArquivoComprovantePdf(): ?Arquivo
+    {
+        return $this->arquivoComprovantePdf;
+    }
+
+    public function setArquivoComprovantePdf(?Arquivo $arquivoComprovantePdf): static
+    {
+        $this->arquivoComprovantePdf = $arquivoComprovantePdf;
+
+        return $this;
+    }
+
+    public function getArquivoPlanilhaCsv(): ?Arquivo
+    {
+        return $this->arquivoPlanilhaCsv;
+    }
+
+    public function setArquivoPlanilhaCsv(?Arquivo $arquivoPlanilhaCsv): static
+    {
+        $this->arquivoPlanilhaCsv = $arquivoPlanilhaCsv;
 
         return $this;
     }

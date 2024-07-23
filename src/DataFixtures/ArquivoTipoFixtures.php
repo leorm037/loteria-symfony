@@ -22,7 +22,7 @@ class ArquivoTipoFixtures extends Fixture
         $arquivosTipos = [
             ['Comprovante de apostas em PDF','i-filetype-pdf'],
             ['Comprovante de apostas em PNG','bi bi-filetype-png'],
-            ['Planilha de apostas','bi bi-filetype-csv']
+            ['Planilha de apostas em CSV','bi bi-filetype-csv'],
         ];
 
         foreach ($arquivosTipos as $item) {

@@ -38,7 +38,7 @@ class AbstractFileUploadService
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), \PATHINFO_FILENAME);
 
-        $safeFilename = $this->slugger->slug($originalFilename);
+        $safeFilename = $this->slugger->slug($originalFilename)->lower();
 
         $filename = $safeFilename.'_'.uniqid().'.'.$file->guessExtension();
 
@@ -62,8 +62,8 @@ class AbstractFileUploadService
         return $this->getTargetDirectory().'/'.$filename;
     }
 
-    public function delete(string $filename): bool
-    {
+    public function delete(?string $filename): bool
+    {        
         return unlink($filename);
     }
 }

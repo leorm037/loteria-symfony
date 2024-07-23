@@ -21,7 +21,7 @@ use App\Form\ApostaImportarType;
 use App\Helper\CsvReaderHelper;
 use App\Repository\ApostaRepository;
 use App\Repository\ArquivoRepository;
-use App\Repository\ArquivoTipoRepository;
+use App\Repository\BolaoRepository;
 use App\Repository\ConcursoRepository;
 use App\Service\ApostaComprovantePdfService;
 use App\Service\ApostaPlanilhaCsvService;
@@ -30,30 +30,36 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Uuid;
 
-#[Route('/aposta', name: 'app_aposta_')]
-class ApostaController extends AbstractController
+#[Route('/bolao', name: 'app_bolao_apostas_')]
+class BolaoApostaController extends AbstractController
 {
 
     public function __construct(
             private ApostaPlanilhaCsvService $planilhaUpload,
             private ApostaComprovantePdfService $comprovanteUpload,
             private ConcursoRepository $concursoRepository,
-            private ArquivoTipoRepository $arquivoTipoRepository,
             private ArquivoRepository $arquivoRepository,
-            private ApostaRepository $apostaRepository
+            private ApostaRepository $apostaRepository,
+            private BolaoRepository $bolaoRepository
     )
     {
         
     }
 
-    #[Route('', name: 'index')]
-    public function index(): Response
+    #[Route('/{uuid}/apostas', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
+    public function index(Request $request): Response
     {
-        $apostas = $this->apostaRepository->findMinhasApostas();
-        
-        return $this->render('aposta/index.html.twig', [
+        $uuid = Uuid::fromString($request->get('uuid'));
+
+        $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+
+        $apostas = $this->apostaRepository->findApostasByUuidBolao($uuid);
+
+        return $this->render('bolaoAposta/index.html.twig', [
                     'apostas' => $apostas,
+                    'bolao' => $bolao,
         ]);
     }
 
@@ -90,21 +96,21 @@ class ApostaController extends AbstractController
                             ->setConcurso($concurso)
                             ->setPlanilha($planilha)
                     ;
-                    
-                    if($comprovante) {
+
+                    if ($comprovante) {
                         $aposta->setComprovante($comprovante);
                     }
 
                     $this->apostaRepository->save($aposta, $csvReaderHelp->eof());
                 }
             }
-            
+
             $this->addFlash('success', 'Planilha importada com sucesso!');
 
             return $this->redirectToRoute('app_aposta_importar', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('aposta/importar.html.twig', [
+        return $this->render('bolaoAposta/importar.html.twig', [
                     'form' => $form,
                     'apostaImportar' => $apostaImportar,
         ]);
@@ -133,15 +139,16 @@ class ApostaController extends AbstractController
         $arquivoTipo = $this->arquivoTipoRepository->findByNome(ArquivoTipoEnum::APOSTA_COMPROVANTE->value);
 
         $arquivo = new Arquivo();
-        $arquivo->setCaminhoNome($comprovanteCaminhoNome)
-                ->setArquivoTipo($arquivoTipo)
+        $arquivo
+                ->setNome($comprovante->getClientOriginalName())
+                ->setCaminhoNome($comprovanteCaminhoNome)
         ;
-        
+
         $this->arquivoRepository->save($arquivo, true);
-        
+
         return $arquivo;
     }
-    
+
     private function planilhaSalvar(UploadedFile $planilha): ?Arquivo
     {
         $planilhaCaminhoNome = $this->planilhaUpload->upload($planilha);
@@ -151,9 +158,9 @@ class ApostaController extends AbstractController
         $arquivo->setCaminhoNome($planilhaCaminhoNome)
                 ->setArquivoTipo($arquivoTipo)
         ;
-        
+
         $this->arquivoRepository->save($arquivo, true);
-        
+
         return $arquivo;
     }
 }

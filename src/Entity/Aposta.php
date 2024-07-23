@@ -47,15 +47,7 @@ class Aposta extends AbstractEntity
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Concurso $concurso = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'arquivo_planilha_id', referencedColumnName: 'id', nullable: true)]
-    private ?Arquivo $planilha = null;
-
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'arquivo_comprovante_id', referencedColumnName: 'id', nullable: true)]
-    private ?Arquivo $comprovante = null;
+    private ?Bolao $bolao = null;
 
     public function getId(): ?int
     {
@@ -116,38 +108,14 @@ class Aposta extends AbstractEntity
         return $this;
     }
 
-    public function getConcurso(): ?Concurso
+    public function getBolao(): ?Bolao
     {
-        return $this->concurso;
+        return $this->bolao;
     }
 
-    public function setConcurso(?Concurso $concurso): static
+    public function setBolao(?Bolao $bolao): static
     {
-        $this->concurso = $concurso;
-
-        return $this;
-    }
-
-    public function getPlanilha(): ?Arquivo
-    {
-        return $this->planilha;
-    }
-
-    public function setPlanilha(?Arquivo $planilha): static
-    {
-        $this->planilha = $planilha;
-
-        return $this;
-    }
-
-    public function getComprovante(): ?Arquivo
-    {
-        return $this->comprovante;
-    }
-
-    public function setComprovante(?Arquivo $comprovante): static
-    {
-        $this->comprovante = $comprovante;
+        $this->bolao = $bolao;
 
         return $this;
     }

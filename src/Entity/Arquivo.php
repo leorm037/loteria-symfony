@@ -41,9 +41,8 @@ class Arquivo extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?ArquivoTipo $arquivoTipo = null;
+    #[ORM\Column(length: 255)]
+    private ?string $nomeOriginal = null;
 
     public function getId(): ?int
     {
@@ -125,15 +124,16 @@ class Arquivo extends AbstractEntity
         return $this;
     }
 
-    public function getArquivoTipo(): ?ArquivoTipo
+    public function getNomeOriginal(): ?string
     {
-        return $this->arquivoTipo;
+        return $this->nomeOriginal;
     }
 
-    public function setArquivoTipo(?ArquivoTipo $arquivoTipo): static
+    public function setNomeOriginal(string $nomeOriginal): static
     {
-        $this->arquivoTipo = $arquivoTipo;
+        $this->nomeOriginal = $nomeOriginal;
 
         return $this;
     }
+
 }

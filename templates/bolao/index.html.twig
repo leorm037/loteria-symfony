@@ -35,11 +35,16 @@
                         <tr>
                             <td>{{ bolao.nome }}</td>
                             <td>{{ bolao.concurso.loteria.nome }}</td>
-                            <td>{{ bolao.concurso.numero }}</td>
-                            <td class="text-center">
-                                <a data-loading="true" role="button" class="btn btn-sm btn-danger" href="#">
-                                    <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
-                                </a>
+                            <td class="text-end">{{ bolao.concurso.numero }}</td>
+                            <td class="text-center p-0 align-middle">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
+                                    <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}">
+                                        <i class="bi bi-ticket-perforated"></i> <span class="d-none d-xl-inline-block">Apostas</span>
+                                    </a>
+                                    <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
+                                        <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     {% else %}
