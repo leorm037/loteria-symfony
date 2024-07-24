@@ -43,7 +43,7 @@
                         <tr>
                             <td class="text-end">{{ aposta.dezenas|join(', ') }}</td>
                             <td class="text-center">{{ aposta.conferida ? 'Sim' : 'Não' }}</td>
-                            {% if aposta.quantidadeAcertos not is null %}
+                            {% if aposta.quantidadeAcertos is not null %}
                                 <td class="text-end">{{ aposta.quantidadeAcertos }}</td>
                             {% else %}
                                 <td>Não apurado</td>
