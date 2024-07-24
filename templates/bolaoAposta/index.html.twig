@@ -33,6 +33,7 @@
                         <tr>
                             <th>Dezenas</th>
                             <th>Conferida</th>
+                            <th>Quantidade de acertos</th>
                             <th>Atualização</th>
                             <th class="text-center">Ações</th>
                         </tr>
@@ -42,6 +43,11 @@
                         <tr>
                             <td class="text-end">{{ aposta.dezenas|join(', ') }}</td>
                             <td class="text-center">{{ aposta.conferida ? 'Sim' : 'Não' }}</td>
+                            {% if aposta.quantidadeAcertos %}
+                                <td class="text-end">{{ aposta.quantidadeAcertos }}</td>
+                            {% else %}
+                                <td>Não apurado</td>
+                            {% endif %}
                             <td class="text-end">{{ aposta.updatedAt ? aposta.updatedAt|date('d/m/Y H:i','America/Sao_Paulo') : aposta.createdAt|date('d/m/Y H:i','America/Sao_Paulo') }}</td>
                             <td class="text-center">
                                 <a data-loading="true" role="button" class="btn btn-sm btn-danger" href="#">
