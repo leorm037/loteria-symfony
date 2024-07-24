@@ -22,7 +22,7 @@ class ConcursoSorteioService
     public static function getConcurso(Loteria $loteria, int $numero = null): ?Concurso
     {
         $json = self::getJson($loteria, $numero);
-
+        
         return ConcursoFactory::buildFromJson($loteria, $json);
     }
 

@@ -32,12 +32,12 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 #[AsCommand(
             name: 'loteria:concurso:recuperar-resultado',
-            description: 'Recuperar o resultado dos sorteios.',
+            description: 'Recuperar o resultado dos concursos sorteados.',
     )]
 class ConcursoRecuperarResultadoCommand extends Command
 {
 
-    private $mensagens = [];
+    private $messages = [];
 
     public function __construct(
             private CacheInterface $cache,
@@ -55,7 +55,7 @@ class ConcursoRecuperarResultadoCommand extends Command
                 ->addArgument(
                         'loteria',
                         InputArgument::OPTIONAL,
-                        'Recupera o resuptado da loteria informada'
+                        'Recupera o resultado da loteria informada'
                 )
                 ->addOption(
                         'concurso',
@@ -106,7 +106,7 @@ class ConcursoRecuperarResultadoCommand extends Command
 
         if (null === $loteria) {
             $this->messages[] = [
-                'status' => 'info',
+                'status' => 'danger',
                 'message' => sprintf('Loteria "%s" não foi encontrada.', $loteriaSlug),
             ];
 
@@ -123,7 +123,7 @@ class ConcursoRecuperarResultadoCommand extends Command
         /** @var Concurso $sorteio */
         $sorteio = $this->cache->get($key, function (ItemInterface $item) use ($loteria, $numero) {
             $item->expiresAfter(new DateInterval('P1D'));
-
+            
             try {
                 return ConcursoSorteioService::getConcurso($loteria, $numero);
             } catch (Exception $e) {
@@ -142,7 +142,7 @@ class ConcursoRecuperarResultadoCommand extends Command
                 $loteria,
                 $sorteio->getNumero()
         );
-
+        
         if (null === $concurso) {
             $loteria = $this->loteriaRepository->find($sorteio->getLoteria()->getId());
             $sorteio->setLoteria($loteria);
@@ -155,6 +155,7 @@ class ConcursoRecuperarResultadoCommand extends Command
             ];
         } elseif (null === $concurso->getDezenas() || null === $concurso->getRateioPremio()) {
             ConcursoFactory::updateFromJson($concurso, $sorteio);
+            
             $this->concursoRepository->save($concurso, true);
 
             $this->messages[] = [
