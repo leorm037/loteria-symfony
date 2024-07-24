@@ -12,6 +12,7 @@
 namespace App\Repository;
 
 use App\Entity\Aposta;
+use App\Entity\Loteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,16 +21,13 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @extends ServiceEntityRepository<Aposta>
  */
-class ApostaRepository extends ServiceEntityRepository
-{
+class ApostaRepository extends ServiceEntityRepository {
 
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Aposta::class);
     }
 
-    public function save(Aposta $aposta, bool $flush = false): void
-    {
+    public function save(Aposta $aposta, bool $flush = false): void {
         $this->getEntityManager()->persist($aposta);
 
         if ($flush) {
@@ -38,10 +36,28 @@ class ApostaRepository extends ServiceEntityRepository
     }
 
     /**
+     * 
+     * @param Loteria $loteria
      * @return Aposta[]|null
      */
-    public function findApostasByUuidBolao(Uuid $uuid)
-    {
+    public function findNaoConferidasConcursoSorteado(Loteria $loteria): ?array {
+        return $this->createQueryBuilder('a')
+                        ->select('a,b,c')
+                        ->andWhere('c.loteria = :loteria')
+                        ->setParameter('loteria', $loteria)
+                        ->andWhere('c.dezenas IS NOT NULL')
+                        ->andWhere('a.conferida = false')
+                        ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
+                        ->innerJoin('b.concurso', 'c', Join::WITH, 'b.concurso = c.id')
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
+
+    /**
+     * @return Aposta[]|null
+     */
+    public function findApostasByUuidBolao(Uuid $uuid) {
         return $this->createQueryBuilder('a')
                         ->select('a,b')
                         ->where('b.uuid = :uuid')

@@ -49,6 +49,12 @@ class Aposta extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?Bolao $bolao = null;
 
+    #[ORM\Column(options: ['default' => 0])]
+    private bool $conferida = false;
+
+    #[ORM\Column(nullable: true, options: ['unsigned' => true])]
+    private ?int $quantidadeAcertos = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -116,6 +122,30 @@ class Aposta extends AbstractEntity
     public function setBolao(?Bolao $bolao): static
     {
         $this->bolao = $bolao;
+
+        return $this;
+    }
+
+    public function isConferida(): ?bool
+    {
+        return $this->conferida;
+    }
+
+    public function setConferida(bool $conferida): static
+    {
+        $this->conferida = $conferida;
+
+        return $this;
+    }
+
+    public function getQuantidadeAcertos(): ?int
+    {
+        return $this->quantidadeAcertos;
+    }
+
+    public function setQuantidadeAcertos(?int $quantidadeAcertos): static
+    {
+        $this->quantidadeAcertos = $quantidadeAcertos;
 
         return $this;
     }

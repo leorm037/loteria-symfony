@@ -53,7 +53,7 @@ when@prod:
             rotate:
                 type: rotating_file
                 level: error
-                formatter: monolog.formatter.line
+                #formatter: monolog.formatter.line
                 path: "%kernel.logs_dir%/%kernel.environment%.log"
                 max_files: 10
 #            console:

@@ -21,6 +21,6 @@ class IndexController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(): Response
     {
-        return $this->redirectToRoute('app_aposta_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
     }
 }
