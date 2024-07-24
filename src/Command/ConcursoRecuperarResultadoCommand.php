@@ -89,7 +89,7 @@ class ConcursoRecuperarResultadoCommand extends Command
         $loterias = $this->loteriaRepository->findAllOrderByNome();
 
         if (null === $loterias) {
-            $this->mensagens[] = ['status' => 'info', 'message' => 'Nenhuma loteria encontrada.'];
+            $this->messages[] = ['status' => 'info', 'message' => 'Nenhuma loteria encontrada.'];
             $this->logger->info("Nenhuma loteria encontrada ao recuperar resultado dos concursos");
 
             return;
@@ -127,13 +127,13 @@ class ConcursoRecuperarResultadoCommand extends Command
             try {
                 return ConcursoSorteioService::getConcurso($loteria, $numero);
             } catch (Exception $e) {
-                $this->mensagens[] = ['status' => 'error', 'message' => $e->getMessage()];
+                $this->messages[] = ['status' => 'error', 'message' => $e->getMessage()];
                 $this->logger->info($e->getMessage());
 
                 return null;
             }
         });
-
+        
         if (!$sorteio) {
             return;
         }
@@ -142,13 +142,14 @@ class ConcursoRecuperarResultadoCommand extends Command
                 $loteria,
                 $sorteio->getNumero()
         );
-        
+               
         if (null === $concurso) {
             $loteria = $this->loteriaRepository->find($sorteio->getLoteria()->getId());
+            
             $sorteio->setLoteria($loteria);
 
             $this->concursoRepository->save($sorteio, true);
-
+            
             $this->messages[] = [
                 'status' => 'success',
                 'message' => sprintf('O concurso %s da %s foi salvo.', $sorteio->getNumero(), $sorteio->getLoteria()->getNome()),

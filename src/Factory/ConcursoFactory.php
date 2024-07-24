@@ -22,7 +22,7 @@ class ConcursoFactory
         $concurso = new Concurso();
         
         $objJson = json_decode($json);
-        
+
         $apuracao = DateTimeHelper::stringToDateTimeImmutable(
             $objJson->dataApuracao,
             'd/m/Y',
