@@ -96,14 +96,10 @@ class LoteriaApostaConferirCommand extends Command {
                         $aposta->getDezenas()
                 );
 
-                $aposta->setConferida(true);
-
-                if (count($resultado) >= 3) {
-
-                    $aposta->setQuantidadeAcertos(count($resultado));
-
-                    $this->messages[] = ['status' => null, 'message' => implode(', ', $resultado)];
-                }
+                $aposta
+                        ->setConferida(true)
+                        ->setQuantidadeAcertos(count($resultado))
+                ;
 
                 $this->manager->persist($aposta);
             }
