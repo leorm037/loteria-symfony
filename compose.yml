@@ -36,6 +36,14 @@ services:
             - mariadb
         links:
             - mariadb:db
+    
+    mail:
+        container_name: loteria-mail
+        image: mailhog/mailhog:latest
+        restart: always
+        ports:
+            - 8025:8025
+            - 1025:1025
 
 volumes:
     mariadb:

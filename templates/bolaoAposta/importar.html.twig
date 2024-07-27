@@ -4,7 +4,8 @@
 {% block title %}{{ parent() }} :: Aposta :: Importar{% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{{ path('app_aposta_index') }}" class="text-decoration-none"><i class="bi bi-ticket-perforated"></i> Aposta</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('app_bolao_index') }}" class="text-decoration-none"><i class="fa-regular fa-futbol"></i> Bolão</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}" class="text-decoration-none"><i class="bi bi-ticket-perforated"></i> Aposta</a></li>
     <li class="breadcrumb-item active"><i class="bi bi-upload"></i> Importar apostas</li>
 {% endblock %}
 
@@ -14,32 +15,12 @@
         <div class="card-header bg-gradient">
             <h1 class="h4 m-0"><i class="bi bi-upload"></i> Importar apostas</h1>
         </div>
+        <div class="card-body border-bottom">
+            {{ include('bolao/_bolao.html.twig') }}
+        </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.loteria) }}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.numero) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.arquivoPlanilhaCsv) }}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.arquivoComprovantePdf) }}
-                </div>
-            </div>
+            {{ include('bolaoAposta/_form.html.twig') }}
         </div>
-        <div class="card-footer bg-gradient d-flex justify-content-between">
-            <div>
-                <a data-loading="true" class="btn btn-outline-secondary bg-gradient btn-sm" href="{{ path('app_aposta_index') }}"><i class="bi bi-arrow-left"></i> Voltar</a>
-            </div>
-            <div>
-                <button type="reset" class="btn btn-secondary bg-gradient btn-sm"><i class="fa-solid fa-broom"></i> Limpar</button>
-                <button data-loading="true" type="submit" class="btn btn-primary bg-gradient btn-sm"><i class="bi bi-floppy"></i> Salvar</button>
-            </div>
-        </div>
+        {{ include('_formFooter.html.twig', {'voltar': path('app_bolao_apostas_index', {'uuid': bolao.uuid})}) }}
     {{ form_end(form) }}
 {% endblock %}

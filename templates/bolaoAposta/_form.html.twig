@@ -1,0 +1,15 @@
+{# template/bolaoAposta/_form.html.twig #}
+{{ form_errors(form) }}
+<div class="row">
+    <div class="col-12">
+        <div class="mb-3">
+            {{ form_label(form.arquivoPlanilhaCsv) }}
+            <div class="input-group">
+                <div class="input-group-text"><i class="bi bi-filetype-csv"></i></div>
+                {{ form_widget(form.arquivoPlanilhaCsv) }}
+            </div>
+            {{ form_errors(form.arquivoPlanilhaCsv) }}
+            {{ form_help(form.arquivoPlanilhaCsv) }}
+        </div>
+    </div>
+</div>

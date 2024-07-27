@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use App\Repository\ApostaRepository;
+use App\Validator\ArrayValueNotRepeat;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
@@ -34,6 +35,7 @@ class Aposta extends AbstractEntity
      */
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Informe as dezenas da aposta.')]
+    #[ArrayValueNotRepeat]
     private array $dezenas = [];
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]

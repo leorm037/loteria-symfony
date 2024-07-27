@@ -53,7 +53,7 @@ class ConcursoRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
                         ->andWhere('c.loteria = :loteria')
                         ->setParameter('loteria', $loteria)
-                        ->addOrderBy('c.numero', 'ASC')
+                        ->addOrderBy('c.numero', 'DESC')
                         ->getQuery()
                         ->getResult()
         ;

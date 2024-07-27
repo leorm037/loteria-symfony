@@ -17,14 +17,6 @@
         <div class="card-body">
             {{ include('bolao/_form.html.twig') }}
         </div>
-        <div class="card-footer bg-gradient d-flex justify-content-between">
-            <div>
-                <a data-loading="true" class="btn btn-outline-secondary bg-gradient btn-sm" href="{{ path('app_bolao_index') }}"><i class="bi bi-arrow-left"></i> Voltar</a>
-            </div>
-            <div>
-                <button type="reset" class="btn btn-secondary bg-gradient btn-sm"><i class="fa-solid fa-broom"></i> Limpar</button>
-                <button type="submit" class="btn btn-primary bg-gradient btn-sm"><i class="bi bi-floppy"></i> Salvar</button>
-            </div>
-        </div>
+        {{ include('_formFooter.html.twig', {'voltar': path('app_bolao_index')}) }}
     {{ form_end(form) }}
 {% endblock %}

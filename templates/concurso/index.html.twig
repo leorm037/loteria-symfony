@@ -16,7 +16,7 @@
             <div class="mb-3">
                 <label for="loteria" class="form-label">Loteria</label>
                 <div class="input-group">
-                    <span class="input-group-text" id="loteria_icon"><i class="bi bi-flower2 icon-rotate-45"></i></span>
+                    <span class="input-group-text" id="loteria_icon"><i class="fa-solid fa-clover icon-rotate-45"></i></span>
                     <select name="loteria" id="loteria" class="form-select" aria-label="Loteria" aria-describedby="loteria_icon">
                         <option value{% if not app.request.get('loteria') %} selected{% endif %}>Selecione uma loteria</option>
                         {% for loteria in loterias %}

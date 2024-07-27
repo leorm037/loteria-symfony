@@ -63,6 +63,7 @@ class ApostaRepository extends ServiceEntityRepository {
                         ->where('b.uuid = :uuid')
                         ->setParameter('uuid', $uuid->toBinary())
                         ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
+                        ->addOrderBy('a.quantidadeAcertos', 'DESC')
                         ->getQuery()
                         ->getResult()
         ;
