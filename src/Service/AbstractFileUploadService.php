@@ -40,7 +40,7 @@ class AbstractFileUploadService
 
         $safeFilename = $this->slugger->slug($originalFilename)->lower();
 
-        $filename = $safeFilename.'_'.uniqid().'.'.$file->guessExtension();
+        $filename = $safeFilename.'_'.uniqid().'.'.$file->getClientOriginalExtension();
 
         try {
             $file->move($this->getTargetDirectory(), $filename);

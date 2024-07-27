@@ -86,7 +86,7 @@ class BolaoController extends AbstractController
             }
 
             if ($arquivoPlanilhaCsv) {
-                $bolao->setArquivoPlanilhaCsv($this->arquivarComprovante($arquivoPlanilhaCsv));
+                $bolao->setArquivoPlanilhaCsv($this->arquivarPlanilha($arquivoPlanilhaCsv));
             }
 
             $this->bolaoRepository->save($bolao, true);
@@ -139,7 +139,7 @@ class BolaoController extends AbstractController
             ;
 
             if ($arquivoComprovantePdf) {
-                if (null != $bolao->getArquivoComprovantePdf()) {
+                if ($bolao->getArquivoComprovantePdf()) {
                     $this->comprovantePdfService->delete($bolao->getArquivoComprovantePdf()->getCaminhoNome());
                 }
                 $bolao->setArquivoComprovantePdf($this->arquivarComprovante($arquivoComprovantePdf));
