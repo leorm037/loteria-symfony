@@ -29,3 +29,8 @@
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+###> upload ###
+/upload/comprovante/*
+/upload/planilha_css/*
+###< upload ###
