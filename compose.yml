@@ -44,6 +44,13 @@ services:
         ports:
             - 8025:8025
             - 1025:1025
+            
+    redis:
+        container_name: loteria-redis
+        image: redis:latest
+        restart: always
+        ports:
+            - 6379:6379
 
 volumes:
     mariadb:

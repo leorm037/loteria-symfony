@@ -20,16 +20,13 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @extends ServiceEntityRepository<Bolao>
  */
-class BolaoRepository extends ServiceEntityRepository
-{
+class BolaoRepository extends ServiceEntityRepository {
 
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Bolao::class);
     }
 
-    public function save(Bolao $bolao, bool $flush = false): void
-    {
+    public function save(Bolao $bolao, bool $flush = false): void {
         $this->getEntityManager()->persist($bolao);
 
         if ($flush) {
@@ -37,8 +34,7 @@ class BolaoRepository extends ServiceEntityRepository
         }
     }
 
-    public function findOneByUuid(Uuid $uuid): ?Bolao
-    {
+    public function findOneByUuid(Uuid $uuid): ?Bolao {
         return $this->createQueryBuilder('b')
                         ->select('b,c,l')
                         ->where('b.uuid = :uuid')
@@ -50,10 +46,11 @@ class BolaoRepository extends ServiceEntityRepository
         ;
     }
 
-    public function list()
-    {
+    public function list() {
         return $this->createQueryBuilder('b')
                         ->select('b,c,l')
+                        ->addSelect('(Select COUNT(a.id) From App\Entity\Aposta a Where a.bolao = b.id) As apostas')
+                        ->addSelect('(Select MAX(a2.quantidadeAcertos) From App\Entity\Aposta a2 Where a2.bolao = b.id) As apostasMax')
                         ->innerJoin('b.concurso', 'c', Join::WITH, 'b.concurso = c.id')
                         ->innerJoin('c.loteria', 'l', Join::WITH, 'c.loteria = l.id')
                         ->addOrderBy('l.nome', 'ASC')

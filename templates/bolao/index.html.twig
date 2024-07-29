@@ -27,15 +27,20 @@
                             <th>Bolão</th>
                             <th>Loteria</th>
                             <th>Concurso</th>
+                            <th>Apostas</th>
+                            <th>Maior acerto em aposta</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
-                    {% for bolao in boloes %}
+                    {% for item in boloes %}
+                        {% set bolao = item[0] %}
                         <tr>
                             <td>{{ bolao.nome }}</td>
                             <td>{{ bolao.concurso.loteria.nome }}</td>
                             <td class="text-end">{{ bolao.concurso.numero }}</td>
+                            <td class="text-end">{{ item.apostas|number_format(0, ',', '.') }}</td>
+                            <td class="text-end">{{ item.apostasMax|number_format(0, ',', '.') }}</td>
                             <td class="text-center p-0 align-middle">
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
                                     <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}">
