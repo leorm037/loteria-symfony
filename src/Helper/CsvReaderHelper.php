@@ -11,30 +11,30 @@
 
 namespace App\Helper;
 
-class CsvReaderHelper
-{
-    private \SplFileObject $file;
+use Exception;
+use SplFileObject;
 
-    public function __construct($filePath, string $delimiter = ';')
-    {
+class CsvReaderHelper {
+
+    private SplFileObject $file;
+
+    public function __construct($filePath, string $delimiter = ';') {
         if (!file_exists($filePath)) {
             throw new Exception("Arquivo \"{$filePath}\" não encontrado.");
         }
 
-        $this->file = new \SplFileObject($filePath);
-        $this->file->setFlags(\SplFileObject::READ_CSV);
+        $this->file = new SplFileObject($filePath);
+        $this->file->setFlags(SplFileObject::READ_CSV);
         $this->file->setCsvControl($delimiter);
     }
 
-    public function getIterator()
-    {
+    public function getIterator() {
         foreach ($this->file as $row) {
             yield $row;
         }
     }
 
-    public function eof(): bool
-    {
+    public function eof(): bool {
         return $this->file->eof();
     }
 }

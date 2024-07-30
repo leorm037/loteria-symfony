@@ -15,16 +15,19 @@ use App\DTO\BolaoDTO;
 use App\Entity\Aposta;
 use App\Entity\Arquivo;
 use App\Entity\Bolao;
+use App\Entity\BolaoArquivo;
 use App\Entity\Concurso;
 use App\Entity\Loteria;
 use App\Form\BolaoType;
 use App\Helper\CsvReaderHelper;
 use App\Repository\ApostaRepository;
 use App\Repository\ArquivoRepository;
+use App\Repository\BolaoArquivoRepository;
 use App\Repository\BolaoRepository;
 use App\Repository\ConcursoRepository;
 use App\Service\ApostaComprovantePdfService;
 use App\Service\ApostaPlanilhaCsvService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,8 +36,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
 
 #[Route('/bolao', name: 'app_bolao_')]
-class BolaoController extends AbstractController
-{
+class BolaoController extends AbstractController {
 
     public function __construct(
             private BolaoRepository $bolaoRepository,
@@ -42,15 +44,15 @@ class BolaoController extends AbstractController
             private ApostaComprovantePdfService $comprovantePdfService,
             private ApostaPlanilhaCsvService $planilhaCsvService,
             private ArquivoRepository $arquivoRepository,
-            private ApostaRepository $apostaRepository
-    )
-    {
+            private ApostaRepository $apostaRepository,
+            private EntityManagerInterface $entityManager,
+            private BolaoArquivoRepository $bolaoArquivoRepository
+    ) {
         
     }
 
     #[Route('/', name: 'index')]
-    public function index(): Response
-    {
+    public function index(): Response {
         $boloes = $this->bolaoRepository->list();
 
         return $this->render('bolao/index.html.twig', [
@@ -59,8 +61,7 @@ class BolaoController extends AbstractController
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
-    {
+    public function new(Request $request): Response {
         $bolaoDTO = new BolaoDTO();
 
         $form = $this->createForm(BolaoType::class, $bolaoDTO);
@@ -81,18 +82,14 @@ class BolaoController extends AbstractController
                     ->setNome($bolaoDTO->getNome())
             ;
 
+            $this->bolaoRepository->save($bolao, true);
+
             if ($arquivoComprovantePdf) {
-                $bolao->setArquivoComprovantePdf($this->arquivarComprovante($arquivoComprovantePdf));
+                $this->anexarComprovante($bolao, $arquivoComprovantePdf);
             }
 
             if ($arquivoPlanilhaCsv) {
-                $bolao->setArquivoPlanilhaCsv($this->arquivarPlanilha($arquivoPlanilhaCsv));
-            }
-
-            $this->bolaoRepository->save($bolao, true);
-
-            if ($bolao->getArquivoPlanilhaCsv()) {
-                $this->importarApostas($bolao);
+                $this->anexarImportarPlanilha($bolao, $arquivoPlanilhaCsv);
             }
 
             $this->addFlash('success', sprintf('Bolão "%s" salvo com sucesso!', $bolao->getNome()));
@@ -106,8 +103,7 @@ class BolaoController extends AbstractController
     }
 
     #[Route('/{uuid}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
-    public function edit(Request $request): Response
-    {
+    public function edit(Request $request): Response {
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
@@ -128,9 +124,7 @@ class BolaoController extends AbstractController
                     $bolaoDTO->getConcursoNumero()
             );
 
-            /** @var UploadedFile $arquivoComprovantePdf */
             $arquivoComprovantePdf = $form->get('arquivoComprovantePdf')->getData();
-            /** @var UploadedFile $arquivoPlanilhaCsv */
             $arquivoPlanilhaCsv = $form->get('arquivoPlanilhaCsv')->getData();
 
             $bolao
@@ -138,24 +132,14 @@ class BolaoController extends AbstractController
                     ->setNome($bolaoDTO->getNome())
             ;
 
+            $this->bolaoRepository->save($bolao, true);
+
             if ($arquivoComprovantePdf) {
-                if ($bolao->getArquivoComprovantePdf()) {
-                    $this->comprovantePdfService->delete($bolao->getArquivoComprovantePdf()->getCaminhoNome());
-                }
-                $bolao->setArquivoComprovantePdf($this->arquivarComprovante($arquivoComprovantePdf));
+                $this->anexarComprovante($bolao, $arquivoComprovantePdf);
             }
 
             if ($arquivoPlanilhaCsv) {
-                if ($bolao->getArquivoPlanilhaCsv()) {
-                    $this->planilhaCsvService->delete($bolao->getArquivoPlanilhaCsv()->getCaminhoNome());
-                }
-                $bolao->setArquivoPlanilhaCsv($this->arquivarPlanilha($arquivoPlanilhaCsv));
-            }
-
-            $this->bolaoRepository->save($bolao, true);
-
-            if ($bolao->getArquivoPlanilhaCsv()) {
-                $this->importarApostas($bolao);
+                $this->anexarImportarPlanilha($bolao, $arquivoPlanilhaCsv);
             }
 
             $this->addFlash('success', sprintf('Bolão "%s" alterado com sucesso!', $bolao->getNome()));
@@ -168,54 +152,66 @@ class BolaoController extends AbstractController
         ]);
     }
 
-    private function arquivarComprovante(UploadedFile $comprovante): Arquivo
-    {
-        $comprovanteCaminho = $this->comprovantePdfService->upload($comprovante);
+    private function anexarImportarPlanilha(Bolao $bolao, UploadedFile $arquivoPlanilhaCsv): void {
+        $caminhoNome = $this->planilhaCsvService->upload($arquivoPlanilhaCsv);
 
         $arquivo = new Arquivo();
         $arquivo
-                ->setNomeOriginal($comprovante->getClientOriginalName())
-                ->setCaminhoNome($comprovanteCaminho)
+                ->setNomeOriginal($arquivoPlanilhaCsv->getClientOriginalName())
+                ->setCaminhoNome($caminhoNome)
         ;
 
-        $this->arquivoRepository->save($arquivo);
-
-        return $arquivo;
+        $this->arquivoRepository->save($arquivo, true);
+        $this->importarPlanilha($bolao, $caminhoNome);
+        $this->anexarArquivo($bolao, $arquivo);
     }
 
-    private function arquivarPlanilha(UploadedFile $planilha): Arquivo
-    {
-        $planilhaCaminho = $this->planilhaCsvService->upload($planilha);
-
-        $arquivo = new Arquivo();
-        $arquivo
-                ->setNomeOriginal($planilha->getClientOriginalName())
-                ->setCaminhoNome($planilhaCaminho)
-        ;
-
-        $this->arquivoRepository->save($arquivo);
-
-        return $arquivo;
-    }
-
-    public function importarApostas(Bolao $bolao)
-    {
-        $csvReaderHelp = new CsvReaderHelper($bolao->getArquivoPlanilhaCsv()->getCaminhoNome());
+    public function importarPlanilha(Bolao $bolao, string $caminhoNome): void {
+        $csvReaderHelp = new CsvReaderHelper($caminhoNome);
 
         foreach ($csvReaderHelp->getIterator() as $row) {
             $dezenas = array_map('intval', $row);
+
+            if (count($dezenas) == 0) {
+                continue;
+            }
+
             $aposta = new Aposta();
             $aposta
                     ->setDezenas($dezenas)
                     ->setBolao($bolao)
             ;
 
-            $this->apostaRepository->save($aposta, $csvReaderHelp->eof());
+            $this->entityManager->persist($aposta);
         }
+
+        $this->entityManager->flush();
     }
 
-    private function cadastraConcursoSeNaoExistir(Loteria $loteria, int $concursoNumero): Concurso
-    {
+    private function anexarComprovante(Bolao $bolao, UploadedFile $arquivoComprovantePdf): void {
+        $caminhoNome = $this->comprovantePdfService->upload($arquivoComprovantePdf);
+
+        $arquivo = new Arquivo();
+        $arquivo
+                ->setNomeOriginal($arquivoComprovantePdf->getClientOriginalName())
+                ->setCaminhoNome($caminhoNome)
+        ;
+
+        $this->arquivoRepository->save($arquivo, true);
+        $this->anexarArquivo($bolao, $arquivo);
+    }
+
+    private function anexarArquivo(Bolao $bolao, Arquivo $arquivo): void {
+        $bolaoArquivo = new BolaoArquivo();
+        $bolaoArquivo
+                ->setBolao($bolao)
+                ->setArquivo($arquivo)
+        ;
+
+        $this->bolaoArquivoRepository->save($bolaoArquivo, true);
+    }
+
+    private function cadastraConcursoSeNaoExistir(Loteria $loteria, int $concursoNumero): Concurso {
         $concurso = $this->concursoRepository->findByLoteriaAndNumero($loteria, $concursoNumero);
 
         if (null == $concurso) {

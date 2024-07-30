@@ -21,8 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BolaoRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Bolao extends AbstractEntity
-{
+class Bolao extends AbstractEntity {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -46,97 +46,56 @@ class Bolao extends AbstractEntity
     #[Assert\NotBlank(message: 'Informe o Concurso do bolão.')]
     private ?Concurso $concurso = null;
 
-    #[ORM\ManyToOne]
-    private ?Arquivo $arquivoComprovantePdf = null;
-
-    #[ORM\ManyToOne]
-    private ?Arquivo $arquivoPlanilhaCsv = null;
-
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getUuid(): ?Uuid
-    {
+    public function getUuid(): ?Uuid {
         return $this->uuid;
     }
 
-    public function setUuid(Uuid $uuid): static
-    {
+    public function setUuid(Uuid $uuid): static {
         $this->uuid = $uuid;
 
         return $this;
     }
 
-    public function getNome(): ?string
-    {
+    public function getNome(): ?string {
         return $this->nome;
     }
 
-    public function setNome(string $nome): static
-    {
+    public function setNome(string $nome): static {
         $this->nome = $nome;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
-    {
+    public function getCreatedAt(): ?DateTimeImmutable {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): static
-    {
+    public function setCreatedAt(DateTimeImmutable $createdAt): static {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeInterface
-    {
+    public function getUpdatedAt(): ?DateTimeInterface {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): static
-    {
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): static {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getConcurso(): ?Concurso
-    {
+    public function getConcurso(): ?Concurso {
         return $this->concurso;
     }
 
-    public function setConcurso(?Concurso $concurso): static
-    {
+    public function setConcurso(?Concurso $concurso): static {
         $this->concurso = $concurso;
-
-        return $this;
-    }
-
-    public function getArquivoComprovantePdf(): ?Arquivo
-    {
-        return $this->arquivoComprovantePdf;
-    }
-
-    public function setArquivoComprovantePdf(?Arquivo $arquivoComprovantePdf): static
-    {
-        $this->arquivoComprovantePdf = $arquivoComprovantePdf;
-
-        return $this;
-    }
-
-    public function getArquivoPlanilhaCsv(): ?Arquivo
-    {
-        return $this->arquivoPlanilhaCsv;
-    }
-
-    public function setArquivoPlanilhaCsv(?Arquivo $arquivoPlanilhaCsv): static
-    {
-        $this->arquivoPlanilhaCsv = $arquivoPlanilhaCsv;
 
         return $this;
     }

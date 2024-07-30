@@ -54,6 +54,7 @@ class BolaoType extends AbstractType
                 ->add('arquivoPlanilhaCsv', FileType::class, [
                     'label' => 'Planilhas com os jogos',
                     'help' => 'Cada linha deve ser uma aposta e as dezenas devem ser separadas por ponto e vírgula.',
+                    'mapped' => false,
                     'required' => false,
                     'attr' => [
                         'accept' => 'text/csv,text/plain',
@@ -72,6 +73,7 @@ class BolaoType extends AbstractType
                 ->add('arquivoComprovantePdf', FileType::class, [
                     'label' => 'Comprovantes dos jogos',
                     'help' => 'O arquivo PDF deve ter as imagens dos comprovantes.',
+                    'mapped' => false,
                     'required' => false,
                     'attr' => [
                         'accept' => 'application/pdf,application/x-pdf,image/png',
