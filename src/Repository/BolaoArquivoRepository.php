@@ -11,8 +11,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Bolao;
 use App\Entity\BolaoArquivo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,6 +32,28 @@ class BolaoArquivoRepository extends ServiceEntityRepository {
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * 
+     * @param Bolao $bolao
+     * @return BolaoArquivo[]|null
+     */
+    public function findByBolao(Bolao $bolao) {
+        return $this->createQueryBuilder('ba')
+                        ->select('ba,b,a')
+                        ->where('b.uuid = :uuid')
+                        ->setParameter('uuid', $bolao->getUuid()->toBinary())
+                        ->innerJoin('ba.bolao', 'b', Join::WITH, 'ba.bolao = b.id')
+                        ->innerJoin('ba.arquivo', 'a', Join::WITH, 'ba.arquivo = a.id')
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
+
+    public function delete(BolaoArquivo $bolaoArquivo): void {
+        $this->getEntityManager()->remove($bolaoArquivo);
+        $this->getEntityManager()->flush();
     }
 
     //    /**

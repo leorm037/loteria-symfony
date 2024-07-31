@@ -61,6 +61,11 @@ class BolaoRepository extends ServiceEntityRepository {
         ;
     }
 
+    public function delete(Bolao $bolao): void {
+        $this->getEntityManager()->remove($bolao);
+        $this->getEntityManager()->flush();
+    }
+
     //    /**
     //     * @return Bolao[] Returns an array of Bolao objects
     //     */

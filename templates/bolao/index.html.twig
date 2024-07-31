@@ -27,8 +27,9 @@
                             <th>Bolão</th>
                             <th>Loteria</th>
                             <th>Concurso</th>
-                            <th>Apostas</th>
-                            <th>Maior acerto em aposta</th>
+                            <th>Apuração</th>
+                            <th class="d-none d-md-table-cell">Apostas</th>
+                            <th class="d-none d-md-table-cell">Maior acerto em aposta</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
@@ -39,8 +40,9 @@
                             <td>{{ bolao.nome }}</td>
                             <td>{{ bolao.concurso.loteria.nome }}</td>
                             <td class="text-end">{{ bolao.concurso.numero }}</td>
-                            <td class="text-end">{{ item.apostas|number_format(0, ',', '.') }}</td>
-                            <td class="text-end">{{ item.apostasMax|number_format(0, ',', '.') }}</td>
+                            <td class="text-end">{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}</td>
+                            <td class="text-end d-none d-md-table-cell">{{ item.apostas|number_format(0, ',', '.') }}</td>
+                            <td class="text-end d-none d-md-table-cell">{{ item.apostasMax|number_format(0, ',', '.') }}</td>
                             <td class="text-center p-0 align-middle">
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
                                     <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}">
@@ -49,6 +51,9 @@
                                     <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
                                         <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
                                     </a>
+                                    <button type="button" class="btn btn-danger" data-delete="{{ bolao.uuid }}">
+                                        <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -62,4 +67,10 @@
             </div>
         </div>
     </div>
+   {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_delete')}) }}
+{% endblock %}
+
+{% block javascripts_footer %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bolao/index.js', 'js') }}"></script>
 {% endblock %}

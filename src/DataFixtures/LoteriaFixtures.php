@@ -23,6 +23,20 @@ class LoteriaFixtures extends Fixture
             [
                 'nome' => 'Mega-Sena',
                 'apiUrl' => 'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena',
+                'aposta' => range(6,15,1),
+                'dezenas' => range(1,60,1)
+            ],
+            [
+                'nome' => '+Milionária',
+                'apiUrl' => 'https://servicebus2.caixa.gov.br/portaldeloterias/api/maismilionaria',
+                'aposta' => range(6,12,1),
+                'dezenas' => range(1,50,1)
+            ],
+            [
+                'nome' => 'Quina',
+                'apiUrl' => 'https://servicebus2.caixa.gov.br/portaldeloterias/api/quina',
+                'aposta' => range(5,15,1),
+                'dezenas' => range(1,80,1)
             ],
         ];
 

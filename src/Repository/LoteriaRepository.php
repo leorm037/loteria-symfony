@@ -57,8 +57,15 @@ class LoteriaRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findByUuid(Uuid $uuid): ?Loteria
+    /**
+     * 
+     * @param string $uuidString
+     * @return Loteria|null
+     */
+    public function findByUuid(string $uuidString): ?Loteria
     {
+        $uuid = Uuid::fromString($uuidString);
+        
         return $this->createQueryBuilder('l')
                         ->where('l.uuid = :uuid')
                         ->setParameter('uuid', $uuid->toBinary())

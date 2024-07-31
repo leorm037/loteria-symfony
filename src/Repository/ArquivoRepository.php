@@ -18,21 +18,23 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<Arquivo>
  */
-class ArquivoRepository extends ServiceEntityRepository
-{
+class ArquivoRepository extends ServiceEntityRepository {
 
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Arquivo::class);
     }
 
-    public function save(Arquivo $arquivo, bool $flush = false): void
-    {
+    public function save(Arquivo $arquivo, bool $flush = false): void {
         $this->getEntityManager()->persist($arquivo);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function delete(Arquivo $arquivo): void {
+        $this->getEntityManager()->remove($arquivo);
+        $this->getEntityManager()->flush();
     }
 
     //    /**

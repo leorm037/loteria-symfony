@@ -32,7 +32,7 @@
             <label for="concurso-apuracao" class="form-label">Apuração</label>
             <div class="input-group">
                 <span class="input-group-text" id="concurso-apuracao-icone"><i class="bi bi-calendar-event"></i></span>
-                <input disabled readonly type="text" class="form-control" id="concurso-apuracao" value="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y','America/Sao_Paulo') : 'Não apurado' }}" aria-label="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y','America/Sao_Paulo') : 'Não apurado' }}">
+                <input disabled readonly type="text" class="form-control" id="concurso-apuracao" value="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}" aria-label="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}">
             </div>
         </div>
     </div>

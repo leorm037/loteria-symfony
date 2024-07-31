@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
+use function dd;
 
 #[Route('/bolao', name: 'app_bolao_')]
 class BolaoController extends AbstractController {
@@ -56,7 +57,7 @@ class BolaoController extends AbstractController {
         $boloes = $this->bolaoRepository->list();
 
         return $this->render('bolao/index.html.twig', [
-                    'boloes' => $boloes,
+                    'boloes' => $boloes
         ]);
     }
 
@@ -152,6 +153,25 @@ class BolaoController extends AbstractController {
         ]);
     }
 
+    #[Route('/delete', name: 'delete', methods: ['POST'])]
+    public function delete(Request $request): Response {
+        $uuidBolao = $request->request->get('uuid');
+
+        $uuid = Uuid::fromString($uuidBolao);
+
+        $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+
+        if ($bolao) {
+            $nomeBolao = $bolao->getNome();
+            $this->excluirAnexos($bolao);
+            $this->apostaRepository->deleteByBolao($bolao);
+            $this->bolaoRepository->delete($bolao);
+            $this->addFlash('success', sprintf('Bolão "%s" excluido com sucesso.', $nomeBolao));
+        }
+
+        return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
+    }
+
     private function anexarImportarPlanilha(Bolao $bolao, UploadedFile $arquivoPlanilhaCsv): void {
         $caminhoNome = $this->planilhaCsvService->upload($arquivoPlanilhaCsv);
 
@@ -225,5 +245,21 @@ class BolaoController extends AbstractController {
         }
 
         return $concurso;
+    }
+
+    private function excluirAnexos(Bolao $bolao): void {
+        $bolaoArquivos = $this->bolaoArquivoRepository->findByBolao($bolao);
+
+        foreach ($bolaoArquivos as $bolaoArquivo) {
+            $arquivo = $bolaoArquivo->getArquivo();
+
+            $this->bolaoArquivoRepository->delete($bolaoArquivo);
+
+            if (file_exists($arquivo->getCaminhoNome())) {
+                unlink($arquivo->getCaminhoNome());
+            }
+
+            $this->arquivoRepository->delete($arquivo);
+        }
     }
 }

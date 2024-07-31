@@ -12,6 +12,7 @@
 namespace App\Repository;
 
 use App\Entity\Aposta;
+use App\Entity\Bolao;
 use App\Entity\Loteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -67,6 +68,17 @@ class ApostaRepository extends ServiceEntityRepository {
                         ->getQuery()
                         ->getResult()
         ;
+    }
+
+    public function deleteByBolao(Bolao $bolao): void {
+        $this->createQueryBuilder('a')
+                ->delete()
+                ->where('a.bolao = :bolao')
+                ->setParameter('bolao', $bolao)
+                ->getQuery()
+                ->execute()
+        ;
+        $this->getEntityManager()->flush();
     }
 
 //    /**
