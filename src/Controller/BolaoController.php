@@ -191,9 +191,28 @@ class BolaoController extends AbstractController {
 
     public function importarPlanilha(Bolao $bolao, string $caminhoNome): void {
         $csvReaderHelp = new CsvReaderHelper($caminhoNome);
+        
+        $apostasCadastradas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
 
         foreach ($csvReaderHelp->getIterator() as $row) {
             $dezenas = array_map('intval', $row);
+            
+            $diferenca = [];
+            
+            foreach ($apostasCadastradas as $apostaCadastrada) {
+                if (count($dezenas) == count($apostaCadastrada->getDezenas())) {
+                    $diferenca = array_diff($dezenas, $apostaCadastrada->getDezenas());
+                    
+                    if (count($diferenca) == 0){
+                        $this->addFlash('danger', sprintf('A aposta "%s" já está cadastrada.', implode(', ', $dezenas)));
+                        break;
+                    }
+                }
+            }
+            
+            if (count($diferenca) == 0) {
+                continue;
+            }
 
             $aposta = new Aposta();
             $aposta
