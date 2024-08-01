@@ -34,6 +34,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function dd;
 
 #[Route('/bolao', name: 'app_bolao_')]
@@ -47,7 +49,8 @@ class BolaoController extends AbstractController {
             private ArquivoRepository $arquivoRepository,
             private ApostaRepository $apostaRepository,
             private EntityManagerInterface $entityManager,
-            private BolaoArquivoRepository $bolaoArquivoRepository
+            private BolaoArquivoRepository $bolaoArquivoRepository,
+            private ValidatorInterface $validator
     ) {
         
     }
@@ -192,15 +195,20 @@ class BolaoController extends AbstractController {
         foreach ($csvReaderHelp->getIterator() as $row) {
             $dezenas = array_map('intval', $row);
 
-            if (count($dezenas) == 0) {
-                continue;
-            }
-
             $aposta = new Aposta();
             $aposta
                     ->setDezenas($dezenas)
                     ->setBolao($bolao)
             ;
+            
+            $errors = $this->validator->validate($aposta);
+            if (count($errors) > 0) {
+                /** @var ConstraintViolation $error */
+                foreach($errors as $error) {
+                    $this->addFlash('danger', sprintf('A aposta "%s" é inválida. ' . $error->getMessage(), implode(", ", $aposta->getDezenas())));
+                }
+                continue;
+            }
 
             $this->entityManager->persist($aposta);
         }

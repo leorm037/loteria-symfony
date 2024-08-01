@@ -22,8 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ApostaRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Aposta extends AbstractEntity
-{
+class Aposta extends AbstractEntity {
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -57,96 +56,114 @@ class Aposta extends AbstractEntity
     #[ORM\Column(nullable: true, options: ['unsigned' => true])]
     private ?int $quantidadeAcertos = null;
 
-    public function getId(): ?int
-    {
+    #[Assert\IsTrue(message: 'A quantidade de dezenas informadas é menor que a definida na Loteria.')]
+    public function isQuantidadeDezenasMenor(): bool {
+        $min = min($this->getBolao()->getConcurso()->getLoteria()->getAposta());
+
+        if (count($this->getDezenas()) >= $min) {
+            return true;
+        }
+
+        return false;
+    }
+
+    #[Assert\IsTrue(message: 'A quantidade de dezenas informadas é maior que a definida na Loteria.')]
+    public function isQuantidadeDezenasMaior(): bool {
+        $max = max($this->getBolao()->getConcurso()->getLoteria()->getAposta());
+
+        if (count($this->getDezenas()) <= $max) {
+            return true;
+        }
+
+        return false;
+    }
+
+    #[Assert\IsTrue(message: 'Existem dezenas fora do intervalo das dezenas da Loteria.')]
+    public function isDezenasForaDoIntervalo(): bool {
+        $fora = array_diff($this->getDezenas(), $this->getBolao()->getConcurso()->getLoteria()->getDezenas());
+        
+        if (count($fora) == 0) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public function getId(): ?int {
         return $this->id;
     }
 
     /**
      * @return array<string>
      */
-    public function getDezenas(): array
-    {
+    public function getDezenas(): array {
         return $this->dezenas;
     }
 
     /**
      * @param array<string> $dezenas
      */
-    public function setDezenas(array $dezenas): static
-    {
+    public function setDezenas(array $dezenas): static {
         $this->dezenas = $dezenas;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
-    {
+    public function getCreatedAt(): ?DateTimeImmutable {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): static
-    {
+    public function setCreatedAt(DateTimeImmutable $createdAt): static {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeInterface
-    {
+    public function getUpdatedAt(): ?DateTimeInterface {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): static
-    {
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): static {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getUuid(): ?Uuid
-    {
+    public function getUuid(): ?Uuid {
         return $this->uuid;
     }
 
-    public function setUuid(Uuid $uuid): static
-    {
+    public function setUuid(Uuid $uuid): static {
         $this->uuid = $uuid;
 
         return $this;
     }
 
-    public function getBolao(): ?Bolao
-    {
+    public function getBolao(): ?Bolao {
         return $this->bolao;
     }
 
-    public function setBolao(?Bolao $bolao): static
-    {
+    public function setBolao(?Bolao $bolao): static {
         $this->bolao = $bolao;
 
         return $this;
     }
 
-    public function isConferida(): ?bool
-    {
+    public function isConferida(): ?bool {
         return $this->conferida;
     }
 
-    public function setConferida(bool $conferida): static
-    {
+    public function setConferida(bool $conferida): static {
         $this->conferida = $conferida;
 
         return $this;
     }
 
-    public function getQuantidadeAcertos(): ?int
-    {
+    public function getQuantidadeAcertos(): ?int {
         return $this->quantidadeAcertos;
     }
 
-    public function setQuantidadeAcertos(?int $quantidadeAcertos): static
-    {
+    public function setQuantidadeAcertos(?int $quantidadeAcertos): static {
         $this->quantidadeAcertos = $quantidadeAcertos;
 
         return $this;
