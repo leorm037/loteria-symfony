@@ -38,6 +38,7 @@ class UsuarioRegistroType extends AbstractType
                     'required' => true, 
                     'mapped' => false,
                     'type' => PasswordType::class,
+                    'invalid_message' => 'A confirmação de senha não corresponde com a senha.',
                     'first_options'  => ['label' => 'Senha'],
                     'second_options' => ['label' => 'Confirmar senha']                    
                 ])

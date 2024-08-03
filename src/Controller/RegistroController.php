@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/registro', name: 'app_registro_')]
+#[Route('/registrar', name: 'app_registro_')]
 class RegistroController extends AbstractController
 {
 
