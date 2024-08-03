@@ -17,6 +17,7 @@ use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ConcursoRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -29,6 +30,8 @@ class Concurso extends AbstractEntity
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Informe o número do Concurso.')]
+    #[Assert\Positive]
     private ?int $numero = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]

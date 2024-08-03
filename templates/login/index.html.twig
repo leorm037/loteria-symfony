@@ -1,0 +1,47 @@
+{# templates/login/login.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: Autenticação{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active"><i class="bi bi-person"></i> Autenticação</li>
+    {% endblock %}
+
+{% block body %}
+    <form action="{{ path('app_login_index') }}" method="post" data-loading="true">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h1 class="h4 m-0"><i class="bi bi-person"></i> Autenticação</h1>                            
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">E-mail</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="username-icone"><i class="bi bi-envelope-at"></i></span>
+                                <input type="email" class="form-control" id="username" name="_username" value="{{ last_username }}" autocomplete="username" placeholder="name@example.com">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Senha</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="password-icone"><i class="bi bi-key"></i></span>
+                                <input type="password" class="form-control" id="password" name="_password" autocomplete="current-password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="reset" class="btn btn-secondary btn-sm"><i class="fa-solid fa-broom"></i> Limpar</button>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-box-arrow-in-right"></i> Autenticar</button>
+                    </div>
+                </div>
+            </div>
+    </form>
+{% endblock %}

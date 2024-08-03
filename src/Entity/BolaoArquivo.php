@@ -12,12 +12,15 @@
 namespace App\Entity;
 
 use App\Repository\BolaoArquivoRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BolaoArquivoRepository::class)]
-class BolaoArquivo
-{
+#[ORM\HasLifecycleCallbacks]
+class BolaoArquivo extends AbstractEntity {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -31,60 +34,51 @@ class BolaoArquivo
     #[ORM\JoinColumn(nullable: false)]
     private ?Arquivo $arquivo = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
+    protected ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
+    protected ?DateTimeInterface $updatedAt = null;
 
-    public function getId(): ?int
-    {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getBolao(): ?Bolao
-    {
+    public function getBolao(): ?Bolao {
         return $this->bolao;
     }
 
-    public function setBolao(?Bolao $bolao): static
-    {
+    public function setBolao(?Bolao $bolao): static {
         $this->bolao = $bolao;
 
         return $this;
     }
 
-    public function getArquivo(): ?Arquivo
-    {
+    public function getArquivo(): ?Arquivo {
         return $this->arquivo;
     }
 
-    public function setArquivo(?Arquivo $arquivo): static
-    {
+    public function setArquivo(?Arquivo $arquivo): static {
         $this->arquivo = $arquivo;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
+    public function getCreatedAt(): ?DateTimeImmutable {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
+    public function setCreatedAt(DateTimeImmutable $createdAt): static {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
+    public function getUpdatedAt(): ?DateTimeInterface {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
-    {
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): static {
         $this->updatedAt = $updatedAt;
 
         return $this;

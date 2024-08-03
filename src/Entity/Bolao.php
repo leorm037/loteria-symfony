@@ -35,7 +35,7 @@ class Bolao extends AbstractEntity {
     #[Assert\NotBlank(message: 'Informe o nome do bolão.')]
     private ?string $nome = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

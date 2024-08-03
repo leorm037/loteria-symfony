@@ -1,0 +1,51 @@
+{# templates/registro/index.html.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: Registro{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active"><i class="bi bi-person-plus"></i> Registro</li>
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        <div class="row justify-content-md-center">
+            <div class="col col-lg-6">
+                <div class="card shadow">
+                     <div class="card-header bg-gradient">
+                        <h1 class="h4 m-0"><i class="bi bi-person-plus"></i> Registro</h1>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.nome) }}
+
+                        <div class="row mb-3">
+                            {{ form_label(form.email) }}
+                            <div class="input-group">
+                                <span class="input-group-text" id="email-icone"><i class="bi bi-envelope-at"></i></span>
+                                {{ form_widget(form.email) }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            {{ form_label(form.plainPassword.first) }}
+                            <div class="input-group">
+                                <span class="input-group-text" id="plainPassword-first-icone"><i class="bi bi-key"></i></span>
+                                {{ form_widget(form.plainPassword.first) }}
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            {{ form_label(form.plainPassword.second) }}
+                            <div class="input-group">
+                                <span class="input-group-text" id="plainPassword-second-icone"><i class="bi bi-key"></i></span>
+                                {{ form_widget(form.plainPassword.second) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="reset" class="btn btn-secondary btn-sm">Limpar</button>
+                        <button type="submit" class="btn btn-primary btn-sm"> Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
