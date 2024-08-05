@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240802184604 extends AbstractMigration
+final class Version20240805213950 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,7 +20,7 @@ final class Version20240802184604 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE usuario (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', password VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE rememberme_token (series VARCHAR(88) NOT NULL, value VARCHAR(88) NOT NULL, lastUsed DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', class VARCHAR(100) NOT NULL, username VARCHAR(200) NOT NULL, PRIMARY KEY(series)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE aposta DROP FOREIGN KEY fk_aposta_bolao');
         $this->addSql('ALTER TABLE aposta CHANGE uuid uuid BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', CHANGE conferida conferida TINYINT(1) DEFAULT 0 NOT NULL, CHANGE dezenas dezenas LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', CHANGE created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', CHANGE updated_at updated_at DATETIME DEFAULT NULL');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_CFAC41F3D17F50A6 ON aposta (uuid)');
@@ -29,13 +29,13 @@ final class Version20240802184604 extends AbstractMigration
         $this->addSql('ALTER TABLE aposta ADD CONSTRAINT fk_aposta_bolao FOREIGN KEY (bolao_id) REFERENCES bolao (id) ON UPDATE NO ACTION ON DELETE NO ACTION');
         $this->addSql('ALTER TABLE arquivo CHANGE uuid uuid BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', CHANGE created_at created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', CHANGE updated_at updated_at DATETIME DEFAULT NULL');
         $this->addSql('ALTER TABLE bolao DROP FOREIGN KEY fk_bolao_concurso');
-        $this->addSql('ALTER TABLE bolao CHANGE uuid uuid BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', CHANGE created_at created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', CHANGE updated_at updated_at DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE bolao CHANGE uuid uuid BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', CHANGE created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', CHANGE updated_at updated_at DATETIME DEFAULT NULL');
         $this->addSql('DROP INDEX fk_bolao_concurso_idx ON bolao');
         $this->addSql('CREATE INDEX IDX_A6B3200EF415D168 ON bolao (concurso_id)');
         $this->addSql('ALTER TABLE bolao ADD CONSTRAINT fk_bolao_concurso FOREIGN KEY (concurso_id) REFERENCES concurso (id) ON UPDATE NO ACTION ON DELETE NO ACTION');
         $this->addSql('ALTER TABLE bolao_arquivo DROP FOREIGN KEY fk_bolao_arquivo_bolao');
         $this->addSql('ALTER TABLE bolao_arquivo DROP FOREIGN KEY fk_bolao_arquivo_arquivo');
-        $this->addSql('ALTER TABLE bolao_arquivo CHANGE created_at created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', CHANGE updated_at updated_at DATETIME DEFAULT NULL');
+        $this->addSql('ALTER TABLE bolao_arquivo CHANGE created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', CHANGE updated_at updated_at DATETIME DEFAULT NULL');
         $this->addSql('DROP INDEX fk_bolao_arquivo_bolao_idx ON bolao_arquivo');
         $this->addSql('CREATE INDEX IDX_403C3E1CAB332E08 ON bolao_arquivo (bolao_id)');
         $this->addSql('DROP INDEX fk_bolao_arquivo_arquivo_idx ON bolao_arquivo');
@@ -51,20 +51,26 @@ final class Version20240802184604 extends AbstractMigration
         $this->addSql('ALTER TABLE loteria CHANGE uuid uuid BINARY(16) NOT NULL COMMENT \'(DC2Type:uuid)\', CHANGE aposta aposta LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', CHANGE dezenas dezenas LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', CHANGE created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', CHANGE updated_at updated_at DATETIME DEFAULT NULL');
         $this->addSql('DROP INDEX slug_url_unique ON loteria');
         $this->addSql('CREATE UNIQUE INDEX slug_UNIQUE ON loteria (slug_url)');
+        $this->addSql('ALTER TABLE usuario CHANGE roles roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', CHANGE created_at created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', CHANGE updated_at updated_at DATETIME DEFAULT NULL, CHANGE last_access last_access DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL');
+        $this->addSql('DROP INDEX email_unique ON usuario');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON usuario (email)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE usuario');
+        $this->addSql('DROP TABLE rememberme_token');
+        $this->addSql('ALTER TABLE usuario CHANGE roles roles LONGTEXT NOT NULL, CHANGE last_access last_access DATETIME DEFAULT \'current_timestamp()\' NOT NULL, CHANGE created_at created_at DATETIME DEFAULT \'current_timestamp()\' NOT NULL, CHANGE updated_at updated_at DATETIME DEFAULT \'NULL\'');
+        $this->addSql('DROP INDEX uniq_identifier_email ON usuario');
+        $this->addSql('CREATE UNIQUE INDEX email_UNIQUE ON usuario (email)');
         $this->addSql('ALTER TABLE arquivo CHANGE uuid uuid BINARY(16) NOT NULL, CHANGE created_at created_at DATETIME DEFAULT \'current_timestamp()\' NOT NULL, CHANGE updated_at updated_at DATETIME DEFAULT \'NULL\'');
         $this->addSql('ALTER TABLE bolao_arquivo DROP FOREIGN KEY FK_403C3E1CAB332E08');
         $this->addSql('ALTER TABLE bolao_arquivo DROP FOREIGN KEY FK_403C3E1C7E7C3263');
         $this->addSql('ALTER TABLE bolao_arquivo CHANGE created_at created_at DATETIME NOT NULL, CHANGE updated_at updated_at DATETIME DEFAULT \'NULL\'');
-        $this->addSql('DROP INDEX idx_403c3e1c7e7c3263 ON bolao_arquivo');
-        $this->addSql('CREATE INDEX fk_bolao_arquivo_arquivo_idx ON bolao_arquivo (arquivo_id)');
         $this->addSql('DROP INDEX idx_403c3e1cab332e08 ON bolao_arquivo');
         $this->addSql('CREATE INDEX fk_bolao_arquivo_bolao_idx ON bolao_arquivo (bolao_id)');
+        $this->addSql('DROP INDEX idx_403c3e1c7e7c3263 ON bolao_arquivo');
+        $this->addSql('CREATE INDEX fk_bolao_arquivo_arquivo_idx ON bolao_arquivo (arquivo_id)');
         $this->addSql('ALTER TABLE bolao_arquivo ADD CONSTRAINT FK_403C3E1CAB332E08 FOREIGN KEY (bolao_id) REFERENCES bolao (id)');
         $this->addSql('ALTER TABLE bolao_arquivo ADD CONSTRAINT FK_403C3E1C7E7C3263 FOREIGN KEY (arquivo_id) REFERENCES arquivo (id)');
         $this->addSql('ALTER TABLE bolao DROP FOREIGN KEY FK_A6B3200EF415D168');
