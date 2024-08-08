@@ -49,3 +49,19 @@ function redirectParamsUrl(url, params, clearParams = false) {
 
     $.LoadingOverlay('hide');
 }
+
+$('i.bi-door-closed').parent().on('mouseover', function(){
+    $(this).children('i').removeClass('bi bi-door-closed');
+    $(this).children('i').addClass('bi bi-door-open');
+}).on('mouseout', function(){
+    $(this).children('i').removeClass('bi bi-door-open');
+    $(this).children('i').addClass('bi bi-door-closed');
+});
+
+$('i.bi-door-open-fill').parent().on('mouseover', function(){
+    $(this).children('i').removeClass('bi bi-door-open-fill');
+    $(this).children('i').addClass('bi bi-door-closed-fill');
+}).on('mouseout', function(){
+    $(this).children('i').removeClass('bi bi-door-closed-fill');
+    $(this).children('i').addClass('bi bi-door-open-fill');
+});

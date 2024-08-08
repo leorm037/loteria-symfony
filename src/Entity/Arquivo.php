@@ -20,7 +20,6 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\HasLifecycleCallbacks]
 class Arquivo extends AbstractEntity
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -87,16 +86,16 @@ class Arquivo extends AbstractEntity
 
     public function getCaminhoNome(): ?string
     {
-        return $this->caminho . \DIRECTORY_SEPARATOR . $this->nome;
+        return $this->caminho.\DIRECTORY_SEPARATOR.$this->nome;
     }
 
     public function setCaminhoNome(string $caminhoNome): static
     {
         $arquivo = pathinfo($caminhoNome);
-        
+
         $this->setNome($arquivo['basename']);
         $this->setCaminho($arquivo['dirname']);
-        
+
         return $this;
     }
 
@@ -135,5 +134,4 @@ class Arquivo extends AbstractEntity
 
         return $this;
     }
-
 }

@@ -1,10 +1,10 @@
 {# templates/registro/index.html.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ parent() }} :: Registro{% endblock %}
+{% block title %}{{ parent() }} :: Inscrição{% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item active"><i class="bi bi-person-plus"></i> Registrar</li>
+    <li class="breadcrumb-item active"><i class="bi bi-person-add"></i> Inscrição</li>
 {% endblock %}
 
 {% block body %}
@@ -13,42 +13,49 @@
             <div class="col col-lg-6">
                 <div class="card shadow">
                      <div class="card-header bg-gradient">
-                        <h1 class="h4 m-0"><i class="bi bi-person-plus"></i> Registrar</h1>
+                        <h1 class="h4 m-0"><i class="bi bi-person-add"></i> Inscrição</h1>
                     </div>
                     <div class="card-body">
-                        {{ form_row(form.nome) }}
-                        <div class="row mb-3">
-                            {{ form_label(form.email) }}
-                            <div class="input-group">
-                                <span class="input-group-text" id="email-icone"><i class="bi bi-envelope-at"></i></span>
-                                {{ form_widget(form.email) }}
+                        <div class="row">
+                            <div class="mb-3 col-12">
+                                {{ form_label(form.nome) }}
+                                <div class="input-group">
+                                    <span class="input-group-text" id="nome-icon"><i class="bi bi-person"></i></span>
+                                    {{ form_widget(form.nome) }}
+                                </div>
+                                {{ form_errors(form.nome) }}
+                                {{ form_help(form.nome) }}
                             </div>
-                            {{ form_errors(form.email) }}
-                            {{ form_help(form.email) }}
-                        </div>
-                        <div class="row mb-3">
-                            {{ form_label(form.plainPassword.first) }}
-                            <div class="input-group">
-                                <span class="input-group-text" id="plainPassword-first-icone"><i class="bi bi-key"></i></span>
-                                {{ form_widget(form.plainPassword.first) }}
+                            <div class="mb-3 col-12">
+                                {{ form_label(form.email) }}
+                                <div class="input-group">
+                                    <span class="input-group-text" id="email-icone"><i class="bi bi-envelope-at"></i></span>
+                                    {{ form_widget(form.email) }}
+                                </div>
+                                {{ form_errors(form.email) }}
+                                {{ form_help(form.email) }}
                             </div>
-                            {{ form_errors(form.plainPassword.first) }}
-                            {{ form_help(form.plainPassword.first) }}
-                        </div>
-                        <div class="row mb-3">
-                            {{ form_label(form.plainPassword.second) }}
-                            <div class="input-group">
-                                <span class="input-group-text" id="plainPassword-second-icone"><i class="bi bi-key"></i></span>
-                                {{ form_widget(form.plainPassword.second) }}
+                            <div class="mb-3 col-12 col-md-6">
+                                {{ form_label(form.plainPassword.first) }}
+                                <div class="input-group">
+                                    <span class="input-group-text" id="plainPassword-first-icone"><i class="bi bi-key"></i></span>
+                                    {{ form_widget(form.plainPassword.first) }}
+                                </div>
+                                {{ form_errors(form.plainPassword.first) }}
+                                {{ form_help(form.plainPassword.first) }}
                             </div>
-                            {{ form_errors(form.plainPassword.second) }}
-                            {{ form_help(form.plainPassword.second) }}
+                            <div class="mb-3 col-12 col-md-6">
+                                {{ form_label(form.plainPassword.second) }}
+                                <div class="input-group">
+                                    <span class="input-group-text" id="plainPassword-second-icone"><i class="bi bi-key"></i></span>
+                                    {{ form_widget(form.plainPassword.second) }}
+                                </div>
+                                {{ form_errors(form.plainPassword.second) }}
+                                {{ form_help(form.plainPassword.second) }}
+                            </div>
                         </div>
                     </div>
-                    <div class="card-footer text-end">
-                        <button type="reset" class="btn btn-secondary btn-sm">Limpar</button>
-                        <button type="submit" class="btn btn-primary btn-sm"> Salvar</button>
-                    </div>
+                    {{ include('_formFooter.html.twig', {'voltar': path('app_login_index')}) }}
                 </div>
             </div>
         </div>

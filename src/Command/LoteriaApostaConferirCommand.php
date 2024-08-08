@@ -24,41 +24,44 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-            name: 'loteria:aposta:conferir',
-            description: 'Confere as apostas dos concursos sorteados.',
-    )]
-class LoteriaApostaConferirCommand extends Command {
-
+    name: 'loteria:aposta:conferir',
+    description: 'Confere as apostas dos concursos sorteados.',
+)]
+class LoteriaApostaConferirCommand extends Command
+{
+    /** @var array<int, array{status: string, message: string}> */
     private $messages = [];
 
     public function __construct(
-            private LoteriaRepository $loteriaRepository,
-            private ApostaRepository $apostaRepository,
-            private EntityManagerInterface $manager
+        private LoteriaRepository $loteriaRepository,
+        private ApostaRepository $apostaRepository,
+        private EntityManagerInterface $manager
     ) {
         parent::__construct();
     }
 
-    protected function configure(): void {
+    protected function configure(): void
+    {
         $this
                 ->addArgument(
-                        'loteria',
-                        InputArgument::OPTIONAL,
-                        'Confere as apostas dos concursos sorteados da loteria informada.')
+                    'loteria',
+                    InputArgument::OPTIONAL,
+                    'Confere as apostas dos concursos sorteados da loteria informada.')
                 ->addOption(
-                        'concurso',
-                        'c',
-                        InputOption::VALUE_REQUIRED,
-                        'Confere as apostas do concurso informado. É obrigado informar tambem a loteria.')
+                    'concurso',
+                    'c',
+                    InputOption::VALUE_REQUIRED,
+                    'Confere as apostas do concurso informado. É obrigado informar tambem a loteria.')
                 ->addOption(
-                        'loterias',
-                        'l',
-                        InputOption::VALUE_NONE,
-                        'Apresenta a lista de loterias.')
+                    'loterias',
+                    'l',
+                    InputOption::VALUE_NONE,
+                    'Apresenta a lista de loterias.')
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int {
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
         $io = new SymfonyStyle($input, $output);
 
         $listarLoteria = $input->getOption('loterias');
@@ -66,15 +69,18 @@ class LoteriaApostaConferirCommand extends Command {
         if ($listarLoteria) {
             $this->listarLoterias();
             $this->exibirMensagens($io);
+
             return Command::SUCCESS;
         }
 
         $this->conferirApostasLoteria();
         $this->exibirMensagens($io);
+
         return Command::SUCCESS;
     }
 
-    private function conferirApostasLoteria(Loteria $loteria = null): void {
+    private function conferirApostasLoteria(?Loteria $loteria = null): void
+    {
         $loterias = [];
 
         if ($loteria) {
@@ -92,13 +98,13 @@ class LoteriaApostaConferirCommand extends Command {
 
             foreach ($apostas as $aposta) {
                 $resultado = array_intersect(
-                        $aposta->getBolao()->getConcurso()->getDezenas(),
-                        $aposta->getDezenas()
+                    $aposta->getBolao()->getConcurso()->getDezenas(),
+                    $aposta->getDezenas()
                 );
 
                 $aposta
                         ->setConferida(true)
-                        ->setQuantidadeAcertos(count($resultado))
+                        ->setQuantidadeAcertos(\count($resultado))
                 ;
 
                 $this->manager->persist($aposta);
@@ -106,11 +112,12 @@ class LoteriaApostaConferirCommand extends Command {
 
             $this->manager->flush();
 
-            $this->messages[] = ['status' => 'null', 'message' => sprintf('Quantidade de apostas conferidas: %s', count($apostas))];
+            $this->messages[] = ['status' => 'null', 'message' => \sprintf('Quantidade de apostas conferidas: %s', \count($apostas))];
         }
     }
 
-    private function listarLoterias(): void {
+    private function listarLoterias(): void
+    {
         $loterias = $this->loteriaRepository->findAllOrderByNome();
 
         $this->messages[] = ['status' => 'title', 'message' => 'Loterias cadastradas'];
@@ -120,7 +127,8 @@ class LoteriaApostaConferirCommand extends Command {
         }
     }
 
-    private function exibirMensagens(SymfonyStyle $io): void {
+    private function exibirMensagens(SymfonyStyle $io): void
+    {
         foreach ($this->messages as $message) {
             switch ($message['status']) {
                 case 'success':

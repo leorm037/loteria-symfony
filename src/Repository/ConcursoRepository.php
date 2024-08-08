@@ -16,14 +16,12 @@ use App\Entity\Loteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Concurso>
  */
 class ConcursoRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Concurso::class);
@@ -44,9 +42,7 @@ class ConcursoRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
-     * @param Uuid $uuid
-     * @return type
+     * @return Concurso[]|null
      */
     public function findByLoteria(Loteria $loteria)
     {

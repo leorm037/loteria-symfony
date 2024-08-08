@@ -12,8 +12,6 @@
 namespace App\Entity;
 
 use App\Repository\ConcursoRepository;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -23,7 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 class Concurso extends AbstractEntity
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,7 +32,7 @@ class Concurso extends AbstractEntity
     private ?int $numero = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $apuracao = null;
+    private ?\DateTimeInterface $apuracao = null;
 
     #[ORM\Column(length: 60, nullable: true)]
     private ?string $local = null;
@@ -47,10 +44,10 @@ class Concurso extends AbstractEntity
     private ?string $uf = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
-    protected ?DateTimeImmutable $createdAt = null;
+    protected ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    protected ?DateTimeInterface $updatedAt = null;
+    protected ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'uuid', unique: true)]
     protected ?Uuid $uuid = null;
@@ -59,9 +56,15 @@ class Concurso extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?Loteria $loteria = null;
 
+    /**
+     * @var array<int,array{descricaoFaixa: string, faixa: int,numeroDeGanhadores: int, valorPremio: int}>|null
+     */
     #[ORM\Column(nullable: true)]
     private ?array $rateioPremio = null;
 
+    /**
+     * @var array<int>|null
+     */
     #[ORM\Column(nullable: true)]
     private ?array $dezenas = null;
 
@@ -82,12 +85,12 @@ class Concurso extends AbstractEntity
         return $this;
     }
 
-    public function getApuracao(): ?DateTimeInterface
+    public function getApuracao(): ?\DateTimeInterface
     {
         return $this->apuracao;
     }
 
-    public function setApuracao(?DateTimeInterface $apuracao): static
+    public function setApuracao(?\DateTimeInterface $apuracao): static
     {
         $this->apuracao = $apuracao;
 
@@ -130,24 +133,24 @@ class Concurso extends AbstractEntity
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): static
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 
@@ -178,11 +181,17 @@ class Concurso extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array<int,array{descricaoFaixa: string, faixa: int,numeroDeGanhadores: int, valorPremio: int}>|null
+     */
     public function getRateioPremio(): ?array
     {
         return $this->rateioPremio;
     }
 
+    /**
+     * @param array<int,array{descricaoFaixa: string, faixa: int,numeroDeGanhadores: int, valorPremio: int}>|null $rateioPremio
+     */
     public function setRateioPremio(?array $rateioPremio): static
     {
         $this->rateioPremio = $rateioPremio;
@@ -190,11 +199,17 @@ class Concurso extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array<int>|null
+     */
     public function getDezenas(): ?array
     {
         return $this->dezenas;
     }
 
+    /**
+     * @param array<int>|null $dezenas
+     */
     public function setDezenas(?array $dezenas): static
     {
         $this->dezenas = $dezenas;

@@ -20,7 +20,7 @@ class ConcursoFactory
     public static function buildFromJson(Loteria $loteria, string $json): Concurso
     {
         $concurso = new Concurso();
-        
+
         $objJson = json_decode($json);
 
         $apuracao = DateTimeHelper::stringToDateTimeImmutable(
@@ -29,15 +29,15 @@ class ConcursoFactory
             'America/Sao_Paulo'
         );
 
-        if (null != $objJson->nomeMunicipioUFSorteio){
+        if (null != $objJson->nomeMunicipioUFSorteio) {
             $municipioUf = explode(',', $objJson->nomeMunicipioUFSorteio);
             $municipio = trim($municipioUf[0]);
             $uf = trim($municipioUf[1]);
         } else {
-            $municipio = "Não informado";
-            $uf = "XX";
+            $municipio = 'Não informado';
+            $uf = 'XX';
         }
-        
+
         return $concurso
                         ->setUf($uf)
                         ->setLoteria($loteria)

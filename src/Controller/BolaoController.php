@@ -36,36 +36,36 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use function dd;
 
 #[Route('/bolao', name: 'app_bolao_')]
-class BolaoController extends AbstractController {
-
+class BolaoController extends AbstractController
+{
     public function __construct(
-            private BolaoRepository $bolaoRepository,
-            private ConcursoRepository $concursoRepository,
-            private ApostaComprovantePdfService $comprovantePdfService,
-            private ApostaPlanilhaCsvService $planilhaCsvService,
-            private ArquivoRepository $arquivoRepository,
-            private ApostaRepository $apostaRepository,
-            private EntityManagerInterface $entityManager,
-            private BolaoArquivoRepository $bolaoArquivoRepository,
-            private ValidatorInterface $validator
+        private BolaoRepository $bolaoRepository,
+        private ConcursoRepository $concursoRepository,
+        private ApostaComprovantePdfService $comprovantePdfService,
+        private ApostaPlanilhaCsvService $planilhaCsvService,
+        private ArquivoRepository $arquivoRepository,
+        private ApostaRepository $apostaRepository,
+        private EntityManagerInterface $entityManager,
+        private BolaoArquivoRepository $bolaoArquivoRepository,
+        private ValidatorInterface $validator
     ) {
-        
     }
 
     #[Route('/', name: 'index')]
-    public function index(): Response {
+    public function index(): Response
+    {
         $boloes = $this->bolaoRepository->list();
 
         return $this->render('bolao/index.html.twig', [
-                    'boloes' => $boloes
+            'boloes' => $boloes,
         ]);
     }
 
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response {
+    public function new(Request $request): Response
+    {
         $bolaoDTO = new BolaoDTO();
 
         $form = $this->createForm(BolaoType::class, $bolaoDTO);
@@ -73,8 +73,8 @@ class BolaoController extends AbstractController {
 
         if ($form->isSubmitted() && $form->isValid()) {
             $concurso = $this->cadastraConcursoSeNaoExistir(
-                    $bolaoDTO->getLoteria(),
-                    $bolaoDTO->getConcursoNumero()
+                $bolaoDTO->getLoteria(),
+                $bolaoDTO->getConcursoNumero()
             );
 
             $arquivoComprovantePdf = $form->get('arquivoComprovantePdf')->getData();
@@ -96,18 +96,19 @@ class BolaoController extends AbstractController {
                 $this->anexarImportarPlanilha($bolao, $arquivoPlanilhaCsv);
             }
 
-            $this->addFlash('success', sprintf('Bolão "%s" salvo com sucesso!', $bolao->getNome()));
+            $this->addFlash('success', \sprintf('Bolão "%s" salvo com sucesso!', $bolao->getNome()));
 
             return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bolao/new.html.twig', [
-                    'form' => $form
+            'form' => $form,
         ]);
     }
 
     #[Route('/{uuid}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
-    public function edit(Request $request): Response {
+    public function edit(Request $request): Response
+    {
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
@@ -124,8 +125,8 @@ class BolaoController extends AbstractController {
 
         if ($form->isSubmitted() && $form->isValid()) {
             $concurso = $this->cadastraConcursoSeNaoExistir(
-                    $bolaoDTO->getLoteria(),
-                    $bolaoDTO->getConcursoNumero()
+                $bolaoDTO->getLoteria(),
+                $bolaoDTO->getConcursoNumero()
             );
 
             $arquivoComprovantePdf = $form->get('arquivoComprovantePdf')->getData();
@@ -146,18 +147,19 @@ class BolaoController extends AbstractController {
                 $this->anexarImportarPlanilha($bolao, $arquivoPlanilhaCsv);
             }
 
-            $this->addFlash('success', sprintf('Bolão "%s" alterado com sucesso!', $bolao->getNome()));
+            $this->addFlash('success', \sprintf('Bolão "%s" alterado com sucesso!', $bolao->getNome()));
 
             return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bolao/edit.html.twig', [
-                    'form' => $form
+            'form' => $form,
         ]);
     }
 
     #[Route('/delete', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request): Response {
+    public function delete(Request $request): Response
+    {
         $uuidBolao = $request->request->get('uuid');
 
         $uuid = Uuid::fromString($uuidBolao);
@@ -169,13 +171,14 @@ class BolaoController extends AbstractController {
             $this->excluirAnexos($bolao);
             $this->apostaRepository->deleteByBolao($bolao);
             $this->bolaoRepository->delete($bolao);
-            $this->addFlash('success', sprintf('Bolão "%s" excluido com sucesso.', $nomeBolao));
+            $this->addFlash('success', \sprintf('Bolão "%s" excluido com sucesso.', $nomeBolao));
         }
 
         return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    private function anexarImportarPlanilha(Bolao $bolao, UploadedFile $arquivoPlanilhaCsv): void {
+    private function anexarImportarPlanilha(Bolao $bolao, UploadedFile $arquivoPlanilhaCsv): void
+    {
         $caminhoNome = $this->planilhaCsvService->upload($arquivoPlanilhaCsv);
 
         $arquivo = new Arquivo();
@@ -189,28 +192,29 @@ class BolaoController extends AbstractController {
         $this->anexarArquivo($bolao, $arquivo);
     }
 
-    public function importarPlanilha(Bolao $bolao, string $caminhoNome): void {
+    public function importarPlanilha(Bolao $bolao, string $caminhoNome): void
+    {
         $csvReaderHelp = new CsvReaderHelper($caminhoNome);
-        
+
         $apostasCadastradas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
 
         foreach ($csvReaderHelp->getIterator() as $row) {
             $dezenas = array_map('intval', $row);
-            
+
             $diferenca = [];
-            
+
             foreach ($apostasCadastradas as $apostaCadastrada) {
-                if (count($dezenas) == count($apostaCadastrada->getDezenas())) {
+                if (\count($dezenas) == \count($apostaCadastrada->getDezenas())) {
                     $diferenca = array_diff($dezenas, $apostaCadastrada->getDezenas());
-                    
-                    if (count($diferenca) == 0){
-                        $this->addFlash('danger', sprintf('A aposta "%s" já está cadastrada.', implode(', ', $dezenas)));
+
+                    if (0 == \count($diferenca)) {
+                        $this->addFlash('danger', \sprintf('A aposta "%s" já está cadastrada.', implode(', ', $dezenas)));
                         break;
                     }
                 }
             }
-            
-            if (count($diferenca) == 0) {
+
+            if (0 == \count($diferenca)) {
                 continue;
             }
 
@@ -219,12 +223,12 @@ class BolaoController extends AbstractController {
                     ->setDezenas($dezenas)
                     ->setBolao($bolao)
             ;
-            
+
             $errors = $this->validator->validate($aposta);
-            if (count($errors) > 0) {
+            if (\count($errors) > 0) {
                 /** @var ConstraintViolation $error */
-                foreach($errors as $error) {
-                    $this->addFlash('danger', sprintf('A aposta "%s" é inválida. ' . $error->getMessage(), implode(", ", $aposta->getDezenas())));
+                foreach ($errors as $error) {
+                    $this->addFlash('danger', \sprintf('A aposta "%s" é inválida. '.$error->getMessage(), implode(', ', $aposta->getDezenas())));
                 }
                 continue;
             }
@@ -235,7 +239,8 @@ class BolaoController extends AbstractController {
         $this->entityManager->flush();
     }
 
-    private function anexarComprovante(Bolao $bolao, UploadedFile $arquivoComprovantePdf): void {
+    private function anexarComprovante(Bolao $bolao, UploadedFile $arquivoComprovantePdf): void
+    {
         $caminhoNome = $this->comprovantePdfService->upload($arquivoComprovantePdf);
 
         $arquivo = new Arquivo();
@@ -248,7 +253,8 @@ class BolaoController extends AbstractController {
         $this->anexarArquivo($bolao, $arquivo);
     }
 
-    private function anexarArquivo(Bolao $bolao, Arquivo $arquivo): void {
+    private function anexarArquivo(Bolao $bolao, Arquivo $arquivo): void
+    {
         $bolaoArquivo = new BolaoArquivo();
         $bolaoArquivo
                 ->setBolao($bolao)
@@ -258,7 +264,8 @@ class BolaoController extends AbstractController {
         $this->bolaoArquivoRepository->save($bolaoArquivo, true);
     }
 
-    private function cadastraConcursoSeNaoExistir(Loteria $loteria, int $concursoNumero): Concurso {
+    private function cadastraConcursoSeNaoExistir(Loteria $loteria, int $concursoNumero): Concurso
+    {
         $concurso = $this->concursoRepository->findByLoteriaAndNumero($loteria, $concursoNumero);
 
         if (null == $concurso) {
@@ -274,7 +281,8 @@ class BolaoController extends AbstractController {
         return $concurso;
     }
 
-    private function excluirAnexos(Bolao $bolao): void {
+    private function excluirAnexos(Bolao $bolao): void
+    {
         $bolaoArquivos = $this->bolaoArquivoRepository->findByBolao($bolao);
 
         foreach ($bolaoArquivos as $bolaoArquivo) {

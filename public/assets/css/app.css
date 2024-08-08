@@ -37,7 +37,7 @@
 
 .border-loteria {
     --bs-border-opacity: 1;
-    border-color: var(--green)!important;
+    border-color: var(--green-200)!important;
 }
 
 .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {

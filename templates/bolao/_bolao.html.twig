@@ -1,47 +1,49 @@
 {# bolao/_bolao.html.twig #}
-<div class="row">
-    <div class="col-12 col-sm-12 col-md-6">
-        <div class="mb-3">
-            <label for="bolao" class="form-label">Nome do bolão</label>
-            <div class="input-group">
-                <span class="input-group-text" id="bolao-icone"><i class="fa-regular fa-futbol"></i></span>
-                <input disabled readonly type="text" class="form-control" id="bolao" value="{{ bolao.nome }}" aria-label="{{ bolao.nome }}">
+<div class="card-body border-bottom text-bg-light">
+    <div class="row">
+        <div class="col-12 col-md-12 col-xl-4">
+            <div class="mb-3">
+                <label for="bolao" class="form-label">Nome do bolão</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="bolao-icone"><i class="fa-regular fa-futbol"></i></span>
+                    <input disabled readonly type="text" class="form-control" id="bolao" value="{{ bolao.nome }}" aria-label="{{ bolao.nome }}">
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-12 col-sm-8 col-md-4">
-        <div class="mb-3">
-            <label for="loteria" class="form-label">Loteria</label>
-            <div class="input-group">
-                <span class="input-group-text" id="loteria-icone"><i class="fa-solid fa-clover icon-rotate-45"></i></span>
-                <input disabled readonly type="text" class="form-control" id="loteria" value="{{ bolao.concurso.loteria.nome }}" aria-label="{{ bolao.concurso.loteria.nome }}">
+        <div class="col-12 col-md-6 col-xl-2">
+            <div class="mb-3">
+                <label for="loteria" class="form-label">Loteria</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="loteria-icone"><i class="fa-solid fa-clover icon-rotate-45"></i></span>
+                    <input disabled readonly type="text" class="form-control" id="loteria" value="{{ bolao.concurso.loteria.nome }}" aria-label="{{ bolao.concurso.loteria.nome }}">
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-12 col-sm-4 col-md-2">
-        <div class="mb-3">
-            <label for="concurso" class="form-label">Concurso</label>
-            <div class="input-group">
-                <span class="input-group-text" id="concurso-icone"><i class="bi bi-123"></i></span>
-                <input disabled readonly type="text" class="form-control" id="concurso" value="{{ bolao.concurso.numero }}" aria-label="{{ bolao.concurso.numero }}">
+        <div class="col-12 col-md-6 col-xl-2">
+            <div class="mb-3">
+                <label for="concurso" class="form-label">Concurso</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="concurso-icone"><i class="bi bi-123"></i></span>
+                    <input disabled readonly type="text" class="form-control" id="concurso" value="{{ bolao.concurso.numero }}" aria-label="{{ bolao.concurso.numero }}">
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-12 col-sm-6">
-        <div class="mb-3">
-            <label for="concurso-apuracao" class="form-label">Apuração</label>
-            <div class="input-group">
-                <span class="input-group-text" id="concurso-apuracao-icone"><i class="bi bi-calendar-event"></i></span>
-                <input disabled readonly type="text" class="form-control" id="concurso-apuracao" value="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}" aria-label="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}">
+        <div class="col-12 col-md-6 col-xl-2">
+            <div class="mb-3">
+                <label for="concurso-apuracao" class="form-label">Apuração</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="concurso-apuracao-icone"><i class="bi bi-calendar-event"></i></span>
+                    <input disabled readonly type="text" class="form-control" id="concurso-apuracao" value="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}" aria-label="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}">
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-12 col-sm-6">
-        <div class="mb-3">
-            <label for="concurso-dezenas" class="form-label">Dezenas</label>
-            <div class="input-group">
-                <span class="input-group-text" id="concurso-dezenas-icone"><i class="bi bi-ticket-perforated-fill"></i></span>
-                <input disabled readonly type="text" class="form-control" id="concurso-dezenas" value="{{ bolao.concurso.dezenas ? bolao.concurso.dezenas|join(', ') : 'Não apurado' }}" aria-label="{{ bolao.concurso.dezenas ? bolao.concurso.dezenas|join(', ') : 'Não apurado' }}">
+        <div class="col-12 col-md-6 col-xl-2">
+            <div class="mb-3">
+                <label for="concurso-dezenas" class="form-label">Dezenas</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="concurso-dezenas-icone"><i class="bi bi-ticket-perforated-fill"></i></span>
+                    <input disabled readonly type="text" class="form-control" id="concurso-dezenas" value="{{ bolao.concurso.dezenas ? bolao.concurso.dezenas|join(', ') : 'Não apurado' }}" aria-label="{{ bolao.concurso.dezenas ? bolao.concurso.dezenas|join(', ') : 'Não apurado' }}">
+                </div>
             </div>
         </div>
     </div>

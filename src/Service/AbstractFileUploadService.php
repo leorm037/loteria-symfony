@@ -63,7 +63,7 @@ class AbstractFileUploadService
     }
 
     public function delete(?string $filename): bool
-    {        
+    {
         return unlink($filename);
     }
 }

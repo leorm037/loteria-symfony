@@ -12,26 +12,29 @@
 namespace App\DTO;
 
 use App\Entity\Bolao;
-use App\Entity\Loteria;
 
-class ApostaImportarDTO {
-
+class ApostaImportarDTO
+{
     private Bolao $bolao;
     private string $arquivoPlanilhaCsv;
 
-    public function getBolao(): Bolao {
+    public function getBolao(): Bolao
+    {
         return $this->bolao;
     }
 
-    public function setBolao(Bolao $bolao): void {
+    public function setBolao(Bolao $bolao): void
+    {
         $this->bolao = $bolao;
     }
 
-    public function getArquivoPlanilhaCsv(): string {
+    public function getArquivoPlanilhaCsv(): string
+    {
         return $this->arquivoPlanilhaCsv;
     }
 
-    public function setArquivoPlanilhaCsv(string $arquivoPlanilhaCsv): void {
+    public function setArquivoPlanilhaCsv(string $arquivoPlanilhaCsv): void
+    {
         $this->arquivoPlanilhaCsv = $arquivoPlanilhaCsv;
     }
 }

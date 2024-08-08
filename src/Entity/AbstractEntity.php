@@ -26,6 +26,7 @@ abstract class AbstractEntity
         $this->uuid();
     }
 
+    #[ORM\PreUpdate]
     public function preUpdate(): void
     {
         $this->updatedAt();
@@ -50,7 +51,7 @@ abstract class AbstractEntity
     {
         if (property_exists(static::class, 'slugUrl') && null === $this->slugUrl && property_exists(static::class, 'nome')) {
             $slugger = new AsciiSlugger();
-            $this->slugUrl = strtolower($slugger->slug($this->getNome()));
+            $this->slugUrl = strtolower($slugger->slug($this->getNome())); /** @phpstan-ignore method.notFound */
         }
     }
 

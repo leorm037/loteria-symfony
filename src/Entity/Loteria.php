@@ -49,9 +49,11 @@ class Loteria extends AbstractEntity
     #[Assert\NotBlank(message: 'Informe a URL da API.')]
     private ?string $apiUrl = null;
 
+    /** @var array<int> $aposta */
     #[ORM\Column]
     private array $aposta = [];
 
+    /** @var array<int> $dezenas */
     #[ORM\Column]
     private array $dezenas = [];
 
@@ -125,11 +127,17 @@ class Loteria extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array<int>
+     */
     public function getAposta(): array
     {
         return $this->aposta;
     }
 
+    /**
+     * @param array<int> $aposta
+     */
     public function setAposta(array $aposta): static
     {
         $this->aposta = $aposta;
@@ -137,11 +145,17 @@ class Loteria extends AbstractEntity
         return $this;
     }
 
+    /**
+     * @return array<int>
+     */
     public function getDezenas(): array
     {
         return $this->dezenas;
     }
 
+    /**
+     * @param array<int> $dezenas
+     */
     public function setDezenas(array $dezenas): static
     {
         $this->dezenas = $dezenas;

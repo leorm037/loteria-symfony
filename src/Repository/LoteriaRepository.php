@@ -46,7 +46,7 @@ class LoteriaRepository extends ServiceEntityRepository
                         ->getResult()
         ;
     }
-    
+
     public function findBySlug(string $slugUrl): ?Loteria
     {
         return $this->createQueryBuilder('l')
@@ -57,15 +57,10 @@ class LoteriaRepository extends ServiceEntityRepository
         ;
     }
 
-    /**
-     * 
-     * @param string $uuidString
-     * @return Loteria|null
-     */
     public function findByUuid(string $uuidString): ?Loteria
     {
         $uuid = Uuid::fromString($uuidString);
-        
+
         return $this->createQueryBuilder('l')
                         ->where('l.uuid = :uuid')
                         ->setParameter('uuid', $uuid->toBinary())

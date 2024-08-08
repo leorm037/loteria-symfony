@@ -22,13 +22,15 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @extends ServiceEntityRepository<Aposta>
  */
-class ApostaRepository extends ServiceEntityRepository {
-
-    public function __construct(ManagerRegistry $registry) {
+class ApostaRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
         parent::__construct($registry, Aposta::class);
     }
 
-    public function save(Aposta $aposta, bool $flush = false): void {
+    public function save(Aposta $aposta, bool $flush = false): void
+    {
         $this->getEntityManager()->persist($aposta);
 
         if ($flush) {
@@ -37,11 +39,10 @@ class ApostaRepository extends ServiceEntityRepository {
     }
 
     /**
-     * 
-     * @param Loteria $loteria
      * @return Aposta[]|null
      */
-    public function findNaoConferidasConcursoSorteado(Loteria $loteria): ?array {
+    public function findNaoConferidasConcursoSorteado(Loteria $loteria): ?array
+    {
         return $this->createQueryBuilder('a')
                         ->select('a,b,c')
                         ->andWhere('c.loteria = :loteria')
@@ -58,7 +59,8 @@ class ApostaRepository extends ServiceEntityRepository {
     /**
      * @return Aposta[]|null
      */
-    public function findApostasByUuidBolao(Uuid $uuid) {
+    public function findApostasByUuidBolao(Uuid $uuid)
+    {
         return $this->createQueryBuilder('a')
                         ->select('a,b')
                         ->where('b.uuid = :uuid')
@@ -70,7 +72,8 @@ class ApostaRepository extends ServiceEntityRepository {
         ;
     }
 
-    public function deleteByBolao(Bolao $bolao): void {
+    public function deleteByBolao(Bolao $bolao): void
+    {
         $this->createQueryBuilder('a')
                 ->delete()
                 ->where('a.bolao = :bolao')
@@ -81,27 +84,27 @@ class ApostaRepository extends ServiceEntityRepository {
         $this->getEntityManager()->flush();
     }
 
-//    /**
-//     * @return Aposta[] Returns an array of Aposta objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-//    public function findOneBySomeField($value): ?Aposta
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Aposta[] Returns an array of Aposta objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('a')
+    //            ->andWhere('a.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('a.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+    //    public function findOneBySomeField($value): ?Aposta
+    //    {
+    //        return $this->createQueryBuilder('a')
+    //            ->andWhere('a.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

@@ -24,12 +24,9 @@ use Symfony\Component\Validator\Constraints\File;
 
 class BolaoType extends AbstractType
 {
-
     public function __construct(
-            private LoteriaRepository $loteriaRepository
-    )
-    {
-        
+        private LoteriaRepository $loteriaRepository
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -67,7 +64,7 @@ class BolaoType extends AbstractType
                                 'text/plain',
                             ],
                             'mimeTypesMessage' => 'Selecione um arquivo de planilha no formato CSV',
-                                ]),
+                        ]),
                     ],
                 ])
                 ->add('arquivoComprovantePdf', FileType::class, [
@@ -84,10 +81,10 @@ class BolaoType extends AbstractType
                             'mimeTypes' => [
                                 'application/pdf',
                                 'application/x-pdf',
-                                'image/png'
+                                'image/png',
                             ],
                             'mimeTypesMessage' => 'Selecione um arquivo no formato PDF com os comprovantes.',
-                                ]),
+                        ]),
                     ],
                 ])
         ;

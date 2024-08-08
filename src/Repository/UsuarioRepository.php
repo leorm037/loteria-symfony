@@ -23,7 +23,6 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Usuario::class);
@@ -35,7 +34,7 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof Usuario) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         $user->setPassword($newHashedPassword);

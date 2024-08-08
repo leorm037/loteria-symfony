@@ -1,4 +1,4 @@
-{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+{% if is_granted('IS_AUTHENTICATED') %}
     <li class="nav-item">
         <a data-loading="true" class="nav-link{% if app.request.get('_route') starts with 'app_bolao' %} active{% endif %}" href="{{ path('app_bolao_index') }}">
             <i class="fa-regular fa-futbol"></i> Bolão
@@ -11,13 +11,18 @@
     </li>
     <li class="nav-item">
         <a data-loading="true" class="nav-link" href="{{ path('app_logout') }}">
-            <i class="bi bi-door-closed"></i> Sair
+            <i class="bi bi-door-open-fill"></i> Sair
         </a>
     </li>
 {% else %}
     <li class="nav-item">
         <a data-loading="true" class="nav-link{% if app.request.get('_route') starts with 'app_login' %} active{% endif %}" href="{{ path('app_login_index') }}">
-            <i class="bi bi-person"></i> Autenticação
+            <i class="bi bi-door-closed"></i> Entrar
+        </a>
+    </li>
+    <li class="nav-item">
+        <a data-loading="true" class="nav-link{% if app.request.get('_route') starts with 'app_inscricao' %} active{% endif %}" href="{{ path('app_inscricao_index') }}">
+            <i class="bi bi-person-plus"></i> Inscreva-se
         </a>
     </li>
 {% endif %}    

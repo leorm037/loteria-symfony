@@ -98,7 +98,7 @@
             "@auto-scripts"
         ],
         "code:analyze": [
-            "phpstan analyse -c phpstan.neon --ansi"
+            "phpstan analyse --ansi"
         ],
         "code:fix": [
             "php-cs-fixer fix --ansi"

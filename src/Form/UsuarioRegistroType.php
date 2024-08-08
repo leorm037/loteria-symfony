@@ -22,25 +22,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UsuarioRegistroType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('nome', TextType::class, [
                     'label' => 'Nome completo',
-                    'required' => true
+                    'required' => true,
                 ])
                 ->add('email', EmailType::class, [
                     'label' => 'E-mail',
-                    'required' => true
+                    'required' => true,
                 ])
-                ->add('plainPassword', RepeatedType::class , [
-                    'required' => true, 
+                ->add('plainPassword', RepeatedType::class, [
+                    'required' => true,
                     'mapped' => false,
                     'type' => PasswordType::class,
                     'invalid_message' => 'A confirmação de senha não corresponde com a senha.',
-                    'first_options'  => ['label' => 'Senha'],
-                    'second_options' => ['label' => 'Confirmar senha']                    
+                    'first_options' => ['label' => 'Senha'],
+                    'second_options' => ['label' => 'Confirmar senha'],
                 ])
         ;
     }

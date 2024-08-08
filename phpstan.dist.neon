@@ -6,3 +6,5 @@ parameters:
         - public/
         - src/
         - tests/
+    universalObjectCratesClasses:
+        - App\Entity\AbstractEntity

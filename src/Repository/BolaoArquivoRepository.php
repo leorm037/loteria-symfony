@@ -20,13 +20,15 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<BolaoArquivo>
  */
-class BolaoArquivoRepository extends ServiceEntityRepository {
-
-    public function __construct(ManagerRegistry $registry) {
+class BolaoArquivoRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
         parent::__construct($registry, BolaoArquivo::class);
     }
 
-    public function save(BolaoArquivo $bolaoArquivo, bool $flush = false): void {
+    public function save(BolaoArquivo $bolaoArquivo, bool $flush = false): void
+    {
         $this->getEntityManager()->persist($bolaoArquivo);
 
         if ($flush) {
@@ -35,11 +37,10 @@ class BolaoArquivoRepository extends ServiceEntityRepository {
     }
 
     /**
-     * 
-     * @param Bolao $bolao
      * @return BolaoArquivo[]|null
      */
-    public function findByBolao(Bolao $bolao) {
+    public function findByBolao(Bolao $bolao)
+    {
         return $this->createQueryBuilder('ba')
                         ->select('ba,b,a')
                         ->where('b.uuid = :uuid')
@@ -51,7 +52,8 @@ class BolaoArquivoRepository extends ServiceEntityRepository {
         ;
     }
 
-    public function delete(BolaoArquivo $bolaoArquivo): void {
+    public function delete(BolaoArquivo $bolaoArquivo): void
+    {
         $this->getEntityManager()->remove($bolaoArquivo);
         $this->getEntityManager()->flush();
     }

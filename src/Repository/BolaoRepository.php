@@ -20,13 +20,15 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @extends ServiceEntityRepository<Bolao>
  */
-class BolaoRepository extends ServiceEntityRepository {
-
-    public function __construct(ManagerRegistry $registry) {
+class BolaoRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
         parent::__construct($registry, Bolao::class);
     }
 
-    public function save(Bolao $bolao, bool $flush = false): void {
+    public function save(Bolao $bolao, bool $flush = false): void
+    {
         $this->getEntityManager()->persist($bolao);
 
         if ($flush) {
@@ -34,7 +36,8 @@ class BolaoRepository extends ServiceEntityRepository {
         }
     }
 
-    public function findOneByUuid(Uuid $uuid): ?Bolao {
+    public function findOneByUuid(Uuid $uuid): ?Bolao
+    {
         return $this->createQueryBuilder('b')
                         ->select('b,c,l')
                         ->where('b.uuid = :uuid')
@@ -46,7 +49,11 @@ class BolaoRepository extends ServiceEntityRepository {
         ;
     }
 
-    public function list() {
+    /**
+     * @return Bolao[]|null
+     */
+    public function list()
+    {
         return $this->createQueryBuilder('b')
                         ->select('b,c,l')
                         ->addSelect('(Select COUNT(a.id) From App\Entity\Aposta a Where a.bolao = b.id) As apostas')
@@ -61,7 +68,8 @@ class BolaoRepository extends ServiceEntityRepository {
         ;
     }
 
-    public function delete(Bolao $bolao): void {
+    public function delete(Bolao $bolao): void
+    {
         $this->getEntityManager()->remove($bolao);
         $this->getEntityManager()->flush();
     }
