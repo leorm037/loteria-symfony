@@ -1,0 +1,20 @@
+{# templates/bundles/TwigBundle/Excepton/error500.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item active"><i class="bi bi-bug"></i> Erro 500</li>
+    {% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h1 class="h4 m-0 text-danger">Erro 500</h1>
+        </div>
+        <div class="card-body">
+            <p>
+                <a href="{{ path('app_index') }}">Voltar para a página inicial</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
