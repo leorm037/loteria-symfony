@@ -201,21 +201,23 @@ class BolaoController extends AbstractController
         foreach ($csvReaderHelp->getIterator() as $row) {
             $dezenas = array_map('intval', $row);
 
-            $diferenca = [];
+            if (\count($apostasCadastradas) > 0) {
+                $diferenca = [];
 
-            foreach ($apostasCadastradas as $apostaCadastrada) {
-                if (\count($dezenas) == \count($apostaCadastrada->getDezenas())) {
-                    $diferenca = array_diff($dezenas, $apostaCadastrada->getDezenas());
+                foreach ($apostasCadastradas as $apostaCadastrada) {
+                    if (\count($dezenas) == \count($apostaCadastrada->getDezenas())) {
+                        $diferenca = array_diff($dezenas, $apostaCadastrada->getDezenas());
 
-                    if (0 == \count($diferenca)) {
-                        $this->addFlash('danger', \sprintf('A aposta "%s" já está cadastrada.', implode(', ', $dezenas)));
-                        break;
+                        if (0 == \count($diferenca)) {
+                            $this->addFlash('danger', \sprintf('A aposta "%s" já está cadastrada.', implode(', ', $dezenas)));
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (0 == \count($diferenca)) {
-                continue;
+                if (0 == \count($diferenca)) {
+                    continue;
+                }
             }
 
             $aposta = new Aposta();
@@ -225,6 +227,7 @@ class BolaoController extends AbstractController
             ;
 
             $errors = $this->validator->validate($aposta);
+
             if (\count($errors) > 0) {
                 /** @var ConstraintViolation $error */
                 foreach ($errors as $error) {
