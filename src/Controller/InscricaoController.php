@@ -20,18 +20,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use function dd;
 
 #[Route('/registrar', name: 'app_inscricao_')]
 class InscricaoController extends AbstractController
 {
-
     public function __construct(
-            private UserPasswordHasherInterface $userPasswordHasher,
-            private UsuarioRepository $usuarioRepository
-    )
-    {
-        
+        private UserPasswordHasherInterface $userPasswordHasher,
+        private UsuarioRepository $usuarioRepository
+    ) {
     }
 
     #[Route('/', name: 'index')]
@@ -45,10 +41,10 @@ class InscricaoController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $usuario->setPassword(
-                    $this->userPasswordHasher->hashPassword(
-                            $usuario,
-                            $form->get('plainPassword')->getData()
-                    )
+                $this->userPasswordHasher->hashPassword(
+                    $usuario,
+                    $form->get('plainPassword')->getData()
+                )
             );
 
             try {
@@ -58,17 +54,16 @@ class InscricaoController extends AbstractController
 
                 return $this->redirectToRoute('app_login_index');
             } catch (UniqueConstraintViolationException $e) {
-
                 $this->addFlash('danger', \sprintf('O e-mail "%s" já está cadastrado.', $usuario->getEmail()));
 
                 return $this->render('registro/index.html.twig', [
-                            'form' => $form,
+                    'form' => $form,
                 ]);
             }
         }
 
         return $this->render('registro/index.html.twig', [
-                    'form' => $form,
+            'form' => $form,
         ]);
     }
 }

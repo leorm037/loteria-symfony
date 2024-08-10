@@ -1,0 +1,28 @@
+{# templates/reset_password/check_email.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: Recuperação de senha foi enviada por e-mail{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a data-loading="true" href="{{ path('app_forgot_password_request') }}" class="text-decoration-none"><i class="bi bi-key-fill"></i> Recuperar senha</a></li>
+    <li class="breadcrumb-item active"><i class="bi bi-key"></i> Recuperação de senha</li>
+    {% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h1 class="h4 m-0"><i class="bi bi-key"></i> Recuperação de senha</h1>
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                Se uma conta que corresponde ao seu e-mail existir, 
+                então um e-mail será enviado contendo um link que você pode usar para redefinir sua senha. 
+                Este link expirará em {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+            </p>
+            <p class="card-text">
+                Se você não receber um e-mail, 
+                verifique sua pasta de spam ou <a data-loading="true" href="{{ path('app_forgot_password_request') }}">tente novamente</a>.
+            </p>
+        </div>
+    </div>
+{% endblock %}

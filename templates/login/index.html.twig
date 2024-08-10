@@ -5,7 +5,7 @@
 
 {% block breadcrumb %}
     <li class="breadcrumb-item active"><i class="bi bi-door-closed"></i> Entrar</li>
-    {% endblock %}
+{% endblock %}
 
 {% block body %}
     <form action="{{ path('app_login_index') }}" method="post" data-loading="true">
@@ -46,7 +46,7 @@
                     <div class="card-footer text-end">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <button type="button" class="btn btn-outline-secondary btn-sm"><i class="bi bi-key"></i> Recuperar senha</button>
+                                <a href="{{ path('app_forgot_password_request') }}" data-loading="true" class="btn btn-outline-secondary btn-sm"><i class="bi bi-key"></i> Recuperar senha</a>
                             </div>
                             <div>
                                 <button type="reset" class="btn btn-secondary btn-sm"><i class="fa-solid fa-broom"></i> Limpar</button>

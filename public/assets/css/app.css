@@ -58,3 +58,10 @@
     -ms-transform:rotate(45deg);
     display: inline-block;
 }
+
+label.required:after{
+   color: red;
+   content: "*";
+   margin-left: 2px;
+   font-weight: bold;
+}
