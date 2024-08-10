@@ -126,6 +126,8 @@ class ConcursoRecuperarResultadoCommand extends Command
             } catch (\Exception $e) {
                 $this->messages[] = ['status' => 'error', 'message' => $e->getMessage()];
                 $this->logger->info($e->getMessage());
+                
+                $item->expiresAfter(0);
 
                 return null;
             }

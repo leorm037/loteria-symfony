@@ -42,7 +42,7 @@ abstract class AbstractEntity
 
     private function updatedAt(): void
     {
-        if (property_exists(static::class, 'updatedAt') && null === $this->updatedAt) {
+        if (property_exists(static::class, 'updatedAt')) {
             $this->updatedAt = DateTimeHelper::currentDateTime();
         }
     }

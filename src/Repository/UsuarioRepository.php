@@ -23,6 +23,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Usuario::class);
@@ -49,6 +50,16 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByEmail(string $email): ?Usuario
+    {
+        return $this->createQueryBuilder('u')
+                        ->where('u.email = :email')
+                        ->setParameter('email', $email)
+                        ->getQuery()
+                        ->getOneOrNullResult()
+        ;
     }
 
     //    /**
