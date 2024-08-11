@@ -1,19 +1,27 @@
 {# templates/_delete.html.twig #}
-<form name="delete" method="post" data-loading="true" enctype="multipart/form-data" action="{{ deleteAction|default("") }}">
+<form name="delete" method="post" data-loading="true" action="{{ deleteAction|default("") }}">
+    <input type="hidden" name="token" value="{{ csrf_token('delete_entity') }}" />
     <input type="hidden" id="deleteUuid" name="uuid" value="">
     <div id="deleteModal" class="modal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="h5 modal-title">Excluir</h1>
+                    <h1 class="h5 modal-title"><i class="bi bi-trash"></i> Excluir</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-labe="Fechar"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-warning alert-dismissible fade show d-flex align-items-center" role="alert">
+                        <div class="flex-shrink-0 me-2">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <div class="flex-grow-1">Esta ação não tem reversão!</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                    </div>
                     <p id="deleteMensagem">Deseja realmente excluir?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-labe="Fechar">Fechar</button>
-                    <button type="submit" class="btn btn-danger">Excluir</button>
+                    <button type="submit" id="modalDeleteButton" class="btn btn-danger">Excluir</button>
                 </div>
             </div>
         </div>

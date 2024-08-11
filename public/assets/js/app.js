@@ -65,3 +65,13 @@ $('i.bi-door-open-fill').parent().on('mouseover', function(){
     $(this).children('i').removeClass('bi bi-door-closed-fill');
     $(this).children('i').addClass('bi bi-door-open-fill');
 });
+
+$("button[data-delete]").each(function () {
+    let uuid = $(this).data('delete');
+    
+    $(this).on('click', function(){
+        $('#deleteUuid').val(uuid);        
+        $('#deleteModal').modal('show');
+        $('#modalDeleteButton').focus();
+    });
+});

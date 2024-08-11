@@ -61,7 +61,11 @@ class BolaoController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(): Response
     {
-        $boloes = $this->bolaoRepository->list();
+        $usuarioEmail = $this->getUser()->getUserIdentifier();
+        
+        $usuario = $this->usuarioRepository->findByEmail($usuarioEmail);
+
+        $boloes = $this->bolaoRepository->list($usuario);
 
         return $this->render('bolao/index.html.twig', [
                     'boloes' => $boloes,
@@ -174,6 +178,14 @@ class BolaoController extends AbstractController
         $uuid = Uuid::fromString($uuidBolao);
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+
+        /** @var string|null $token */
+        $token = $request->getPayload()->get('token');
+
+        if (!$this->isCsrfTokenValid('delete_entity', $token)) {
+            $this->addFlash('danger', 'Token do formulário de exclusão está inválido.');
+            return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
+        }
 
         if ($bolao) {
             $nomeBolao = $bolao->getNome();

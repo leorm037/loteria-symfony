@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
 
-#[Route('/bolao', name: 'app_bolao_apostas_')]
+#[Route('/bolao/{uuid}/apostas', name: 'app_bolao_apostas_', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
 class BolaoApostaController extends AbstractController
 {
     public function __construct(
@@ -28,7 +28,7 @@ class BolaoApostaController extends AbstractController
     ) {
     }
 
-    #[Route('/{uuid}/apostas', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
+    #[Route('', name: 'index')]
     public function index(Request $request): Response
     {
         $uuid = Uuid::fromString($request->get('uuid'));
@@ -37,7 +37,7 @@ class BolaoApostaController extends AbstractController
 
         $apostas = $this->apostaRepository->findApostasByUuidBolao($uuid);
 
-        return $this->render('bolaoAposta/index.html.twig', [
+        return $this->render('bolao_aposta/index.html.twig', [
             'apostas' => $apostas,
             'bolao' => $bolao,
         ]);

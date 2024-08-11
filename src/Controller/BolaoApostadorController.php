@@ -1,0 +1,126 @@
+<?php
+
+/*
+ *     This file is part of Loteria.
+ *
+ *     (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ *     This source file is subject to the MIT license that is bundled
+ *     with this source code in the file LICENSE.
+ */
+
+namespace App\Controller;
+
+use App\Entity\Apostador;
+use App\Form\ApostadorType;
+use App\Repository\ApostadorRepository;
+use App\Repository\BolaoRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Uid\Uuid;
+
+#[Route(name: 'app_bolao_apostador_')]
+class BolaoApostadorController extends AbstractController
+{
+
+    public function __construct(
+            private BolaoRepository $bolaoRepository,
+            private ApostadorRepository $apostadorRepository
+    )
+    {
+        
+    }
+
+    #[Route('/bolao/{uuid}/apostador', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
+    public function index(Request $request): Response
+    {
+        $uuid = Uuid::fromString($request->get('uuid'));
+
+        $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+
+        $apostadores = $this->apostadorRepository->findByBolao($bolao);
+
+        return $this->render('bolao_apostador/index.html.twig', [
+                    'bolao' => $bolao,
+                    'apostadores' => $apostadores
+        ]);
+    }
+
+    #[Route('/bolao/{uuid}/apostador/new', name: 'new', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
+    public function new(Request $request): Response
+    {
+        $uuid = Uuid::fromString($request->get('uuid'));
+
+        $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+
+        $apostador = new Apostador();
+
+        $apostador->setBolao($bolao);
+
+        $form = $this->createForm(ApostadorType::class, $apostador);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->apostadorRepository->save($apostador, true);
+
+            $this->addFlash('success', sprintf('Apostador "%s" foi cadastrador com sucesso.', $apostador->getNome()));
+
+            return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('bolao_apostador/new.html.twig', [
+                    'form' => $form,
+                    'bolao' => $bolao
+        ]);
+    }
+
+    #[Route('/bolao/apostador/{uuid}/edit', name: 'edit', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
+    public function edit(Request $request): Response
+    {
+        $uuid = Uuid::fromString($request->get('uuid'));
+
+        $apostador = $this->apostadorRepository->findByUuid($uuid);
+
+        $form = $this->createForm(ApostadorType::class, $apostador);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->apostadorRepository->save($apostador, true);
+
+            $this->addFlash('success', sprintf('Apostador "%s" foi atualizado com sucesso.', $apostador->getNome()));
+
+            return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('bolao_apostador/edit.html.twig', [
+                    'form' => $form,
+                    'bolao' => $apostador->getBolao()
+        ]);
+    }
+
+    #[Route('/bolao/apostador/delete', name: 'delete', methods: ['POST'])]
+    public function delete(Request $request): Response
+    {
+        $uuid = Uuid::fromString($request->get('uuid'));
+
+        $apostador = $this->apostadorRepository->findByUuid($uuid);
+
+        /** @var string|null $token */
+        $token = $request->getPayload()->get('token');
+
+        if (!$this->isCsrfTokenValid('delete_entity', $token)) {
+            $this->addFlash('danger', 'Token do formulário de exclusão está inválido.');
+            return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
+        }
+        
+        $this->apostadorRepository->delete($apostador);
+        
+        $this->addFlash('success', sprintf('Apostador "%s" removido com sucesso.', $apostador->getNome()));
+
+        return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
+    }
+}

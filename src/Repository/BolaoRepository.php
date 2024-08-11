@@ -12,6 +12,7 @@
 namespace App\Repository;
 
 use App\Entity\Bolao;
+use App\Entity\Usuario;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,6 +23,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class BolaoRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bolao::class);
@@ -52,12 +54,15 @@ class BolaoRepository extends ServiceEntityRepository
     /**
      * @return Bolao[]|null
      */
-    public function list()
+    public function list(Usuario $usuario)
     {
         return $this->createQueryBuilder('b')
                         ->select('b,c,l')
                         ->addSelect('(Select COUNT(a.id) From App\Entity\Aposta a Where a.bolao = b.id) As apostas')
-                        ->addSelect('(Select MAX(a2.quantidadeAcertos) From App\Entity\Aposta a2 Where a2.bolao = b.id) As apostasMax')
+                         ->addSelect('(Select COUNT(ap.id) From App\Entity\Apostador ap Where ap.bolao = b.id) As apostadores')
+                        ->addSelect('(Select MAX(a2.quantidadeAcertos) From App\Entity\Aposta a2 Where a2.bolao = b.id) As apostasMax')                        
+                        ->where('b.usuario = :usuario')
+                        ->setParameter('usuario', $usuario)
                         ->innerJoin('b.concurso', 'c', Join::WITH, 'b.concurso = c.id')
                         ->innerJoin('c.loteria', 'l', Join::WITH, 'c.loteria = l.id')
                         ->addOrderBy('l.nome', 'ASC')

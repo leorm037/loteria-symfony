@@ -1,0 +1,65 @@
+{# templates/bolao_apostador/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: Bolão :: Apostador{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a data-loading="true" href="{{ path('app_bolao_index') }}" class="text-decoration-none"><i class="fa-regular fa-futbol"></i> Bolão</a></li>
+    <li class="breadcrumb-item active"><i class="bi bi-people-fill"></i> Apostadores</li>
+    {% endblock %}
+
+{% block body %}
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h4 m-0"><i class="bi bi-people-fill"></i> Apostadores</h1>
+                </div>
+                <div>
+                    <a data-loading="true" href="{{ path('app_bolao_apostador_new', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                        <i class="bi bi-plus"></i> Novo
+                    </a>
+                </div>
+            </div>
+        </div>        
+        {{ include('bolao/_bolao.html.twig') }}
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Atualizado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for apostador in apostadores %}
+                            <tr>
+                                <td>{{ apostador.nome }}</td>
+                                <td>{{ apostador.email }}</td>
+                                <td>{{ apostador.updatedAt ? apostador.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : apostador.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
+                                        <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_edit', {'uuid': apostador.uuid}) }}">
+                                            <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
+                                        </a>
+                                        <button type="button" class="btn btn-danger" data-delete="{{ apostador.uuid }}">
+                                        <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
+                                    </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">Nenhum registro encontrado</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_apostador_delete')}) }}
+{% endblock %}
