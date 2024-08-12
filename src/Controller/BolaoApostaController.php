@@ -18,14 +18,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
+use App\Security\Voter\ApostaVoter;
 
 #[Route('/bolao/{uuid}/apostas', name: 'app_bolao_apostas_', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
 class BolaoApostaController extends AbstractController
 {
+
     public function __construct(
-        private ApostaRepository $apostaRepository,
-        private BolaoRepository $bolaoRepository
-    ) {
+            private ApostaRepository $apostaRepository,
+            private BolaoRepository $bolaoRepository
+    )
+    {
+        
     }
 
     #[Route('', name: 'index')]
@@ -35,11 +39,13 @@ class BolaoApostaController extends AbstractController
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
 
-        $apostas = $this->apostaRepository->findApostasByUuidBolao($uuid);
+        $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
+
+        $this->denyAccessUnlessGranted(ApostaVoter::LIST, $bolao);
 
         return $this->render('bolao_aposta/index.html.twig', [
-            'apostas' => $apostas,
-            'bolao' => $bolao,
+                    'apostas' => $apostas,
+                    'bolao' => $bolao,
         ]);
     }
 }

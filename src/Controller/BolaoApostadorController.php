@@ -12,9 +12,11 @@
 namespace App\Controller;
 
 use App\Entity\Apostador;
+use App\Enum\TokenEnum;
 use App\Form\ApostadorType;
 use App\Repository\ApostadorRepository;
 use App\Repository\BolaoRepository;
+use App\Security\Voter\ApostadorVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +41,8 @@ class BolaoApostadorController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+        
+        $this->denyAccessUnlessGranted(ApostadorVoter::LIST, $bolao);
 
         $apostadores = $this->apostadorRepository->findByBolao($bolao);
 
@@ -54,6 +58,8 @@ class BolaoApostadorController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+        
+        $this->denyAccessUnlessGranted(ApostadorVoter::NEW, $bolao);
 
         $apostador = new Apostador();
 
@@ -83,6 +89,8 @@ class BolaoApostadorController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $apostador = $this->apostadorRepository->findByUuid($uuid);
+        
+        $this->denyAccessUnlessGranted(ApostadorVoter::EDIT, $apostador);
 
         $form = $this->createForm(ApostadorType::class, $apostador);
 
@@ -91,7 +99,7 @@ class BolaoApostadorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->apostadorRepository->save($apostador, true);
 
-            $this->addFlash('success', sprintf('Apostador "%s" foi atualizado com sucesso.', $apostador->getNome()));
+            $this->addFlash('success', sprintf('Apostador "%s" foi alterado com sucesso.', $apostador->getNome()));
 
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
         }
@@ -108,12 +116,14 @@ class BolaoApostadorController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $apostador = $this->apostadorRepository->findByUuid($uuid);
+        
+        $this->denyAccessUnlessGranted(ApostadorVoter::DELETE, $apostador);
 
         /** @var string|null $token */
         $token = $request->getPayload()->get('token');
 
-        if (!$this->isCsrfTokenValid('delete_entity', $token)) {
-            $this->addFlash('danger', 'Token do formulário de exclusão está inválido.');
+        if (!$this->isCsrfTokenValid(TokenEnum::DELETE->value, $token)) {
+            $this->addFlash('danger', 'Formulário de exclusão está inválido, tente novamente.');
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
         }
         

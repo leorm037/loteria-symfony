@@ -15,11 +15,13 @@
                 <div>
                     <h1 class="h4 m-0"><i class="bi bi-people-fill"></i> Apostadores</h1>
                 </div>
-                <div>
-                    <a data-loading="true" href="{{ path('app_bolao_apostador_new', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
-                        <i class="bi bi-plus"></i> Novo
-                    </a>
-                </div>
+                {% if is_granted('BOLAO_APOSTADOR_NEW', bolao) %}
+                    <div>
+                        <a data-loading="true" href="{{ path('app_bolao_apostador_new', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                            <i class="bi bi-plus"></i> Novo
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>        
         {{ include('bolao/_bolao.html.twig') }}
@@ -42,12 +44,16 @@
                                 <td>{{ apostador.updatedAt ? apostador.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : apostador.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
-                                        <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_edit', {'uuid': apostador.uuid}) }}">
-                                            <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
-                                        </a>
-                                        <button type="button" class="btn btn-danger" data-delete="{{ apostador.uuid }}">
-                                        <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
-                                    </button>
+                                        {% if is_granted('BOLAO_APOSTADOR_EDIT', apostador) %}
+                                            <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_edit', {'uuid': apostador.uuid}) }}">
+                                                <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
+                                            </a>
+                                        {% endif %}
+                                        {% if is_granted('BOLAO_APOSTADOR_DELETE', apostador) %}
+                                            <button type="button" class="btn btn-danger" data-delete="{{ apostador.uuid }}">
+                                                <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
+                                            </button>
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>

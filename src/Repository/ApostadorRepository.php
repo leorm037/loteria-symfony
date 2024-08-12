@@ -43,6 +43,18 @@ class ApostadorRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function deleteByBolao(Bolao $bolao): void
+    {
+        $this->createQueryBuilder('a')
+                ->delete()
+                ->where('a.bolao = :bolao')
+                ->setParameter('bolao', $bolao)
+                ->getQuery()
+                ->execute()
+        ;
+        $this->getEntityManager()->flush();
+    }
+
     /**
      * 
      * @param Bolao $bolao

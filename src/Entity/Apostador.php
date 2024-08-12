@@ -23,6 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 class Apostador extends AbstractEntity
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -47,6 +48,16 @@ class Apostador extends AbstractEntity
 
     #[ORM\Column(type: 'uuid')]
     protected ?Uuid $uuid = null;
+
+    public function getBolaoUsuario(): Usuario
+    {
+        return $this->getBolao()->getUsuario();
+    }
+
+    public function getBolaoConcurso(): Concurso
+    {
+        return $this->getBolao()->getConcurso();
+    }
 
     public function getId(): ?int
     {

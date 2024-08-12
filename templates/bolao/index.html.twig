@@ -53,9 +53,11 @@
                                     <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_index', {'uuid': bolao.uuid}) }}">
                                         <i class="bi bi-people-fill"></i> <span class="d-none d-xl-inline-block">Apostadores</span>
                                     </a>
-                                    <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
-                                        <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
-                                    </a>
+                                    {% if is_granted('BOLAO_EDIT', bolao) %}
+                                        <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
+                                            <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
+                                        </a>
+                                    {% endif %}
                                     <button type="button" class="btn btn-danger" data-delete="{{ bolao.uuid }}">
                                         <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
                                     </button>

@@ -18,17 +18,19 @@ use App\Entity\Bolao;
 use App\Entity\BolaoArquivo;
 use App\Entity\Concurso;
 use App\Entity\Loteria;
+use App\Enum\TokenEnum;
 use App\Form\BolaoType;
 use App\Helper\CsvReaderHelper;
+use App\Repository\ApostadorRepository;
 use App\Repository\ApostaRepository;
 use App\Repository\ArquivoRepository;
 use App\Repository\BolaoArquivoRepository;
 use App\Repository\BolaoRepository;
 use App\Repository\ConcursoRepository;
 use App\Repository\UsuarioRepository;
+use App\Security\Voter\BolaoVoter;
 use App\Service\ApostaComprovantePdfService;
 use App\Service\ApostaPlanilhaCsvService;
-use App\Security\Voter\BolaoVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -50,6 +52,7 @@ class BolaoController extends AbstractController
             private ApostaPlanilhaCsvService $planilhaCsvService,
             private ArquivoRepository $arquivoRepository,
             private ApostaRepository $apostaRepository,
+            private ApostadorRepository $apostadorRepository,
             private EntityManagerInterface $entityManager,
             private BolaoArquivoRepository $bolaoArquivoRepository,
             private ValidatorInterface $validator,
@@ -110,7 +113,7 @@ class BolaoController extends AbstractController
                 $this->anexarImportarPlanilha($bolao, $arquivoPlanilhaCsv);
             }
 
-            $this->addFlash('success', \sprintf('Bolão "%s" salvo com sucesso!', $bolao->getNome()));
+            $this->addFlash('success', \sprintf('Bolão "%s" cadastrado com sucesso!', $bolao->getNome()));
 
             return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -185,15 +188,16 @@ class BolaoController extends AbstractController
         /** @var string|null $token */
         $token = $request->getPayload()->get('token');
 
-        if (!$this->isCsrfTokenValid('delete_entity', $token)) {
-            $this->addFlash('danger', 'Token do formulário de exclusão está inválido.');
+        if (!$this->isCsrfTokenValid(TokenEnum::DELETE->value, $token)) {
+            $this->addFlash('danger', 'Formulário de exclusão inválido, tente novamente.');
             return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
-        }
+        }       
 
         if ($bolao) {
             $nomeBolao = $bolao->getNome();
             $this->excluirAnexos($bolao);
             $this->apostaRepository->deleteByBolao($bolao);
+            $this->apostadorRepository->deleteByBolao($bolao);
             $this->bolaoRepository->delete($bolao);
             $this->addFlash('success', \sprintf('Bolão "%s" excluido com sucesso.', $nomeBolao));
         }
