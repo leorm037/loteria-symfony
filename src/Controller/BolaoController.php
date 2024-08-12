@@ -28,6 +28,7 @@ use App\Repository\ConcursoRepository;
 use App\Repository\UsuarioRepository;
 use App\Service\ApostaComprovantePdfService;
 use App\Service\ApostaPlanilhaCsvService;
+use App\Security\Voter\BolaoVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -62,7 +63,7 @@ class BolaoController extends AbstractController
     public function index(): Response
     {
         $usuarioEmail = $this->getUser()->getUserIdentifier();
-        
+
         $usuario = $this->usuarioRepository->findByEmail($usuarioEmail);
 
         $boloes = $this->bolaoRepository->list($usuario);
@@ -125,6 +126,8 @@ class BolaoController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+
+        $this->denyAccessUnlessGranted(BolaoVoter::EDIT, $bolao);
 
         $bolaoDTO = new BolaoDTO();
         $bolaoDTO
