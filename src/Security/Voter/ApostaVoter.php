@@ -12,21 +12,22 @@
 namespace App\Security\Voter;
 
 use App\Entity\Bolao;
-use App\Entity\Usuario;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @phpstan-extends Voter<string, Bolao>
+ */
 class ApostaVoter extends Voter
 {
-
     public const LIST = 'BOLAO_APOSTA_LIST';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [
-                    self::LIST
-                ]) && $subject instanceof Bolao;
+        return \in_array($attribute, [
+            self::LIST,
+        ]) && $subject instanceof Bolao;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -46,10 +47,10 @@ class ApostaVoter extends Voter
             };
         }
 
-        return false;
+        return false; /** @phpstan-ignore deadCode.unreachable */
     }
 
-    private function canList(Bolao $bolao, Usuario $usuario): bool
+    private function canList(Bolao $bolao, UserInterface $usuario): bool
     {
         return $usuario === $bolao->getUsuario();
     }

@@ -14,8 +14,6 @@ namespace App\Service;
 use App\Entity\Concurso;
 use App\Entity\Loteria;
 use App\Factory\ConcursoFactory;
-use Exception;
-use function dd;
 
 /**
  * Description of ConcursoSorteioService.
@@ -34,7 +32,7 @@ class ConcursoSorteioService
     private static function getJson(Loteria $loteria, ?int $numero = null): string
     {
         $url = $loteria->getApiUrl().'/'.$numero;
-        
+
         $handle = curl_init($url);
 
         curl_setopt($handle, \CURLOPT_TIMEOUT, 5);
@@ -49,15 +47,15 @@ class ConcursoSorteioService
         $error = curl_error($handle);
 
         if (!empty($error)) {
-            throw new Exception($error);
+            throw new \Exception($error);
         }
 
         curl_close($handle);
 
-        $validade = json_decode($json);       
+        $validade = json_decode($json);
 
         if (isset($validade->message)) {
-            throw new Exception(sprintf('Não foi possível encontrar o sorteio %s da %s.', $numero, $loteria->getNome()));
+            throw new \Exception(\sprintf('Não foi possível encontrar o sorteio %s da %s.', $numero, $loteria->getNome()));
         }
 
         return $json;

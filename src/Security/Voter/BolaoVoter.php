@@ -12,20 +12,19 @@
 namespace App\Security\Voter;
 
 use App\Entity\Bolao;
-use App\Entity\Usuario;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * @phpstan-extends Voter<string, Bolao>
+ */
 class BolaoVoter extends Voter
 {
-
     public const EDIT = 'BOLAO_EDIT';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
         return \in_array($attribute, [self::EDIT]) && $subject instanceof Bolao;
     }
 
@@ -43,9 +42,8 @@ class BolaoVoter extends Voter
         };
     }
 
-    private function canEdit(Bolao $bolao, Usuario $usuario): bool
+    private function canEdit(Bolao $bolao, UserInterface $usuario): bool
     {
-        return $usuario === $bolao->getUsuario() &&
-                null === $bolao->getConcurso()->getDezenas();
+        return $usuario === $bolao->getUsuario() && null === $bolao->getConcurso()->getDezenas();
     }
 }

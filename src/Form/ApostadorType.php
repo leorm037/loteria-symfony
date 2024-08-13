@@ -12,8 +12,6 @@
 namespace App\Form;
 
 use App\Entity\Apostador;
-use App\Entity\Bolao;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,7 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ApostadorType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -30,12 +27,12 @@ class ApostadorType extends AbstractType
                     'label' => 'Nome',
                     'required' => true,
                     'attr' => [
-                        'autofocus' => true
-                    ]
+                        'autofocus' => true,
+                    ],
                 ])
                 ->add('email', EmailType::class, [
                     'label' => 'E-mail',
-                    'required' => false
+                    'required' => false,
                 ])
         ;
     }

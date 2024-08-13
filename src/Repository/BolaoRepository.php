@@ -23,7 +23,6 @@ use Symfony\Component\Uid\Uuid;
  */
 class BolaoRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bolao::class);
@@ -60,7 +59,7 @@ class BolaoRepository extends ServiceEntityRepository
                         ->select('b,c,l')
                         ->addSelect('(Select COUNT(a.id) From App\Entity\Aposta a Where a.bolao = b.id) As apostas')
                          ->addSelect('(Select COUNT(ap.id) From App\Entity\Apostador ap Where ap.bolao = b.id) As apostadores')
-                        ->addSelect('(Select MAX(a2.quantidadeAcertos) From App\Entity\Aposta a2 Where a2.bolao = b.id) As apostasMax')                        
+                        ->addSelect('(Select MAX(a2.quantidadeAcertos) From App\Entity\Aposta a2 Where a2.bolao = b.id) As apostasMax')
                         ->where('b.usuario = :usuario')
                         ->setParameter('usuario', $usuario)
                         ->innerJoin('b.concurso', 'c', Join::WITH, 'b.concurso = c.id')

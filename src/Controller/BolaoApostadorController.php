@@ -26,13 +26,10 @@ use Symfony\Component\Uid\Uuid;
 #[Route(name: 'app_bolao_apostador_')]
 class BolaoApostadorController extends AbstractController
 {
-
     public function __construct(
-            private BolaoRepository $bolaoRepository,
-            private ApostadorRepository $apostadorRepository
-    )
-    {
-        
+        private BolaoRepository $bolaoRepository,
+        private ApostadorRepository $apostadorRepository
+    ) {
     }
 
     #[Route('/bolao/{uuid}/apostador', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
@@ -41,14 +38,14 @@ class BolaoApostadorController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
-        
+
         $this->denyAccessUnlessGranted(ApostadorVoter::LIST, $bolao);
 
         $apostadores = $this->apostadorRepository->findByBolao($bolao);
 
         return $this->render('bolao_apostador/index.html.twig', [
-                    'bolao' => $bolao,
-                    'apostadores' => $apostadores
+            'bolao' => $bolao,
+            'apostadores' => $apostadores,
         ]);
     }
 
@@ -58,7 +55,7 @@ class BolaoApostadorController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
-        
+
         $this->denyAccessUnlessGranted(ApostadorVoter::NEW, $bolao);
 
         $apostador = new Apostador();
@@ -72,14 +69,14 @@ class BolaoApostadorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->apostadorRepository->save($apostador, true);
 
-            $this->addFlash('success', sprintf('Apostador "%s" foi cadastrador com sucesso.', $apostador->getNome()));
+            $this->addFlash('success', \sprintf('Apostador "%s" foi cadastrador com sucesso.', $apostador->getNome()));
 
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bolao_apostador/new.html.twig', [
-                    'form' => $form,
-                    'bolao' => $bolao
+            'form' => $form,
+            'bolao' => $bolao,
         ]);
     }
 
@@ -89,7 +86,7 @@ class BolaoApostadorController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $apostador = $this->apostadorRepository->findByUuid($uuid);
-        
+
         $this->denyAccessUnlessGranted(ApostadorVoter::EDIT, $apostador);
 
         $form = $this->createForm(ApostadorType::class, $apostador);
@@ -99,14 +96,14 @@ class BolaoApostadorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->apostadorRepository->save($apostador, true);
 
-            $this->addFlash('success', sprintf('Apostador "%s" foi alterado com sucesso.', $apostador->getNome()));
+            $this->addFlash('success', \sprintf('Apostador "%s" foi alterado com sucesso.', $apostador->getNome()));
 
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bolao_apostador/edit.html.twig', [
-                    'form' => $form,
-                    'bolao' => $apostador->getBolao()
+            'form' => $form,
+            'bolao' => $apostador->getBolao(),
         ]);
     }
 
@@ -116,7 +113,7 @@ class BolaoApostadorController extends AbstractController
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $apostador = $this->apostadorRepository->findByUuid($uuid);
-        
+
         $this->denyAccessUnlessGranted(ApostadorVoter::DELETE, $apostador);
 
         /** @var string|null $token */
@@ -124,12 +121,13 @@ class BolaoApostadorController extends AbstractController
 
         if (!$this->isCsrfTokenValid(TokenEnum::DELETE->value, $token)) {
             $this->addFlash('danger', 'Formulário de exclusão está inválido, tente novamente.');
+
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
         }
-        
+
         $this->apostadorRepository->delete($apostador);
-        
-        $this->addFlash('success', sprintf('Apostador "%s" removido com sucesso.', $apostador->getNome()));
+
+        $this->addFlash('success', \sprintf('Apostador "%s" removido com sucesso.', $apostador->getNome()));
 
         return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
     }
