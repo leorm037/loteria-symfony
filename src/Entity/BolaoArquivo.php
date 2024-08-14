@@ -14,6 +14,7 @@ namespace App\Entity;
 use App\Repository\BolaoArquivoRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: BolaoArquivoRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -37,6 +38,9 @@ class BolaoArquivo extends AbstractEntity
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\Column(type: 'uuid')]
+    protected ?Uuid $uuid = null;
 
     public function getId(): ?int
     {
@@ -87,6 +91,18 @@ class BolaoArquivo extends AbstractEntity
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUuid(): ?Uuid
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid(Uuid $uuid): static
+    {
+        $this->uuid = $uuid;
 
         return $this;
     }

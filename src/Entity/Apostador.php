@@ -46,6 +46,12 @@ class Apostador extends AbstractEntity
     #[ORM\Column(type: 'uuid')]
     protected ?Uuid $uuid = null;
 
+    #[ORM\Column]
+    private ?bool $cotaPaga = false;
+
+    #[ORM\Column]
+    private int $cotaQuantidade = 1;
+
     public function getBolaoUsuario(): Usuario
     {
         return $this->getBolao()->getUsuario();
@@ -129,6 +135,30 @@ class Apostador extends AbstractEntity
     public function setUuid(Uuid $uuid): static
     {
         $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function isCotaPaga(): bool
+    {
+        return $this->cotaPaga;
+    }
+
+    public function setCotaPaga(bool $cotaPaga): static
+    {
+        $this->cotaPaga = $cotaPaga;
+
+        return $this;
+    }
+
+    public function getCotaQuantidade(): int
+    {
+        return $this->cotaQuantidade;
+    }
+
+    public function setCotaQuantidade(int $cotaQuantidade): static
+    {
+        $this->cotaQuantidade = $cotaQuantidade;
 
         return $this;
     }

@@ -1,3 +1,11 @@
 {# bolao_apostador/_form.html.twig #}
 {{ form_row(form.nome) }}
 {{ form_row(form.email) }}
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.cotaPaga) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.cotaQuantidade) }}
+    </div>
+</div>

@@ -62,7 +62,7 @@ class ApostadorRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
                         ->where('a.bolao = :bolao')
                         ->setParameter('bolao', $bolao)
-                        ->orderBy('a.nome', 'DESC')
+                        ->orderBy('a.nome', 'ASC')
                         ->getQuery()
                         ->getResult()
         ;

@@ -6,7 +6,7 @@
             {{ form_label(form.loteria) }}
             <div class="input-group">
                 <div class="input-group-text"><i class="fa-solid fa-clover icon-rotate-45"></i></div>
-                {{ form_widget(form.loteria) }}
+                    {{ form_widget(form.loteria) }}
             </div>
             {{ form_errors(form.loteria) }}
             {{ form_help(form.loteria) }}
@@ -17,7 +17,7 @@
             {{ form_label(form.concursoNumero) }}
             <div class="input-group">
                 <div class="input-group-text"><i class="bi bi-123"></i></div>
-                {{ form_widget(form.concursoNumero) }}
+                    {{ form_widget(form.concursoNumero) }}
             </div>
             {{ form_errors(form.concursoNumero) }}
             {{ form_help(form.concursoNumero) }}
@@ -28,18 +28,21 @@
             {{ form_label(form.nome) }}
             <div class="input-group">
                 <div class="input-group-text"><i class="bi bi-alphabet"></i></div>
-                {{ form_widget(form.nome) }}
+                    {{ form_widget(form.nome) }}
             </div>
             {{ form_errors(form.nome) }}
             {{ form_help(form.nome) }}
         </div>
+    </div>
+    <div class="col-12">
+        {{ form_row(form.cotaValor) }}
     </div>
     <div class="col-12 col-md-6">
         <div class="mb-3">
             {{ form_label(form.arquivoPlanilhaCsv) }}
             <div class="input-group">
                 <div class="input-group-text"><i class="bi bi-filetype-csv"></i></div>
-                {{ form_widget(form.arquivoPlanilhaCsv) }}
+                    {{ form_widget(form.arquivoPlanilhaCsv) }}
             </div>
             {{ form_errors(form.arquivoPlanilhaCsv) }}
             {{ form_help(form.arquivoPlanilhaCsv) }}
@@ -50,7 +53,7 @@
             {{ form_label(form.arquivoComprovantePdf) }}
             <div class="input-group">
                 <div class="input-group-text"><i class="bi bi-filetype-pdf"></i></div>
-                {{ form_widget(form.arquivoComprovantePdf) }}
+                    {{ form_widget(form.arquivoComprovantePdf) }}
             </div>
             {{ form_errors(form.arquivoComprovantePdf) }}
             {{ form_help(form.arquivoComprovantePdf) }}

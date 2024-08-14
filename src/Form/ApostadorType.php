@@ -13,10 +13,13 @@ namespace App\Form;
 
 use App\Entity\Apostador;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class ApostadorType extends AbstractType
 {
@@ -33,6 +36,32 @@ class ApostadorType extends AbstractType
                 ->add('email', EmailType::class, [
                     'label' => 'E-mail',
                     'required' => false,
+                ])
+                ->add('cotaPaga', ChoiceType::class, [
+                    'label' => 'Cota paga',
+                    'required' => true,
+                    'choices' => [
+                        'Sim' => true,
+                        'Não' => false,
+                    ],
+                    'expanded' => true,
+                    'multiple' => false,
+                    'label_attr' => [
+                        'class' => 'radio-inline',
+                    ],
+                ])
+                ->add('cotaQuantidade', IntegerType::class, [
+                    'label' => 'Quantidade de cotas',
+                    'required' => true,
+                    'attr' => [
+                        'class' => 'text-end',
+                    ],
+                    'constraints' => [
+                        new GreaterThanOrEqual([
+                            'value' => 1,
+                            'message' => 'A quantidade de cotas deve ser igual ou maior que 1.',
+                        ]),
+                    ],
                 ])
         ;
     }

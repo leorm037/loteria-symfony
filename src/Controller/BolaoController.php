@@ -98,6 +98,7 @@ class BolaoController extends AbstractController
                     ->setConcurso($concurso)
                     ->setNome($bolaoDTO->getNome())
                     ->setUsuario($usuario)
+                    ->setCotaValor($bolaoDTO->getCotaValor())
             ;
 
             $this->bolaoRepository->save($bolao, true);
@@ -134,6 +135,7 @@ class BolaoController extends AbstractController
                 ->setNome($bolao->getNome())
                 ->setLoteria($bolao->getConcurso()->getLoteria())
                 ->setConcursoNumero($bolao->getConcurso()->getNumero())
+                ->setCotaValor($bolao->getCotaValor())
         ;
 
         $form = $this->createForm(BolaoType::class, $bolaoDTO);
@@ -151,6 +153,7 @@ class BolaoController extends AbstractController
             $bolao
                     ->setConcurso($concurso)
                     ->setNome($bolaoDTO->getNome())
+                    ->setCotaValor($bolaoDTO->getCotaValor())
             ;
 
             $this->bolaoRepository->save($bolao, true);

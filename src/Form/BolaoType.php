@@ -17,10 +17,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class BolaoType extends AbstractType
 {
@@ -47,6 +49,18 @@ class BolaoType extends AbstractType
                 ->add('nome', TextType::class, [
                     'label' => 'Nome do bolão',
                     'required' => true,
+                ])
+                ->add('cotaValor', MoneyType::class, [
+                    'label' => 'Valor da cota',
+                    'currency' => 'BRL',
+                    'required' => false,
+                    'html5' => true,
+                    'constraints' => [
+                        new GreaterThanOrEqual([
+                            'value' => 0,
+                            'message' => 'O valor da cota deve ser igual ou maior que 0.',
+                        ]),
+                    ],
                 ])
                 ->add('arquivoPlanilhaCsv', FileType::class, [
                     'label' => 'Planilhas com os jogos',

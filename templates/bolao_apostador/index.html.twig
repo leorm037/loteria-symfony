@@ -32,8 +32,10 @@
                         <tr>
                             <th>Nome</th>
                             <th>E-mail</th>
+                            <th>Cota paga</th>
+                            <th>Quantidade de cotas</th>
                             <th>Atualizado</th>
-                            <th>Ações</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -41,8 +43,10 @@
                             <tr>
                                 <td>{{ apostador.nome }}</td>
                                 <td>{{ apostador.email }}</td>
+                                <td>{{ apostador.cotaPaga ? 'Sim' : 'Não' }}</td>
+                                <td class="text-end">{{ apostador.cotaQuantidade }}</td>
                                 <td>{{ apostador.updatedAt ? apostador.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : apostador.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
-                                <td>
+                                <td class="text-center">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
                                         {% if is_granted('BOLAO_APOSTADOR_EDIT', apostador) %}
                                             <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_edit', {'uuid': apostador.uuid}) }}">

@@ -48,6 +48,9 @@ class Bolao extends AbstractEntity
     #[ORM\JoinColumn(nullable: false)]
     private ?Usuario $usuario = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    private ?string $cotaValor = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +124,18 @@ class Bolao extends AbstractEntity
     public function setUsuario(?Usuario $usuario): static
     {
         $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    public function getCotaValor(): ?string
+    {
+        return $this->cotaValor;
+    }
+
+    public function setCotaValor(?string $cotaValor): static
+    {
+        $this->cotaValor = $cotaValor;
 
         return $this;
     }
