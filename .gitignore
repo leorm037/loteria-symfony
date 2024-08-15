@@ -31,6 +31,7 @@ phpstan.neon
 ###< phpstan/phpstan ###
 
 ###> upload ###
+upload/apostador/comprovante_jpg/*
 upload/aposta/comprovante_pdf/*
 upload/aposta/planilha_csv/*
 ###< upload ###
