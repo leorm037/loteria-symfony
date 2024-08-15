@@ -156,7 +156,9 @@ class BolaoApostadorController extends AbstractController
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
         }
 
-        $this->deleteComprovante($apostador->getArquivo());
+        if ($apostador->getArquivo()) {
+            $this->deleteComprovante($apostador->getArquivo());
+        }
 
         $this->apostadorRepository->delete($apostador);
 
