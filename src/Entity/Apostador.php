@@ -52,6 +52,9 @@ class Apostador extends AbstractEntity
     #[ORM\Column]
     private int $cotaQuantidade = 1;
 
+    #[ORM\ManyToOne]
+    private ?Arquivo $arquivo = null;
+
     public function getBolaoUsuario(): Usuario
     {
         return $this->getBolao()->getUsuario();
@@ -159,6 +162,18 @@ class Apostador extends AbstractEntity
     public function setCotaQuantidade(int $cotaQuantidade): static
     {
         $this->cotaQuantidade = $cotaQuantidade;
+
+        return $this;
+    }
+
+    public function getArquivo(): ?Arquivo
+    {
+        return $this->arquivo;
+    }
+
+    public function setArquivo(?Arquivo $arquivo): static
+    {
+        $this->arquivo = $arquivo;
 
         return $this;
     }

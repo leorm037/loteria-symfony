@@ -12,14 +12,21 @@
 namespace App\Controller;
 
 use App\Entity\Apostador;
+use App\Entity\Arquivo;
 use App\Enum\TokenEnum;
 use App\Form\ApostadorType;
 use App\Repository\ApostadorRepository;
+use App\Repository\ArquivoRepository;
 use App\Repository\BolaoRepository;
 use App\Security\Voter\ApostadorVoter;
+use App\Service\ApostadorComprovanteJpgService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
 
@@ -28,7 +35,9 @@ class BolaoApostadorController extends AbstractController
 {
     public function __construct(
         private BolaoRepository $bolaoRepository,
-        private ApostadorRepository $apostadorRepository
+        private ApostadorRepository $apostadorRepository,
+        private ApostadorComprovanteJpgService $apostadorComprovante,
+        private ArquivoRepository $arquivoRepository
     ) {
     }
 
@@ -59,14 +68,22 @@ class BolaoApostadorController extends AbstractController
         $this->denyAccessUnlessGranted(ApostadorVoter::NEW, $bolao);
 
         $apostador = new Apostador();
-
         $apostador->setBolao($bolao);
 
         $form = $this->createForm(ApostadorType::class, $apostador);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $arquivoComprovanteJpg = $form->get('arquivoComprovanteJpg')->getData();
+
+            $apostador
+                    ->setArquivo($this->arquivarComprovante($arquivoComprovanteJpg))
+            ;
+
+            if (!$apostador->isCotaPaga() && $apostador->getArquivo()) {
+                $apostador->setCotaPaga(true);
+            }
+
             $this->apostadorRepository->save($apostador, true);
 
             $this->addFlash('success', \sprintf('Apostador "%s" foi cadastrador com sucesso.', $apostador->getNome()));
@@ -94,6 +111,20 @@ class BolaoApostadorController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $arquivoComprovanteJpg = $form->get('arquivoComprovanteJpg')->getData();
+
+            if ($arquivoComprovanteJpg) {
+                $this->deleteComprovante($apostador->getArquivo());
+
+                $apostador
+                        ->setArquivo($this->arquivarComprovante($arquivoComprovanteJpg))
+                ;
+
+                if (!$apostador->isCotaPaga() && $apostador->getArquivo()) {
+                    $apostador->setCotaPaga(true);
+                }
+            }
+
             $this->apostadorRepository->save($apostador, true);
 
             $this->addFlash('success', \sprintf('Apostador "%s" foi alterado com sucesso.', $apostador->getNome()));
@@ -125,10 +156,52 @@ class BolaoApostadorController extends AbstractController
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
         }
 
+        $this->deleteComprovante($apostador->getArquivo());
+
         $this->apostadorRepository->delete($apostador);
 
         $this->addFlash('success', \sprintf('Apostador "%s" removido com sucesso.', $apostador->getNome()));
 
         return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/bolao/apostador/comprovante/{uuid}/download', name: 'comprovante_download', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
+    public function comprovateDownload(Request $request): BinaryFileResponse
+    {
+        $uuid = Uuid::fromString($request->get('uuid'));
+
+        $arquivo = $this->arquivoRepository->findByUuid($uuid);
+
+        if (!file_exists($arquivo->getCaminhoNome())) {
+            throw new NotFoundHttpException(\sprintf('Não foi possível encontrar o arquivo "%s".', $arquivo->getNomeOriginal()));
+        }
+
+        return $this->file($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal(), ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+    }
+
+    private function arquivarComprovante(?UploadedFile $arquivoComprovanteJpg): ?Arquivo
+    {
+        if (!$arquivoComprovanteJpg) {
+            return null;
+        }
+
+        $caminhoNome = $this->apostadorComprovante->upload($arquivoComprovanteJpg);
+
+        $arquivo = new Arquivo();
+        $arquivo
+                ->setNomeOriginal($arquivoComprovanteJpg->getClientOriginalName())
+                ->setCaminhoNome($caminhoNome)
+        ;
+
+        $this->arquivoRepository->save($arquivo, true);
+
+        return $arquivo;
+    }
+
+    private function deleteComprovante(Arquivo $arquivo): void
+    {
+        $this->apostadorComprovante->delete($arquivo->getCaminhoNome());
+
+        $this->arquivoRepository->delete($arquivo);
     }
 }

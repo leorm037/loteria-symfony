@@ -14,6 +14,7 @@ namespace App\Repository;
 use App\Entity\Apostador;
 use App\Entity\Bolao;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -55,17 +56,17 @@ class ApostadorRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Apostador[]|null
+     * @return Paginator<Apostador>|null
      */
     public function findByBolao(Bolao $bolao)
     {
-        return $this->createQueryBuilder('a')
-                        ->where('a.bolao = :bolao')
-                        ->setParameter('bolao', $bolao)
-                        ->orderBy('a.nome', 'ASC')
-                        ->getQuery()
-                        ->getResult()
+        $query = $this->createQueryBuilder('a')
+                ->where('a.bolao = :bolao')
+                ->setParameter('bolao', $bolao)
+                ->orderBy('a.nome', 'ASC')
         ;
+
+        return new Paginator($query);
     }
 
     public function findByUuid(Uuid $uuid): ?Apostador

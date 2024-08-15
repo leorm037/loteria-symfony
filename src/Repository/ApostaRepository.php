@@ -16,6 +16,7 @@ use App\Entity\Bolao;
 use App\Entity\Loteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -57,19 +58,19 @@ class ApostaRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Aposta[]|null
+     * @return Paginator<Aposta>|null
      */
     public function findApostasByUuidBolao(Uuid $uuid)
     {
-        return $this->createQueryBuilder('a')
+        $query = $this->createQueryBuilder('a')
                         ->select('a,b')
                         ->where('b.uuid = :uuid')
                         ->setParameter('uuid', $uuid->toBinary())
                         ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
                         ->addOrderBy('a.quantidadeAcertos', 'DESC')
-                        ->getQuery()
-                        ->getResult()
         ;
+
+        return new Paginator($query);
     }
 
     public function deleteByBolao(Bolao $bolao): void

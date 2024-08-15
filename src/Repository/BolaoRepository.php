@@ -15,6 +15,7 @@ use App\Entity\Bolao;
 use App\Entity\Usuario;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -51,11 +52,11 @@ class BolaoRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Bolao[]|null
+     * @return Paginator<Bolao>|null
      */
     public function list(Usuario $usuario)
     {
-        return $this->createQueryBuilder('b')
+        $query = $this->createQueryBuilder('b')
                         ->select('b,c,l')
                         ->addSelect('(Select COUNT(a.id) From App\Entity\Aposta a Where a.bolao = b.id) As apostas')
                          ->addSelect('(Select COUNT(ap.id) From App\Entity\Apostador ap Where ap.bolao = b.id) As apostadores')
@@ -67,9 +68,9 @@ class BolaoRepository extends ServiceEntityRepository
                         ->addOrderBy('l.nome', 'ASC')
                         ->addOrderBy('c.numero', 'DESC')
                         ->addOrderBy('b.nome', 'ASC')
-                        ->getQuery()
-                        ->getResult()
         ;
+
+        return new Paginator($query);
     }
 
     public function delete(Bolao $bolao): void

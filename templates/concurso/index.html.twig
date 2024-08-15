@@ -43,7 +43,11 @@
                     {% for concurso in concursos %}
                         <tr>
                             <td class="text-end">{{ concurso.numero }}</td>
-                            <td class="text-end">{{ concurso.apuracao|date('d/m/Y','America/Sao_Paulo') }}</td>
+                            {% if concurso.apuracao %}
+                                <td class="text-end">{{ concurso.apuracao|date('d/m/Y','America/Sao_Paulo') }}</td>
+                            {% else %}
+                                <td>Não apurado</td>
+                            {% endif %}
                             <td class="text-end">{{ concurso.dezenas|join(', ') }}</td>
                             <td>{{ concurso.local }}</td>
                             <td>{{ concurso.municipio }}</td>

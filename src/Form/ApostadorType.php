@@ -15,10 +15,12 @@ use App\Entity\Apostador;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class ApostadorType extends AbstractType
@@ -60,6 +62,24 @@ class ApostadorType extends AbstractType
                         new GreaterThanOrEqual([
                             'value' => 1,
                             'message' => 'A quantidade de cotas deve ser igual ou maior que 1.',
+                        ]),
+                    ],
+                ])
+                ->add('arquivoComprovanteJpg', FileType::class, [
+                    'label' => 'Comprovante de pagamente',
+                    'help' => 'Pagamento da cota é confirmado quando um comprovante é enviado.',
+                    'mapped' => false,
+                    'required' => false,
+                    'attr' => [
+                        'accept' => 'image/jpeg',
+                    ],
+                    'constraints' => [
+                        new File([
+                            'maxSize' => '10240k',
+                            'mimeTypes' => [
+                                'image/jpeg',
+                            ],
+                            'mimeTypesMessage' => 'Selecione o comprovante em formato Jpg.',
                         ]),
                     ],
                 ])

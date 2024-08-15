@@ -14,6 +14,7 @@ namespace App\Repository;
 use App\Entity\Arquivo;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Arquivo>
@@ -32,6 +33,16 @@ class ArquivoRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByUuid(Uuid $uuid): ?Arquivo
+    {
+        return $this->createQueryBuilder('a')
+                        ->where('a.uuid = :uuid')
+                        ->setParameter('uuid', $uuid->toBinary())
+                        ->getQuery()
+                        ->getOneOrNullResult()
+        ;
     }
 
     public function delete(Arquivo $arquivo): void
