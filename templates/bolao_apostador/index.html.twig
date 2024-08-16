@@ -75,28 +75,9 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <select class="form-select form-select-sm" aria-label="Quantidade de registro por página">
-                        <option selected>10</option>
-                        <option>25</option>
-                        <option>50</option>
-                        <option>100</option>
-                    </select>
-                </div>
-                <nav aria-label="Paginação">
-                    <ul class="pagination justify-content-center pagination-sm m-0">
-                        <li class="page-item disabled"><a class="page-link" href="#">Anterior</a></li>
-                        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="#">Próximo</a></li>
-                    </ul>
-                </nav>
-                <div>
-                    {{ apostadores.count }} registro(s) encontrado(s).
-                </div>
-            </div>
-        </div>
+        
+        {{ include('_tableFooter.html.twig', {'registros': apostadores.count}) }}
+        
     </div>
     {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_apostador_delete')}) }}
 {% endblock %}

@@ -15,6 +15,7 @@ use App\Entity\Concurso;
 use App\Entity\Loteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,17 +43,17 @@ class ConcursoRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Concurso[]|null
+     * @return Paginator<Concurso>|null
      */
     public function findByLoteria(Loteria $loteria)
     {
-        return $this->createQueryBuilder('c')
+        $query = $this->createQueryBuilder('c')
                         ->andWhere('c.loteria = :loteria')
                         ->setParameter('loteria', $loteria)
                         ->addOrderBy('c.numero', 'DESC')
-                        ->getQuery()
-                        ->getResult()
         ;
+        
+        return new Paginator($query);
     }
 
     public function save(Concurso $concurso, bool $flush = false): void
