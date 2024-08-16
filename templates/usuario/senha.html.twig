@@ -1,0 +1,42 @@
+{# templates/usuario/dados.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: Usuário :: Dados{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><i class="bi bi-person-circle"></i> Usuario</li>
+    <li class="breadcrumb-item active"><i class="bi bi-file-person"></i> Dados</li>
+    {% endblock %}
+
+{% block body %}
+    {{ form_start(form, {'attr': {'data-loading': 'true'}}) }}
+    <div class="card shadow-sm">
+        <div class="card-header bg-gradient">
+            <h1 class="h4 m-0"><i class="bi bi-file-person"></i> Dados</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="mb-3 col-12 col-md-6">
+                    {{ form_label(form.plainPassword.first) }}
+                    <div class="input-group">
+                        <span class="input-group-text" id="plainPassword-first-icone"><i class="bi bi-key"></i></span>
+                            {{ form_widget(form.plainPassword.first) }}
+                    </div>
+                    {{ form_errors(form.plainPassword.first) }}
+                    {{ form_help(form.plainPassword.first) }}
+                </div>
+                <div class="mb-3 col-12 col-md-6">
+                    {{ form_label(form.plainPassword.second) }}
+                    <div class="input-group">
+                        <span class="input-group-text" id="plainPassword-second-icone"><i class="bi bi-key"></i></span>
+                            {{ form_widget(form.plainPassword.second) }}
+                    </div>
+                    {{ form_errors(form.plainPassword.second) }}
+                    {{ form_help(form.plainPassword.second) }}
+                </div>
+            </div>
+        </div>
+        {{ include('_formFooter.html.twig', {'voltar': path('app_index')}) }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

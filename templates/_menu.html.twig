@@ -10,9 +10,29 @@
         </a>
     </li>
     <li class="nav-item">
-        <a data-loading="true" class="nav-link" href="{{ path('app_logout') }}">
-            <i class="bi bi-door-open-fill"></i> Sair
+        <img src="{{ app.user.email|gravatar(32) }}" class="ms-3 mt-1 border border-loteria rounded-circle" alt="{{ app.user.nome }}">
+    </li>
+    <li class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+            {{ app.user.nome }}
         </a>
+        <ul class="dropdown-menu dropdown-menu-dark border-loteria bg-loteria shadow dropdown-menu-lg-end">
+            <li>
+                <a class="dropdown-item" href="{{ path('app_usuario_dados') }}">
+                    <i class="bi bi-file-person-fill"></i> Alterar dados do usuário
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('app_usuario_senha') }}">
+                    <i class="bi bi-key-fill"></i> Alterar senha
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="{{ path('app_logout') }}">
+                    <i class="bi bi-door-open-fill"></i> Sair
+                </a>
+            </li>          
+        </ul>
     </li>
 {% else %}
     <li class="nav-item">
