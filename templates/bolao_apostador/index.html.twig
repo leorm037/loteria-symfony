@@ -54,7 +54,7 @@
                                             </a>
                                         {% endif %}
                                         {% if apostador.arquivo %}
-                                            <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_comprovante_download', {'uuid': apostador.arquivo.uuid}) }}">
+                                            <a data-loading="true" role="button" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_comprovante_download', {'uuid': apostador.arquivo.uuid}) }}">
                                                 <i class="bi bi-filetype-jpg"></i> <span class="d-none d-xl-inline-block">Comprovante</span>
                                             </a>
                                         {% endif %}

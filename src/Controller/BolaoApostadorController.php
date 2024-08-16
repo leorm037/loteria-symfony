@@ -178,7 +178,7 @@ class BolaoApostadorController extends AbstractController
             throw new NotFoundHttpException(\sprintf('Não foi possível encontrar o arquivo "%s".', $arquivo->getNomeOriginal()));
         }
 
-        return $this->file($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal(), ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+        return $this->file($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal(), ResponseHeaderBag::DISPOSITION_INLINE);
     }
 
     private function arquivarComprovante(?UploadedFile $arquivoComprovanteJpg): ?Arquivo
