@@ -11,6 +11,8 @@
 
 namespace App\Service;
 
+use DateTime;
+use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,7 +29,7 @@ class AbstractFileUploadService
 
     public function getTargetDirectory(): ?string
     {
-        $dateTime = new \DateTime();
+        $dateTime = new DateTime();
 
         $dateTimeDirectory = $dateTime->format('Y/m/d');
 
@@ -64,6 +66,14 @@ class AbstractFileUploadService
 
     public function delete(?string $filename): bool
     {
-        return unlink($filename);
+        try {
+            return unlink($filename);
+        } catch (Exception $e) {
+            $mensagem = sprintf('Arquivo "%s" não encontrador', $filename);
+            
+            $this->logger->error($mensagem, $e->getTrace());
+            
+            return true;
+        }       
     }
 }

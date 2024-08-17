@@ -75,14 +75,14 @@ class BolaoApostadorController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $arquivoComprovanteJpg = $form->get('arquivoComprovanteJpg')->getData();
+            
+            dump($arquivoComprovanteJpg);
 
             $apostador
                     ->setArquivo($this->arquivarComprovante($arquivoComprovanteJpg))
             ;
-
-            if (!$apostador->isCotaPaga() && $apostador->getArquivo()) {
-                $apostador->setCotaPaga(true);
-            }
+            
+            dump($apostador, $apostador->isCotaPaga());
 
             $this->apostadorRepository->save($apostador, true);
 
@@ -119,10 +119,6 @@ class BolaoApostadorController extends AbstractController
                 }
 
                 $apostador->setArquivo($this->arquivarComprovante($arquivoComprovanteJpg));
-
-                if (!$apostador->isCotaPaga() && $apostador->getArquivo()) {
-                    $apostador->setCotaPaga(true);
-                }
             }
 
             $this->apostadorRepository->save($apostador, true);
@@ -159,7 +155,7 @@ class BolaoApostadorController extends AbstractController
         if ($apostador->getArquivo()) {
             $this->deleteComprovante($apostador->getArquivo());
         }
-
+        
         $this->apostadorRepository->delete($apostador);
 
         $this->addFlash('success', \sprintf('Apostador "%s" removido com sucesso.', $apostador->getNome()));
@@ -203,7 +199,5 @@ class BolaoApostadorController extends AbstractController
     private function deleteComprovante(Arquivo $arquivo): void
     {
         $this->apostadorComprovante->delete($arquivo->getCaminhoNome());
-
-        $this->arquivoRepository->delete($arquivo);
     }
 }
