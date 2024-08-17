@@ -60,7 +60,7 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
                         ->getOneOrNullResult()
         ;
     }
-    
+
     //    /**
     //     * @return Usuario[] Returns an array of Usuario objects
     //     */

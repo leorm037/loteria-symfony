@@ -14,15 +14,9 @@ namespace App\Twig\Runtime;
 use App\Service\GravatarService;
 use Twig\Extension\RuntimeExtensionInterface;
 
-class GravatarExtensionRuntime implements RuntimeExtensionInterface
+class GravatarUrlExtensionRuntime implements RuntimeExtensionInterface
 {
-
-    public function __construct()
-    {
-        // Inject dependencies if needed
-    }
-
-    public function getUrl(string $email, int $sizePixel = null)
+    public function getUrl(string $email, ?int $sizePixel = null): string
     {
         return GravatarService::getUrl($email, $sizePixel);
     }

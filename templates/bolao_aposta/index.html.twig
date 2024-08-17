@@ -16,7 +16,7 @@
         {{ include('bolao/_bolao.html.twig') }}
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>Dezenas</th>
@@ -28,8 +28,8 @@
                     <tbody class="table-group-divider">
                         {% for aposta in apostas %}
                             <tr>
-                                <td class="text-end">{{ aposta.dezenas|join(', ') }}</td>
-                                <td class="text-center">{{ aposta.conferida ? 'Sim' : 'Não' }}</td>
+                                <td class="text-end">{{ aposta.dezenas|dezenasSorteadas(bolao.concurso.dezenas) }}</td>
+                                <td class="text-start">{{ aposta.conferida ? 'Sim' : 'Não' }}</td>
                                 {% if aposta.quantidadeAcertos is not null %}
                                     <td class="text-end">{{ aposta.quantidadeAcertos }}</td>
                                 {% else %}

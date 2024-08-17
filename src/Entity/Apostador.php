@@ -52,7 +52,7 @@ class Apostador extends AbstractEntity
     #[ORM\Column]
     private int $cotaQuantidade = 1;
 
-    #[ORM\ManyToOne(cascade: ["remove"])]
+    #[ORM\ManyToOne(cascade: ['remove'])]
     private ?Arquivo $arquivo = null;
 
     public function getBolaoUsuario(): Usuario
@@ -144,10 +144,10 @@ class Apostador extends AbstractEntity
 
     public function isCotaPaga(): bool
     {
-        if(null !== $this->getArquivo()) {
+        if (null !== $this->getArquivo()) {
             return true;
         }
-        
+
         return $this->cotaPaga;
     }
 
@@ -178,7 +178,7 @@ class Apostador extends AbstractEntity
     public function setArquivo(?Arquivo $arquivo): static
     {
         $this->arquivo = $arquivo;
-        
+
         if (!$this->isCotaPaga() && null !== $this->arquivo) {
             $this->setCotaPaga(true);
         }

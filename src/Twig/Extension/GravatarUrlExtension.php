@@ -11,18 +11,24 @@
 
 namespace App\Twig\Extension;
 
-use App\Twig\Runtime\GravatarExtensionRuntime;
+use App\Twig\Runtime\GravatarUrlExtensionRuntime;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-class GravatarExtension extends AbstractExtension
+class GravatarUrlExtension extends AbstractExtension
 {
     public function getFilters(): array
     {
         return [
-            new TwigFilter('gravatar', [GravatarExtensionRuntime::class, 'getUrl']),
+            new TwigFilter('gravatarUrl', [GravatarUrlExtensionRuntime::class, 'getUrl']),
         ];
     }
 
+    public function getFunctions()
+    {
+        return [
+            new TwigFunction('gravatarUrl', [GravatarUrlExtensionRuntime::class, 'getUrl']),
+        ];
+    }
 }

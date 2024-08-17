@@ -28,7 +28,7 @@ class InscricaoController extends AbstractController
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
         private UsuarioRepository $usuarioRepository,
-            private LoggerInterface $logger
+        private LoggerInterface $logger
     ) {
     }
 
@@ -56,10 +56,10 @@ class InscricaoController extends AbstractController
 
                 return $this->redirectToRoute('app_login_index');
             } catch (UniqueConstraintViolationException $e) {
-                $mensagem = sprintf('O e-mail "%s" já está cadastrado.', $usuario->getEmail());
-                
+                $mensagem = \sprintf('O e-mail "%s" já está cadastrado.', $usuario->getEmail());
+
                 $this->addFlash('danger', $mensagem);
-                
+
                 $this->logger->error($mensagem, $e->getTrace());
 
                 return $this->render('registro/index.html.twig', [

@@ -17,7 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 
 class UsuarioDadosType extends AbstractType
 {
@@ -26,11 +25,11 @@ class UsuarioDadosType extends AbstractType
         $builder
             ->add('nome', TextType::class, [
                 'label' => 'Nome completo',
-                'required' => true
+                'required' => true,
             ])
             ->add('email', EmailType::class, [
                 'label' => 'E-mail',
-                'required' => true
+                'required' => true,
             ])
         ;
     }

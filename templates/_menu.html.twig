@@ -10,7 +10,7 @@
         </a>
     </li>
     <li class="nav-item">
-        <img src="{{ app.user.email|gravatar(32) }}" class="ms-3 mt-1 border border-loteria rounded-circle" alt="{{ app.user.nome }}">
+        <img src="{{ gravatarUrl(app.user.email, 32) }}" class="ms-3 mt-1 border border-loteria rounded-circle" alt="{{ app.user.nome }}">
     </li>
     <li class="nav-item dropdown">
         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">

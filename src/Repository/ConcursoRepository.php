@@ -52,7 +52,7 @@ class ConcursoRepository extends ServiceEntityRepository
                         ->setParameter('loteria', $loteria)
                         ->addOrderBy('c.numero', 'DESC')
         ;
-        
+
         return new Paginator($query);
     }
 
