@@ -228,7 +228,7 @@ class BolaoController extends AbstractController
         $apostasCadastradas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
 
         foreach ($csvReaderHelp->getIterator() as $row) {
-            $dezenas = array_map('intval', $row);
+            $dezenas = array_map('strval', $row);
 
             if (\count($apostasCadastradas) > 0) {
                 $diferenca = [];

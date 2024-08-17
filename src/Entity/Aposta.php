@@ -28,7 +28,7 @@ class Aposta extends AbstractEntity
     private ?int $id = null;
 
     /**
-     * @var array<int>
+     * @var array<string>
      */
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Informe as dezenas da aposta.')]
@@ -96,7 +96,7 @@ class Aposta extends AbstractEntity
     }
 
     /**
-     * @return array<int>
+     * @return array<string>
      */
     public function getDezenas(): array
     {
@@ -104,7 +104,7 @@ class Aposta extends AbstractEntity
     }
 
     /**
-     * @param array<int> $dezenas
+     * @param array<string> $dezenas
      */
     public function setDezenas(array $dezenas): static
     {
