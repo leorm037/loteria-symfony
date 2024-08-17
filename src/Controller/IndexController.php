@@ -11,18 +11,26 @@
 
 namespace App\Controller;
 
+use App\Entity\Bolao;
+use App\Repository\ApostaRepository;
+use App\Repository\BolaoRepository;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/', name: 'app_')]
 class IndexController extends AbstractController
 {
+
     public function __construct(
-        private MailerInterface $mailer
-    ) {
+            private MailerInterface $mailer,
+            private BolaoRepository $bolaoRepository,
+            private ApostaRepository $apostaRepository
+    )
+    {
+        
     }
 
     #[Route('/', name: 'index')]
@@ -34,19 +42,30 @@ class IndexController extends AbstractController
     #[Route('/test', name: 'test')]
     public function test(): Response
     {
-        $email = (new Email())
-            ->from('sistema@paginaemconstrucao.com.br')
-            ->to('leonardo@paginaemconstrucao.com.br')
-            // ->cc('cc@example.com')
-            // ->bcc('bcc@example.com')
-            // ->replyTo('fabien@example.com')
-            // ->priority(Email::PRIORITY_HIGH)
-            ->subject('Time for Symfony Mailer!')
-            ->text('Sending emails is fun again!')
-            ->html('<p>See Twig integration for better HTML integration!</p>');
+        /** @var Bolao $bolao */
+        $bolao = $this->bolaoRepository->findOneBy(['nome' => 'Teste 1']);
+        $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
+
+        $assunto = sprintf('Bolão: %s', $bolao->getNome());
+
+        $email = (new TemplatedEmail())
+                ->from('sistema@paginaemconstrucao.com.br')
+                ->to('leonardo@paginaemconstrucao.com.br')
+                // ->cc('cc@example.com')
+                // ->bcc('bcc@example.com')
+                // ->replyTo('fabien@example.com')
+                // ->priority(Email::PRIORITY_HIGH)
+                ->subject($assunto)
+                ->htmlTemplate('email/bolao/notificarResultadoBolao.html.twig')
+                ->locale('pt-br')
+                ->context(['bolao' => $bolao, 'apostas' => $apostas])
+        ;
 
         $this->mailer->send($email);
 
-        return $this->render('index/index.html.twig');
+        return $this->render('email/bolao/notificarResultadoBolao.html.twig', [
+                    'bolao' => $bolao,
+                    'apostas' => $apostas
+        ]);
     }
 }

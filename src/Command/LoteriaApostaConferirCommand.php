@@ -11,10 +11,15 @@
 
 namespace App\Command;
 
+use App\Entity\Apostador;
+use App\Entity\Bolao;
 use App\Entity\Loteria;
+use App\Repository\ApostadorRepository;
 use App\Repository\ApostaRepository;
+use App\Repository\BolaoRepository;
 use App\Repository\LoteriaRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,21 +27,27 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Mailer\MailerInterface;
 
 #[AsCommand(
-    name: 'loteria:aposta:conferir',
-    description: 'Confere as apostas dos concursos sorteados.',
-)]
+            name: 'loteria:aposta:conferir',
+            description: 'Confere as apostas dos concursos sorteados.',
+    )]
 class LoteriaApostaConferirCommand extends Command
 {
+
     /** @var array<int, array{status: string, message: string}> */
     private $messages = [];
 
     public function __construct(
-        private LoteriaRepository $loteriaRepository,
-        private ApostaRepository $apostaRepository,
-        private EntityManagerInterface $manager
-    ) {
+            private ApostadorRepository $apostadorRepository,
+            private LoteriaRepository $loteriaRepository,
+            private ApostaRepository $apostaRepository,
+            private BolaoRepository $bolaoRepository,
+            private EntityManagerInterface $manager,
+            private MailerInterface $mailer
+    )
+    {
         parent::__construct();
     }
 
@@ -44,19 +55,19 @@ class LoteriaApostaConferirCommand extends Command
     {
         $this
                 ->addArgument(
-                    'loteria',
-                    InputArgument::OPTIONAL,
-                    'Confere as apostas dos concursos sorteados da loteria informada.')
+                        'loteria',
+                        InputArgument::OPTIONAL,
+                        'Confere as apostas dos concursos sorteados da loteria informada.')
                 ->addOption(
-                    'concurso',
-                    'c',
-                    InputOption::VALUE_REQUIRED,
-                    'Confere as apostas do concurso informado. É obrigado informar tambem a loteria.')
+                        'concurso',
+                        'c',
+                        InputOption::VALUE_REQUIRED,
+                        'Confere as apostas do concurso informado. É obrigado informar tambem a loteria.')
                 ->addOption(
-                    'loterias',
-                    'l',
-                    InputOption::VALUE_NONE,
-                    'Apresenta a lista de loterias.')
+                        'loterias',
+                        'l',
+                        InputOption::VALUE_NONE,
+                        'Apresenta a lista de loterias.')
         ;
     }
 
@@ -81,6 +92,7 @@ class LoteriaApostaConferirCommand extends Command
 
     private function conferirApostasLoteria(?Loteria $loteria = null): void
     {
+        $boloes = [];
         $loterias = [];
 
         if ($loteria) {
@@ -98,8 +110,8 @@ class LoteriaApostaConferirCommand extends Command
 
             foreach ($apostas as $aposta) {
                 $resultado = array_intersect(
-                    $aposta->getBolao()->getConcurso()->getDezenas(),
-                    $aposta->getDezenas()
+                        $aposta->getBolao()->getConcurso()->getDezenas(),
+                        $aposta->getDezenas()
                 );
 
                 $aposta
@@ -108,12 +120,16 @@ class LoteriaApostaConferirCommand extends Command
                 ;
 
                 $this->manager->persist($aposta);
+
+                $boloes[] = $aposta->getBolao()->getId();
             }
 
             $this->manager->flush();
 
             $this->messages[] = ['status' => 'null', 'message' => \sprintf('Quantidade de apostas conferidas: %s', \count($apostas))];
         }
+
+        $this->enviarResultadoBolao($boloes);
     }
 
     private function listarLoterias(): void
@@ -124,6 +140,55 @@ class LoteriaApostaConferirCommand extends Command
 
         foreach ($loterias as $loteria) {
             $this->messages[] = ['status' => null, 'message' => $loteria->getSlugUrl()];
+        }
+    }
+
+    /**
+     * 
+     * @param array<int>|null $boloesId
+     * @return void
+     */
+    private function enviarResultadoBolao(?array $boloesId): void
+    {              
+        if (!$boloesId || count($boloesId) == 0) {
+            return;
+        }
+        
+        $unique_boloesId = array_unique($boloesId, SORT_NUMERIC);
+               
+        foreach ($unique_boloesId as $bolaoId) {
+            $bolao = $this->bolaoRepository->find($bolaoId);
+            $this->notificarApostadores($bolao);
+        }
+    }
+
+    private function notificarApostadores(Bolao $bolao): void
+    {
+        $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
+        $apostadores = $this->apostadorRepository->findByBolao($bolao);
+                     
+        $assunto = sprintf('Bolão: %s', $bolao->getNome());
+
+        $email = (new TemplatedEmail())
+                ->from('sistema@paginaemconstrucao.com.br')
+                //->to('to@exemple.com')
+                // ->cc('cc@example.com')
+                // ->bcc('bcc@example.com')
+                // ->replyTo('fabien@example.com')
+                // ->priority(Email::PRIORITY_HIGH)
+                ->subject($assunto)
+                ->htmlTemplate('email/bolao/notificarResultadoBolao.html.twig')
+                ->locale('pt-br')
+                ->context(['bolao' => $bolao, 'apostas' => $apostas])
+        ;
+        
+        foreach ($apostadores as $apostador) {
+            if (!$apostador->getEmail()) {
+                continue;
+            }
+            
+            $email->to($apostador->getEmail());
+            $this->mailer->send($email);
         }
     }
 

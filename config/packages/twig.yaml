@@ -1,6 +1,9 @@
 twig:
     form_themes: ['bootstrap_5_layout.html.twig']
     file_name_pattern: '*.twig'
+    
+    paths:
+        '%kernel.project_dir%/public/assets': public_assets
 
 when@test:
     twig:
