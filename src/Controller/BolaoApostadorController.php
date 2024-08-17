@@ -76,13 +76,9 @@ class BolaoApostadorController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $arquivoComprovanteJpg = $form->get('arquivoComprovanteJpg')->getData();
 
-            dump($arquivoComprovanteJpg);
-
             $apostador
                     ->setArquivo($this->arquivarComprovante($arquivoComprovanteJpg))
             ;
-
-            dump($apostador, $apostador->isCotaPaga());
 
             $this->apostadorRepository->save($apostador, true);
 
