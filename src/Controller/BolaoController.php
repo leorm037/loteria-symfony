@@ -31,9 +31,12 @@ use App\Service\ApostaComprovantePdfService;
 use App\Service\ApostaPlanilhaCsvService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -102,15 +105,15 @@ class BolaoController extends AbstractController
             ;
 
             if ($arquivoComprovantePdf) {
-                $bolao->setComprovanteJogosPdf($this->anexarComprovante($bolao, $arquivoComprovantePdf));
+                $bolao->setComprovanteJogosPdf($this->anexarComprovante($arquivoComprovantePdf));
             }
 
             if ($arquivoPlanilhaCsv) {
-                $bolao->setPlanilhaJogosCsv($this->anexarPlanilha($bolao, $arquivoPlanilhaCsv));                
+                $bolao->setPlanilhaJogosCsv($this->anexarPlanilha($arquivoPlanilhaCsv));
             }
 
             $this->bolaoRepository->save($bolao, true);
-            
+
             if ($arquivoPlanilhaCsv) {
                 $this->importarPlanilha($bolao);
             }
@@ -161,14 +164,16 @@ class BolaoController extends AbstractController
             ;
 
             if ($arquivoComprovantePdf) {
+                $this->excluirComprovante($bolao->getComprovanteJogosPdf());
                 $bolao->setComprovanteJogosPdf(
-                        $this->anexarComprovante($bolao, $arquivoComprovantePdf)
+                        $this->anexarComprovante($arquivoComprovantePdf)
                 );
             }
 
             if ($arquivoPlanilhaCsv) {
+                $this->excluirPlanilha($bolao->getPlanilhaJogosCsv());
                 $bolao->setPlanilhaJogosCsv(
-                        $this->anexarPlanilha($bolao, $arquivoPlanilhaCsv)
+                        $this->anexarPlanilha($arquivoPlanilhaCsv)
                 );
             }
 
@@ -208,7 +213,8 @@ class BolaoController extends AbstractController
 
         if ($bolao) {
             $nomeBolao = $bolao->getNome();
-            $this->excluirAnexos($bolao);
+            $this->excluirComprovante($bolao->getComprovanteJogosPdf());
+            $this->excluirPlanilha($bolao->getPlanilhaJogosCsv());
             $this->apostaRepository->deleteByBolao($bolao);
             $this->apostadorRepository->deleteByBolao($bolao);
             $this->bolaoRepository->delete($bolao);
@@ -218,15 +224,47 @@ class BolaoController extends AbstractController
         return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    private function anexarPlanilha(Bolao &$bolao, UploadedFile $arquivoPlanilhaCsv): Arquivo
+    #[Route('/bolao/{uuid}/comprovante/download', name: 'comprovante_download', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
+    public function comprovateDownload(Request $request): BinaryFileResponse
+    {
+        $uuid = Uuid::fromString($request->get('uuid'));
+
+        $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+
+        $arquivo = $bolao->getComprovanteJogosPdf();
+
+        if (!file_exists($arquivo->getCaminhoNome())) {
+            throw new NotFoundHttpException(\sprintf('Não foi possível encontrar o arquivo "%s".', $arquivo->getNomeOriginal()));
+        }
+
+        return $this->file($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal(), ResponseHeaderBag::DISPOSITION_INLINE);
+    }
+
+    #[Route('/bolao/{uuid}/planilha/download', name: 'planilha_download', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
+    public function planilhaDownload(Request $request): BinaryFileResponse
+    {
+        $uuid = Uuid::fromString($request->get('uuid'));
+
+        $bolao = $this->bolaoRepository->findOneByUuid($uuid);
+
+        $arquivo = $bolao->getPlanilhaJogosCsv();
+
+        if (!file_exists($arquivo->getCaminhoNome())) {
+            throw new NotFoundHttpException(\sprintf('Não foi possível encontrar o arquivo "%s".', $arquivo->getNomeOriginal()));
+        }
+
+        return $this->file($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal(), ResponseHeaderBag::DISPOSITION_ATTACHMENT);
+    }
+
+    private function anexarPlanilha(UploadedFile $arquivoPlanilhaCsv): Arquivo
     {
         $caminhoNome = $this->planilhaCsvService->upload($arquivoPlanilhaCsv);
 
         $arquivo = new Arquivo();
-        
+
         return $arquivo
-                ->setNomeOriginal($arquivoPlanilhaCsv->getClientOriginalName())
-                ->setCaminhoNome($caminhoNome)
+                        ->setNomeOriginal($arquivoPlanilhaCsv->getClientOriginalName())
+                        ->setCaminhoNome($caminhoNome)
         ;
     }
 
@@ -284,7 +322,7 @@ class BolaoController extends AbstractController
         $this->entityManager->flush();
     }
 
-    private function anexarComprovante(Bolao &$bolao, UploadedFile $arquivoComprovantePdf): Arquivo
+    private function anexarComprovante(UploadedFile $arquivoComprovantePdf): Arquivo
     {
         $caminhoNome = $this->comprovantePdfService->upload($arquivoComprovantePdf);
 
@@ -312,20 +350,21 @@ class BolaoController extends AbstractController
         return $concurso;
     }
 
-    private function excluirAnexos(Bolao $bolao): void
+    private function excluirComprovante(?Arquivo $arquivo): void
     {
-        $bolaoArquivos = $this->bolaoArquivoRepository->findByBolao($bolao);
-
-        foreach ($bolaoArquivos as $bolaoArquivo) {
-            $arquivo = $bolaoArquivo->getArquivo();
-
-            $this->bolaoArquivoRepository->delete($bolaoArquivo);
-
-            if (file_exists($arquivo->getCaminhoNome())) {
-                unlink($arquivo->getCaminhoNome());
-            }
-
-            $this->arquivoRepository->delete($arquivo);
+        if (null === $arquivo) {
+            return;
         }
+
+        $this->comprovantePdfService->delete($arquivo->getCaminhoNome());
+    }
+
+    private function excluirPlanilha(?Arquivo $arquivo): void
+    {
+        if (null === $arquivo) {
+            return;
+        }
+
+        $this->planilhaCsvService->delete($arquivo->getCaminhoNome());
     }
 }
