@@ -3,7 +3,7 @@ twig:
     file_name_pattern: '*.twig'
     
     paths:
-        '%kernel.project_dir%/public/assets': public_assets
+        '%kernel.project_dir%/assets/styles': assets_styles
 
 when@test:
     twig:

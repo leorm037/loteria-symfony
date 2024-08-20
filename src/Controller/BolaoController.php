@@ -22,7 +22,6 @@ use App\Form\BolaoType;
 use App\Helper\CsvReaderHelper;
 use App\Repository\ApostadorRepository;
 use App\Repository\ApostaRepository;
-use App\Repository\ArquivoRepository;
 use App\Repository\BolaoRepository;
 use App\Repository\ConcursoRepository;
 use App\Repository\UsuarioRepository;
@@ -45,21 +44,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/bolao', name: 'app_bolao_')]
 class BolaoController extends AbstractController
 {
-
     public function __construct(
-            private BolaoRepository $bolaoRepository,
-            private ConcursoRepository $concursoRepository,
-            private ApostaComprovantePdfService $comprovantePdfService,
-            private ApostaPlanilhaCsvService $planilhaCsvService,
-            private ArquivoRepository $arquivoRepository,
-            private ApostaRepository $apostaRepository,
-            private ApostadorRepository $apostadorRepository,
-            private EntityManagerInterface $entityManager,
-            private ValidatorInterface $validator,
-            private UsuarioRepository $usuarioRepository
-    )
-    {
-        
+        private BolaoRepository $bolaoRepository,
+        private ConcursoRepository $concursoRepository,
+        private ApostaComprovantePdfService $comprovantePdfService,
+        private ApostaPlanilhaCsvService $planilhaCsvService,
+        private ApostaRepository $apostaRepository,
+        private ApostadorRepository $apostadorRepository,
+        private EntityManagerInterface $entityManager,
+        private ValidatorInterface $validator,
+        private UsuarioRepository $usuarioRepository
+    ) {
     }
 
     #[Route('/', name: 'index')]
@@ -72,7 +67,7 @@ class BolaoController extends AbstractController
         $boloes = $this->bolaoRepository->list($usuario);
 
         return $this->render('bolao/index.html.twig', [
-                    'boloes' => $boloes,
+            'boloes' => $boloes,
         ]);
     }
 
@@ -86,8 +81,8 @@ class BolaoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $concurso = $this->cadastraConcursoSeNaoExistir(
-                    $bolaoDTO->getLoteria(),
-                    $bolaoDTO->getConcursoNumero()
+                $bolaoDTO->getLoteria(),
+                $bolaoDTO->getConcursoNumero()
             );
 
             $arquivoComprovantePdf = $form->get('arquivoComprovantePdf')->getData();
@@ -124,7 +119,7 @@ class BolaoController extends AbstractController
         }
 
         return $this->render('bolao/new.html.twig', [
-                    'form' => $form,
+            'form' => $form,
         ]);
     }
 
@@ -150,8 +145,8 @@ class BolaoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $concurso = $this->cadastraConcursoSeNaoExistir(
-                    $bolaoDTO->getLoteria(),
-                    $bolaoDTO->getConcursoNumero()
+                $bolaoDTO->getLoteria(),
+                $bolaoDTO->getConcursoNumero()
             );
 
             $arquivoComprovantePdf = $form->get('arquivoComprovantePdf')->getData();
@@ -166,14 +161,14 @@ class BolaoController extends AbstractController
             if ($arquivoComprovantePdf) {
                 $this->excluirComprovante($bolao->getComprovanteJogosPdf());
                 $bolao->setComprovanteJogosPdf(
-                        $this->anexarComprovante($arquivoComprovantePdf)
+                    $this->anexarComprovante($arquivoComprovantePdf)
                 );
             }
 
             if ($arquivoPlanilhaCsv) {
                 $this->excluirPlanilha($bolao->getPlanilhaJogosCsv());
                 $bolao->setPlanilhaJogosCsv(
-                        $this->anexarPlanilha($arquivoPlanilhaCsv)
+                    $this->anexarPlanilha($arquivoPlanilhaCsv)
                 );
             }
 
@@ -189,7 +184,7 @@ class BolaoController extends AbstractController
         }
 
         return $this->render('bolao/edit.html.twig', [
-                    'form' => $form,
+            'form' => $form,
         ]);
     }
 
@@ -281,7 +276,7 @@ class BolaoController extends AbstractController
         foreach ($csvReaderHelp->getIterator() as $row) {
             $dezenas = array_map('strval', $row);
 
-            if (count($apostasCadastradas) > 0) {
+            if (\count($apostasCadastradas) > 0) {
                 $diferenca = [];
 
                 foreach ($apostasCadastradas as $apostaCadastrada) {
@@ -311,7 +306,7 @@ class BolaoController extends AbstractController
             if (\count($errors) > 0) {
                 /** @var ConstraintViolation $error */
                 foreach ($errors as $error) {
-                    $this->addFlash('danger', \sprintf('A aposta "%s" é inválida. ' . $error->getMessage(), implode(', ', $aposta->getDezenas())));
+                    $this->addFlash('danger', \sprintf('A aposta "%s" é inválida. '.$error->getMessage(), implode(', ', $aposta->getDezenas())));
                 }
                 continue;
             }
@@ -327,6 +322,7 @@ class BolaoController extends AbstractController
         $caminhoNome = $this->comprovantePdfService->upload($arquivoComprovantePdf);
 
         $arquivo = new Arquivo();
+
         return $arquivo
                         ->setNomeOriginal($arquivoComprovantePdf->getClientOriginalName())
                         ->setCaminhoNome($caminhoNome)

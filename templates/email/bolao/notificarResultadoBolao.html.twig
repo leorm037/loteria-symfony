@@ -1,71 +1,45 @@
 {# templates/email/bolao/notificarResultadoBolao.html.twig #}
-{% apply inline_css(source('@public_assets/bootstrap-5.3.3-dist/css/bootstrap.min.css'), source('@public_assets/css/app.css')) %}
-<div class="container my-3">
-    <div class="card shadow-sm">
-        <div class="card-header">
-            <h1 class="h4 m-0"><i class="bi bi-envelope-paper-fill"></i> Resultado do bolão</h1>
-        </div>        
+{% apply inline_css(source('@assets_styles/email.css')) %}
+<h1 class="h1">Resultado do bolão</h1>
 
+<p class="label">Nome do bolão</p>
+<p class="value">{{ bolao.nome }}</p>
 
+<p class="label">Loteria</p>
+<p class="value">{{ bolao.concurso.loteria.nome }}</p>
 
-        <div class="card-body border-bottom text-bg-light">
-            <div class="row">
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="bolao" class="form-label">Nome do bolão</label>
-                        <input disabled readonly type="text" class="form-control" id="bolao" value="{{ bolao.nome }}" aria-label="{{ bolao.nome }}">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="loteria" class="form-label">Loteria</label>
-                        <input disabled readonly type="text" class="form-control" id="loteria" value="{{ bolao.concurso.loteria.nome }}" aria-label="{{ bolao.concurso.loteria.nome }}">
-                    </div>
-                </div>
-                <div class="col-2">
-                    <div class="mb-3">
-                        <label for="concurso" class="form-label">Concurso</label>
-                        <input disabled readonly type="text" class="form-control" id="concurso" value="{{ bolao.concurso.numero }}" aria-label="{{ bolao.concurso.numero }}">
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="mb-3">
-                        <label for="concurso-apuracao" class="form-label">Apuração</label>
-                        <input disabled readonly type="text" class="form-control" id="concurso-apuracao" value="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}" aria-label="{{ bolao.concurso.apuracao ? bolao.concurso.apuracao|date('d/m/Y') : 'Não apurado' }}">
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="mb-3">
-                        <label for="concurso-dezenas" class="form-label">Dezenas</label>
-                        <input disabled readonly type="text" class="form-control" id="concurso-dezenas" value="{{ bolao.concurso.dezenas ? bolao.concurso.dezenas|join(', ') : 'Não apurado' }}" aria-label="{{ bolao.concurso.dezenas ? bolao.concurso.dezenas|join(', ') : 'Não apurado' }}">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Dezenas</th>
-                            <th>Quantidade de acertos</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        {% for aposta in apostas %}
-                            <tr>
-                                <td class="text-end">{{ aposta.dezenas|dezenasSorteadas(bolao.concurso.dezenas) }}</td>
-                                <td class="text-end">{{ aposta.quantidadeAcertos }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="card-footer text-end">
-            {{ apostas.count }} aposta(s).
-        </div>
-    </div>
-</div>
+<p class="label">Concurso</p>
+<p class="value">{{ bolao.concurso.numero }}</p>
+
+<p class="label">Apuração</p>
+<p class="value">{{ bolao.concurso.apuracao|date('d/m/Y', 'America/Sao_Paulo') }}</p>
+
+<p class="label">Dezenas</p>
+<p class="value">{{ bolao.concurso.dezenas|join(', ') }}</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th colspan="2"class="table-title text-center bg-verde">Apostas</th>
+        </tr>
+        <tr>
+            <th class="table-title text-center">Dezenas</th>
+            <th class="table-title text-center">Quantidade de acertos</th>
+        </tr>
+    </thead>
+    <tbody class="">
+        {% for aposta in apostas %}
+            <tr>
+                <td class="text-end">{{ aposta.dezenas|dezenasSorteadas(bolao.concurso.dezenas) }}</td>
+                <td class="text-end">{{ aposta.quantidadeAcertos }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2" class="text-end bg-verde">{{ apostas.count }} aposta(s).</th>
+        </tr>
+    </tfoot>
+</table>
 
 {% endapply %}

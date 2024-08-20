@@ -23,14 +23,11 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/', name: 'app_')]
 class IndexController extends AbstractController
 {
-
     public function __construct(
-            private MailerInterface $mailer,
-            private BolaoRepository $bolaoRepository,
-            private ApostaRepository $apostaRepository
-    )
-    {
-        
+        private MailerInterface $mailer,
+        private BolaoRepository $bolaoRepository,
+        private ApostaRepository $apostaRepository
+    ) {
     }
 
     #[Route('/', name: 'index')]
@@ -46,7 +43,7 @@ class IndexController extends AbstractController
         $bolao = $this->bolaoRepository->findOneBy(['nome' => 'Teste 1']);
         $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
 
-        $assunto = sprintf('Bolão: %s', $bolao->getNome());
+        $assunto = \sprintf('Bolão: %s', $bolao->getNome());
 
         $email = (new TemplatedEmail())
                 ->from('sistema@paginaemconstrucao.com.br')
@@ -64,8 +61,8 @@ class IndexController extends AbstractController
         $this->mailer->send($email);
 
         return $this->render('email/bolao/notificarResultadoBolao.html.twig', [
-                    'bolao' => $bolao,
-                    'apostas' => $apostas
+            'bolao' => $bolao,
+            'apostas' => $apostas,
         ]);
     }
 }
