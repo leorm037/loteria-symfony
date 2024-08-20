@@ -58,13 +58,13 @@
                                             <i class="bi bi-people-fill"></i> <span class="d-none d-xl-inline-block">Apostadores</span>
                                         </a>
                                             
-                                        {% if bolao.planilhaJogosCsv %}
+                                        {% if bolao.comprovanteJogosPdf %}
                                             <a role="button" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
                                                 <i class="bi bi-filetype-jpg"></i> <span class="d-none d-xl-inline-block">Comprovante</span>
                                             </a>
                                         {% endif %}
                                         
-                                        {% if bolao.comprovanteJogosPdf %}
+                                        {% if bolao.planilhaJogosCsv %}
                                             <a role="button" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_planilha_download', {'uuid': bolao.uuid}) }}">
                                                 <i class="bi bi-filetype-csv"></i> <span class="d-none d-xl-inline-block">Planilha</span>
                                             </a>
