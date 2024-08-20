@@ -219,7 +219,7 @@ class BolaoController extends AbstractController
         return $this->redirectToRoute('app_bolao_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/bolao/{uuid}/comprovante/download', name: 'comprovante_download', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
+    #[Route('/{uuid}/comprovante/download', name: 'comprovante_download', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
     public function comprovateDownload(Request $request): BinaryFileResponse
     {
         $uuid = Uuid::fromString($request->get('uuid'));
@@ -235,7 +235,7 @@ class BolaoController extends AbstractController
         return $this->file($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal(), ResponseHeaderBag::DISPOSITION_INLINE);
     }
 
-    #[Route('/bolao/{uuid}/planilha/download', name: 'planilha_download', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
+    #[Route('/{uuid}/planilha/download', name: 'planilha_download', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
     public function planilhaDownload(Request $request): BinaryFileResponse
     {
         $uuid = Uuid::fromString($request->get('uuid'));
