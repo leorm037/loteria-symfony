@@ -51,6 +51,12 @@ class Bolao extends AbstractEntity
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $cotaValor = null;
 
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
+    private ?Arquivo $planilhaJogosCsv = null;
+
+    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
+    private ?Arquivo $comprovanteJogosPdf = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +142,30 @@ class Bolao extends AbstractEntity
     public function setCotaValor(?string $cotaValor): static
     {
         $this->cotaValor = $cotaValor;
+
+        return $this;
+    }
+
+    public function getPlanilhaJogosCsv(): ?Arquivo
+    {
+        return $this->planilhaJogosCsv;
+    }
+
+    public function setPlanilhaJogosCsv(?Arquivo $planilhaJogosCsv): static
+    {
+        $this->planilhaJogosCsv = $planilhaJogosCsv;
+
+        return $this;
+    }
+
+    public function getComprovanteJogosPdf(): ?Arquivo
+    {
+        return $this->comprovanteJogosPdf;
+    }
+
+    public function setComprovanteJogosPdf(?Arquivo $comprovanteJogosPdf): static
+    {
+        $this->comprovanteJogosPdf = $comprovanteJogosPdf;
 
         return $this;
     }
