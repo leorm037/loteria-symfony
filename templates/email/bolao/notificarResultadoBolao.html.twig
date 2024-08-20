@@ -17,26 +17,32 @@
 <p class="label">Dezenas</p>
 <p class="value">{{ bolao.concurso.dezenas|join(', ') }}</p>
 
-<table class="table">
+<br>
+
+<table class="table"style="min-width: 640px; width: 80%;">
     <thead>
         <tr>
             <th colspan="2"class="table-title text-center bg-verde">Apostas</th>
         </tr>
-        <tr>
+        <tr class="table-border-bottom">
             <th class="table-title text-center">Dezenas</th>
             <th class="table-title text-center">Quantidade de acertos</th>
         </tr>
     </thead>
     <tbody class="">
-        {% for aposta in apostas %}
-            <tr>
+        {% for key, aposta in apostas %}
+            {% if key is even %}
+            <tr class="bg-verde-claro">
+            {% else %}
+            <tr>        
+            {% endif %}
                 <td class="text-end">{{ aposta.dezenas|dezenasSorteadas(bolao.concurso.dezenas) }}</td>
                 <td class="text-end">{{ aposta.quantidadeAcertos }}</td>
             </tr>
         {% endfor %}
     </tbody>
     <tfoot>
-        <tr>
+        <tr class="table-border-top">
             <th colspan="2" class="text-end bg-verde">{{ apostas.count }} aposta(s).</th>
         </tr>
     </tfoot>
