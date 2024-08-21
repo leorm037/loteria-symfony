@@ -14,7 +14,6 @@ namespace App\Controller;
 use App\Entity\Loteria;
 use App\Repository\ConcursoRepository;
 use App\Repository\LoteriaRepository;
-use SensioLabs\AnsiConverter\AnsiToHtmlConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -84,24 +83,19 @@ class ConcursoController extends AbstractController
             'command' => 'loteria:aposta:conferir'
         ]);
 
-        $output = new BufferedOutput(
-                OutputInterface::VERBOSITY_NORMAL,
-                true
-        );
-
-        $converte = new AnsiToHtmlConverter();
+        $output = new BufferedOutput();
 
         $application->run($concursoRecuperarResultado, $output);
 
-        $content = $output->fetch();
+        $content = nl2br($output->fetch());
 
-        $this->addFlash('success', $converte->convert($content));
+        $this->addFlash('success', $content);
 
         $application->run($apostaConferir, $output);
 
-        $content = $output->fetch();
+        $content = nl2br($output->fetch());
 
-        $this->addFlash('success', $converte->convert($content));
+        $this->addFlash('success', $content);
 
         return $this->redirectToRoute('app_concurso_index');
     }
