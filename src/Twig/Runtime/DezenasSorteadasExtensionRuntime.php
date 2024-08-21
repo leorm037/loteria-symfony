@@ -52,6 +52,8 @@ class DezenasSorteadasExtensionRuntime implements RuntimeExtensionInterface
                 $html = '<span class="badge text-bg-%s">%s</span>';
 
                 $resultado[] = \sprintf($html, $cor, $dezena);
+                
+                continue;
             }
 
             $resultado[] = $dezena;
