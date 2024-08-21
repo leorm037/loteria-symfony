@@ -19,7 +19,7 @@
             </nav>
         </div>
         <div class="col-12 col-sm-4 text-sm-end text-center">
-            {{ registros }} registro(s) encontrado(s).
+            {{ registros|number_format(0, ',', '.') }} registro(s) encontrado(s).
         </div>
     </div>
 </div>
