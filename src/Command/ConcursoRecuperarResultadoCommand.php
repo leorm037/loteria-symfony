@@ -118,20 +118,7 @@ class ConcursoRecuperarResultadoCommand extends Command
         $key = 'json_'.$loteria->getId().'_'.$numero;
 
         /** @var Concurso $sorteio */
-        $sorteio = $this->cache->get($key, function (ItemInterface $item) use ($loteria, $numero) {
-            $item->expiresAfter(new \DateInterval('P1D'));
-
-            try {
-                return ConcursoSorteioService::getConcurso($loteria, $numero);
-            } catch (\Exception $e) {
-                $this->messages[] = ['status' => 'error', 'message' => $e->getMessage()];
-                $this->logger->info($e->getMessage());
-
-                $item->expiresAfter(0);
-
-                return null;
-            }
-        });
+        $sorteio =  ConcursoSorteioService::getConcurso($loteria, $numero);
 
         if (null == $sorteio) {
             return;
