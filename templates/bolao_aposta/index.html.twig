@@ -15,11 +15,13 @@
                 <div>
                     <h1 class="h4 m-0"><i class="bi bi-ticket-perforated"></i> Apostas</h1>
                 </div>
-                <div>
-                    <a data-loading="true" href="{{ path('app_bolao_apostas_new', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
-                        <i class="bi bi-plus"></i> Novo
-                    </a>
-                </div>
+                {% if is_granted('BOLAO_APOSTA_NEW', bolao) %}
+                    <div>
+                        <a data-loading="true" href="{{ path('app_bolao_apostas_new', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                            <i class="bi bi-plus"></i> Novo
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>        
         {{ include('bolao/_bolao.html.twig') }}
@@ -32,7 +34,9 @@
                             <th>Conferida</th>
                             <th>Quantidade de acertos</th>
                             <th>Atualização</th>
-                            <th class="text-center">Ações</th>
+                                {% if is_granted('BOLAO_APOSTA_EDIT', bolao) %}
+                                <th class="text-center">Ações</th>
+                                {% endif %}
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -45,21 +49,27 @@
                                 {% else %}
                                     <td>Não apurado</td>
                                 {% endif %}
-                                <td class="text-end">{{ aposta.updatedAt ? aposta.updatedAt|date('d/m/Y H:i') : aposta.createdAt|date('d/m/Y H:i') }}</td>
-                                <td class="text-center d-print-none">
-                                    <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
-                                        <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostas_edit', {'uuid': aposta.uuid}) }}">
-                                            <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
-                                        </a>
-                                        <button type="button" class="btn btn-danger" data-delete="{{ aposta.uuid }}">
-                                            <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
-                                        </button>
-                                    </div>
-                                </td>
+                                <td class="text-end">{{ aposta.updatedAt ? aposta.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : aposta.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
+                                {% if is_granted('BOLAO_APOSTA_EDIT', bolao) %}
+                                    <td class="text-center d-print-none">
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
+                                            <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostas_edit', {'uuid': aposta.uuid}) }}">
+                                                <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
+                                            </a>
+                                            <button type="button" class="btn btn-danger" data-delete="{{ aposta.uuid }}">
+                                                <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                {% endif %}
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="5" class="text-center">Nenhum registro encontrado</td>
+                                {% if is_granted('BOLAO_APOSTA_EDIT', bolao) %}
+                                    <td colspan="5" class="text-center">Nenhum registro encontrado</td>
+                                {% else %}
+                                    <td colspan="4" class="text-center">Nenhum registro encontrado</td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>

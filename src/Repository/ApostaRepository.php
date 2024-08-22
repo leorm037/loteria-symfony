@@ -86,6 +86,12 @@ class ApostaRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    public function delete(Aposta $aposta): void
+    {
+        $this->getEntityManager()->remove($aposta);
+        $this->getEntityManager()->flush();
+    }
+
     public function findByUuid(Uuid $uuid): ?Aposta
     {
         return $this->createQueryBuilder('a')

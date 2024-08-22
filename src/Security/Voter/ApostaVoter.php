@@ -21,13 +21,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ApostaVoter extends Voter
 {
+
+    public const NEW = 'BOLAO_APOSTA_NEW';
     public const LIST = 'BOLAO_APOSTA_LIST';
+    public const EDIT = 'BOLAO_APOSTA_EDIT';
+    public const DELETE = 'BOLAO_APOSTA_DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return \in_array($attribute, [
-            self::LIST,
-        ]) && $subject instanceof Bolao;
+        return in_array($attribute, [
+                    self::NEW,
+                    self::LIST,
+                    self::EDIT,
+                    self::DELETE
+                ]) && $subject instanceof Bolao;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -38,20 +45,34 @@ class ApostaVoter extends Voter
             return false;
         }
 
-        if ($subject instanceof Bolao) {
-            $bolao = $subject;
+        $bolao = $subject;
 
-            return match ($attribute) {
-                self::LIST => $this->canList($bolao, $usuario),
-                default => false
-            };
-        }
+        return match ($attribute) {
+            self::NEW => $this->canNew($bolao, $usuario),
+            self::LIST => $this->canList($bolao, $usuario),
+            self::EDIT => $this->canEdit($bolao, $usuario),
+            self::DELETE => $this->canDelete($bolao, $usuario),
+            default => false
+        };
+    }
 
-        return false; /** @phpstan-ignore deadCode.unreachable */
+    private function canNew(Bolao $bolao, UserInterface $usuario): bool
+    {
+        return null === $bolao->getConcurso()->getDezenas() && $bolao->getUsuario() === $usuario;
     }
 
     private function canList(Bolao $bolao, UserInterface $usuario): bool
     {
         return $usuario === $bolao->getUsuario();
+    }
+
+    private function canEdit(Bolao $bolao, UserInterface $usuario): bool
+    {
+        return null === $bolao->getConcurso()->getDezenas() && $bolao->getUsuario() === $usuario;
+    }
+
+    private function canDelete(Bolao $bolao, UserInterface $usuario): bool
+    {
+        return null === $bolao->getConcurso()->getDezenas() && $bolao->getUsuario() === $usuario;
     }
 }
