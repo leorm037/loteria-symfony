@@ -105,7 +105,7 @@ class BolaoApostaController extends AbstractController
 
         $bolao = $aposta->getBolao();
 
-        $this->denyAccessUnlessGranted(ApostaVoter::DELETE, $aposta);
+        $this->denyAccessUnlessGranted(ApostaVoter::DELETE, $bolao);
 
         /** @var string|null $token */
         $token = $request->getPayload()->get('token');
