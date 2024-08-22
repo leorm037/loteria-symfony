@@ -11,7 +11,16 @@
 {% block body %}
     <div class="card shadow-sm">
         <div class="card-header">
-            <h1 class="h4 m-0"><i class="bi bi-ticket-perforated"></i> Apostas</h1>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h4 m-0"><i class="bi bi-ticket-perforated"></i> Apostas</h1>
+                </div>
+                <div>
+                    <a data-loading="true" href="{{ path('app_bolao_apostas_new', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                        <i class="bi bi-plus"></i> Novo
+                    </a>
+                </div>
+            </div>
         </div>        
         {{ include('bolao/_bolao.html.twig') }}
         <div class="card-body">
@@ -23,6 +32,7 @@
                             <th>Conferida</th>
                             <th>Quantidade de acertos</th>
                             <th>Atualização</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -36,18 +46,29 @@
                                     <td>Não apurado</td>
                                 {% endif %}
                                 <td class="text-end">{{ aposta.updatedAt ? aposta.updatedAt|date('d/m/Y H:i') : aposta.createdAt|date('d/m/Y H:i') }}</td>
+                                <td class="text-center d-print-none">
+                                    <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
+                                        <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostas_edit', {'uuid': aposta.uuid}) }}">
+                                            <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
+                                        </a>
+                                        <button type="button" class="btn btn-danger" data-delete="{{ aposta.uuid }}">
+                                            <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
+                                        </button>
+                                    </div>
+                                </td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="4" class="text-center">Nenhum registro encontrado</td>
+                                <td colspan="5" class="text-center">Nenhum registro encontrado</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
-        
+
         {{ include('_tableFooter.html.twig', {'registros': apostas.count}) }}
-        
+
     </div>
+    {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_apostas_delete')}) }}
 {% endblock %}

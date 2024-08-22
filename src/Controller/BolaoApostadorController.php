@@ -13,6 +13,7 @@ namespace App\Controller;
 
 use App\Entity\Apostador;
 use App\Entity\Arquivo;
+use App\Entity\Bolao;
 use App\Enum\TokenEnum;
 use App\Form\ApostadorType;
 use App\Repository\ApostadorRepository;
@@ -58,13 +59,9 @@ class BolaoApostadorController extends AbstractController
         ]);
     }
 
-    #[Route('/bolao/{uuid}/apostador/new', name: 'new', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    #[Route('/bolao/{uuid:bolao}/apostador/new', name: 'new', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
+    public function new(Request $request, Bolao $bolao): Response
     {
-        $uuid = Uuid::fromString($request->get('uuid'));
-
-        $bolao = $this->bolaoRepository->findOneByUuid($uuid);
-
         $this->denyAccessUnlessGranted(ApostadorVoter::NEW, $bolao);
 
         $apostador = new Apostador();
@@ -82,7 +79,7 @@ class BolaoApostadorController extends AbstractController
 
             $this->apostadorRepository->save($apostador, true);
 
-            $this->addFlash('success', \sprintf('Apostador "%s" foi cadastrador com sucesso.', $apostador->getNome()));
+            $this->addFlash('success', \sprintf('Apostador "%s" foi cadastrado com sucesso.', $apostador->getNome()));
 
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
         }

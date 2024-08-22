@@ -25,6 +25,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class ApostaRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Aposta::class);
@@ -63,11 +64,11 @@ class ApostaRepository extends ServiceEntityRepository
     public function findApostasByUuidBolao(Uuid $uuid)
     {
         $query = $this->createQueryBuilder('a')
-                        ->select('a,b')
-                        ->where('b.uuid = :uuid')
-                        ->setParameter('uuid', $uuid->toBinary())
-                        ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
-                        ->addOrderBy('a.quantidadeAcertos', 'DESC')
+                ->select('a,b')
+                ->where('b.uuid = :uuid')
+                ->setParameter('uuid', $uuid->toBinary())
+                ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
+                ->addOrderBy('a.quantidadeAcertos', 'DESC')
         ;
 
         return new Paginator($query);
@@ -83,6 +84,16 @@ class ApostaRepository extends ServiceEntityRepository
                 ->execute()
         ;
         $this->getEntityManager()->flush();
+    }
+
+    public function findByUuid(Uuid $uuid): ?Aposta
+    {
+        return $this->createQueryBuilder('a')
+                        ->where('a.uuid = :uuid')
+                        ->setParameter('uuid', $uuid->toBinary())
+                        ->getQuery()
+                        ->getOneOrNullResult()
+        ;
     }
 
     //    /**

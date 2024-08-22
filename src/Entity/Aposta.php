@@ -54,7 +54,7 @@ class Aposta extends AbstractEntity
     #[ORM\Column(nullable: true, options: ['unsigned' => true])]
     private ?int $quantidadeAcertos = null;
 
-    #[Assert\IsTrue(message: 'A quantidade de dezenas informadas é menor que a definida na Loteria.')]
+    #[Assert\IsTrue(message: 'A quantidade de dezenas informada é menor que a definida na Loteria.')]
     public function isQuantidadeDezenasMenor(): bool
     {
         $min = min($this->getBolao()->getConcurso()->getLoteria()->getAposta());
@@ -66,7 +66,7 @@ class Aposta extends AbstractEntity
         return false;
     }
 
-    #[Assert\IsTrue(message: 'A quantidade de dezenas informadas é maior que a definida na Loteria.')]
+    #[Assert\IsTrue(message: 'A quantidade de dezenas informada é maior que a definida na Loteria.')]
     public function isQuantidadeDezenasMaior(): bool
     {
         $max = max($this->getBolao()->getConcurso()->getLoteria()->getAposta());

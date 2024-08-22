@@ -1,0 +1,27 @@
+{# templates/bolao_aposta/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: Bolão :: Apostas :: Novo{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a data-loading="true" href="{{ path('app_bolao_index') }}" class="text-decoration-none"><i class="fa-regular fa-futbol"></i> Bolão</a></li>
+    <li class="breadcrumb-item"><a data-loading="true" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}" class="text-decoration-none"><i class="bi bi-ticket-perforated-fill"></i> Apostas</a></li>
+    <li class="breadcrumb-item active"><i class="bi bi-ticket"></i> Aposta</li>
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form, {'attr': {'data-loading': 'true'}}) }}
+    <div class="card shadow-sm">
+        <div class="card-header bg-gradient">
+            <h1 class="h4 m-0"><i class="bi bi-ticket"></i> Aposta</h1>
+        </div>
+        
+        {{ include('bolao/_bolao.html.twig') }}
+        
+        <div class="card-body">
+            {{ include('bolao_aposta/_form.html.twig') }}
+        </div>
+        
+        {{ include('_formFooter.html.twig', {'voltar': path('app_bolao_apostas_index', {'uuid': bolao.uuid})}) }}
+    {{ form_end(form) }}
+{% endblock %}
