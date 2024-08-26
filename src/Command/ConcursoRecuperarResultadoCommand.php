@@ -25,8 +25,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
 
 #[AsCommand(
     name: 'loteria:concurso:recuperar-resultado',
@@ -38,7 +36,6 @@ class ConcursoRecuperarResultadoCommand extends Command
     private $messages = [];
 
     public function __construct(
-        private CacheInterface $cache,
         private LoggerInterface $logger,
         private LoteriaRepository $loteriaRepository,
         private ConcursoRepository $concursoRepository
@@ -118,7 +115,7 @@ class ConcursoRecuperarResultadoCommand extends Command
         $key = 'json_'.$loteria->getId().'_'.$numero;
 
         /** @var Concurso $sorteio */
-        $sorteio =  ConcursoSorteioService::getConcurso($loteria, $numero);
+        $sorteio = ConcursoSorteioService::getConcurso($loteria, $numero);
 
         if (null == $sorteio) {
             return;

@@ -23,6 +23,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ConcursoRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Concurso::class);
@@ -45,12 +46,13 @@ class ConcursoRepository extends ServiceEntityRepository
     /**
      * @return Paginator<Concurso>|null
      */
-    public function findByLoteria(Loteria $loteria)
+    public function findByLoteria(Loteria $loteria, int $registrosPorPagina = 10)
     {
         $query = $this->createQueryBuilder('c')
-                        ->andWhere('c.loteria = :loteria')
-                        ->setParameter('loteria', $loteria)
-                        ->addOrderBy('c.numero', 'DESC')
+                ->andWhere('c.loteria = :loteria')
+                ->setParameter('loteria', $loteria)
+                ->addOrderBy('c.numero', 'DESC')
+                ->setMaxResults($registrosPorPagina)
         ;
 
         return new Paginator($query);

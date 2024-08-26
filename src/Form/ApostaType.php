@@ -20,14 +20,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ApostaType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
                 ->add('dezenas', TextType::class, [
                     'label' => 'Dezenas',
                     'required' => true,
-                    'help' => 'Separe as dezenas por vírgula.'
+                    'help' => 'Separe as dezenas por vírgula.',
                 ])
         ;
 
@@ -44,7 +43,7 @@ class ApostaType extends AbstractType
                 'quantidadeDezenasMenor' => 'dezenas',
                 'quantidadeDezenasMaior' => 'dezenas',
                 'dezenasForaDoIntervalo' => 'dezenas',
-            ]
+            ],
         ]);
     }
 }

@@ -26,12 +26,9 @@ use Symfony\Component\Uid\Uuid;
 #[Route('/bolao', name: 'app_bolao_apostas_')]
 class BolaoApostaController extends AbstractController
 {
-
     public function __construct(
-            private ApostaRepository $apostaRepository
-    )
-    {
-        
+        private ApostaRepository $apostaRepository
+    ) {
     }
 
     #[Route('/{uuid:bolao}/apostas', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
@@ -42,8 +39,8 @@ class BolaoApostaController extends AbstractController
         $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
 
         return $this->render('bolao_aposta/index.html.twig', [
-                    'apostas' => $apostas,
-                    'bolao' => $bolao,
+            'apostas' => $apostas,
+            'bolao' => $bolao,
         ]);
     }
 
@@ -61,14 +58,14 @@ class BolaoApostaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->apostaRepository->save($aposta, true);
 
-            $this->addFlash('success', sprintf('Dezenas "%s" cadastradas com sucesso.', implode(', ', $aposta->getDezenas())));
+            $this->addFlash('success', \sprintf('Dezenas "%s" cadastradas com sucesso.', implode(', ', $aposta->getDezenas())));
 
             return $this->redirectToRoute('app_bolao_apostas_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bolao_aposta/new.html.twig', [
-                    'form' => $form,
-                    'bolao' => $bolao
+            'form' => $form,
+            'bolao' => $bolao,
         ]);
     }
 
@@ -85,14 +82,14 @@ class BolaoApostaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->apostaRepository->save($aposta, true);
 
-            $this->addFlash('success', sprintf('Dezenas "%s" alteradas com sucesso.', implode(', ', $aposta->getDezenas())));
+            $this->addFlash('success', \sprintf('Dezenas "%s" alteradas com sucesso.', implode(', ', $aposta->getDezenas())));
 
             return $this->redirectToRoute('app_bolao_apostas_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bolao_aposta/edit.html.twig', [
-                    'form' => $form,
-                    'bolao' => $bolao
+            'form' => $form,
+            'bolao' => $bolao,
         ]);
     }
 
@@ -118,7 +115,7 @@ class BolaoApostaController extends AbstractController
 
         $this->apostaRepository->delete($aposta);
 
-        $this->addFlash('success', sprintf('Aposta "%s" foi removida com sucesso.', implode(', ', $aposta->getDezenas())));
+        $this->addFlash('success', \sprintf('Aposta "%s" foi removida com sucesso.', implode(', ', $aposta->getDezenas())));
 
         return $this->redirectToRoute('app_bolao_apostas_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
     }

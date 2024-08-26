@@ -21,7 +21,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ApostaVoter extends Voter
 {
-
     public const NEW = 'BOLAO_APOSTA_NEW';
     public const LIST = 'BOLAO_APOSTA_LIST';
     public const EDIT = 'BOLAO_APOSTA_EDIT';
@@ -29,12 +28,12 @@ class ApostaVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [
-                    self::NEW,
-                    self::LIST,
-                    self::EDIT,
-                    self::DELETE
-                ]) && $subject instanceof Bolao;
+        return \in_array($attribute, [
+            self::NEW,
+            self::LIST,
+            self::EDIT,
+            self::DELETE,
+        ]) && $subject instanceof Bolao;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool

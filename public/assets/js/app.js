@@ -32,6 +32,8 @@ function redirectUrl(url, param = null, value = null, clearParams = false) {
 
 function redirectParamsUrl(url, params, clearParams = false) {
     let newUrl = url;
+    
+    console.log(url,params);
 
     $.LoadingOverlay('show');
 
@@ -74,4 +76,11 @@ $("button[data-delete]").each(function () {
         $('#deleteModal').modal('show');
         $('#modalDeleteButton').focus();
     });
+});
+
+$('#registros-por-pagina').on('change', function(){
+   var url = $(location).attr('href');
+   var registros_por_pagina = this.value;
+      
+   redirectParamsUrl(url, [['registros-por-pagina',registros_por_pagina]]);
 });

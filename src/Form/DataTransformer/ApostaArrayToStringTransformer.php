@@ -1,8 +1,12 @@
 <?php
 
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Scripting/PHPClass.php to edit this template
+ *     This file is part of Loteria.
+ *
+ *     (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ *     This source file is subject to the MIT license that is bundled
+ *     with this source code in the file LICENSE.
  */
 
 namespace App\Form\DataTransformer;
@@ -10,29 +14,29 @@ namespace App\Form\DataTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 
 /**
- * Description of ApostaArrayToStringTransformer
- *
- * @author leona
+ * @phpstan-extends
  */
 class ApostaArrayToStringTransformer implements DataTransformerInterface
 {
-
+    /**
+     * @param array<int,string> $dezenasAsArray
+     */
     public function transform($dezenasAsArray): string
     {
         return implode(',', $dezenasAsArray);
     }
 
-    private function lpad(int $value): string
-    {
-        
-    }
-
+    /**
+     * @param string $dezenasAsString
+     *
+     * @return array<int,string>
+     */
     public function reverseTransform($dezenasAsString): array
     {
         $dezenasArray = explode(',', $dezenasAsString);
 
         $func = function (int $value): string {
-            return str_pad($value, 2, '00', STR_PAD_LEFT);
+            return str_pad($value, 2, '00', \STR_PAD_LEFT);
         };
 
         return array_map($func, $dezenasArray);
