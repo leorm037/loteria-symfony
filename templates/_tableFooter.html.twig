@@ -2,7 +2,7 @@
 <div class="card-footer">
     <div class="row">
         <div class="col-12 col-sm-4">
-            <select name="registros-por-pagina" id="registros-por-pagina" class="form-select form-select-sm" aria-label="Quantidade de registro por página">
+            <select name="registros-por-pagina" id="registros-por-pagina" class="form-select form-select-sm" aria-label="Quantidade de registro por página"{{ registros == 0 ? ' disabled' }}>
                 <option value="10"{{ app.request.query.get('registros-por-pagina') == 10 ? ' selected' : '' }}>10</option>
                 <option value="25"{{ app.request.query.get('registros-por-pagina') == 25 ? ' selected' : '' }}>25</option>
                 <option value="50"{{ app.request.query.get('registros-por-pagina') == 50 ? ' selected' : '' }}>50</option>
