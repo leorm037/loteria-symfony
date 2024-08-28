@@ -11,6 +11,7 @@
 
 namespace App\Repository;
 
+use App\DTO\PaginacaoDTO;
 use App\Entity\Concurso;
 use App\Entity\Loteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -43,20 +44,22 @@ class ConcursoRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Paginator<Concurso>|null
+     * @return PaginacaoDTO<Concurso>|null
      */
-    public function findByLoteria(Loteria $loteria, int $registrosPorPagina = 10)
+    public function findByLoteria(Loteria $loteria, int $registrosPorPagina = 10, int $paginaAtual = 0)
     {
-        $registros = (!\in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
+        $registros = (!in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
+        $pagina = $paginaAtual * $registrosPorPagina;
 
         $query = $this->createQueryBuilder('c')
                 ->andWhere('c.loteria = :loteria')
                 ->setParameter('loteria', $loteria)
                 ->addOrderBy('c.numero', 'DESC')
+                ->setFirstResult($pagina)
                 ->setMaxResults($registros)
         ;
-
-        return new Paginator($query);
+        
+        return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
     }
 
     public function save(Concurso $concurso, bool $flush = false): void

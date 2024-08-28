@@ -45,13 +45,17 @@ class BolaoApostadorController extends AbstractController
     #[Route('/bolao/{uuid}/apostador', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
     public function index(Request $request): Response
     {
+        $registrosPorPaginas = $request->get('registros-por-pagina', 10);
+        
+        $pagina = $request->get('pagina', 0);
+        
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
 
         $this->denyAccessUnlessGranted(ApostadorVoter::LIST, $bolao);
 
-        $apostadores = $this->apostadorRepository->findByBolao($bolao);
+        $apostadores = $this->apostadorRepository->findByBolao($bolao, $registrosPorPaginas, $pagina);
 
         return $this->render('bolao_apostador/index.html.twig', [
             'bolao' => $bolao,

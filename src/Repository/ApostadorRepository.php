@@ -11,6 +11,7 @@
 
 namespace App\Repository;
 
+use App\DTO\PaginacaoDTO;
 use App\Entity\Apostador;
 use App\Entity\Bolao;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -56,17 +57,23 @@ class ApostadorRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Paginator<Apostador>|null
+     * @return Paginacao|null
      */
-    public function findByBolao(Bolao $bolao)
+    public function findByBolao(Bolao $bolao, int $registrosPorPagina = 10, int $paginaAtual = 0)
     {
+        $registros = (!in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
+        
+        $pagina = $paginaAtual * $registrosPorPagina;
+        
         $query = $this->createQueryBuilder('a')
                 ->where('a.bolao = :bolao')
                 ->setParameter('bolao', $bolao)
                 ->orderBy('a.nome', 'ASC')
+                ->setFirstResult($pagina)
+                ->setMaxResults($registros)
         ;
 
-        return new Paginator($query);
+        return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
     }
 
     public function findByUuid(Uuid $uuid): ?Apostador

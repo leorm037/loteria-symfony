@@ -82,5 +82,14 @@ $('#registros-por-pagina').on('change', function(){
    var url = $(location).attr('href');
    var registros_por_pagina = this.value;
       
-   redirectParamsUrl(url, [['registros-por-pagina',registros_por_pagina]]);
+   redirectUrl(url, 'registros-por-pagina', registros_por_pagina, false);
+});
+
+$('button[data-pagina]').each(function(){
+    var url = $(location).attr('href');
+    var pagina = $(this).data('pagina');
+    
+    $(this).on('click', function(){
+        redirectUrl(url, 'pagina', pagina, false);
+    });    
 });

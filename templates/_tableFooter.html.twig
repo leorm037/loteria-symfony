@@ -2,7 +2,7 @@
 <div class="card-footer">
     <div class="row">
         <div class="col-12 col-sm-4">
-            <select name="registros-por-pagina" id="registros-por-pagina" class="form-select form-select-sm" aria-label="Quantidade de registro por página"{{ registros == 0 ? ' disabled' }}>
+            <select name="registros-por-pagina" id="registros-por-pagina" class="form-select form-select-sm" aria-label="Quantidade de registro por página"{{ paginacao == null or paginacao.count == 0 ? ' disabled' }}>
                 <option value="10"{{ app.request.query.get('registros-por-pagina') == 10 ? ' selected' : '' }}>10</option>
                 <option value="25"{{ app.request.query.get('registros-por-pagina') == 25 ? ' selected' : '' }}>25</option>
                 <option value="50"{{ app.request.query.get('registros-por-pagina') == 50 ? ' selected' : '' }}>50</option>
@@ -12,14 +12,46 @@
         <div class="col-12 col-sm-4 text-center">
             <nav aria-label="Paginação">
                 <ul class="pagination justify-content-center pagination-sm m-0">
-                    <li class="page-item disabled"><a class="page-link" href="#"><i class="bi bi-chevron-compact-left"></i> Anterior</a></li>
-                    <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item disabled"><a class="page-link" href="#">Próximo <i class="bi bi-chevron-compact-right"></i></a></li>
+                    {% if paginacao is empty or paginacao.paginaPrimeira %}
+                        <li class="page-item disabled">
+                            <a class="page-link"><i class="bi bi-chevron-compact-left"></i> Anterior</a>
+                        </li>                            
+                    {% else %}
+                        <li class="page-item">
+                            <button type="button" class="page-link" data-pagina="{{ paginacao.paginaAnterior }}"><i class="bi bi-chevron-compact-left"></i> Anterior</button>
+                        </li>
+                    {% endif %}    
+                    
+                    {% if paginacao is empty %}
+                        <li class="page-item disabled" aria-current="page">
+                            <button type="button" class="page-link">1</button>
+                        </li>
+                    {% else %}                    
+                        {% for i in paginacao.paginas %}
+                            <li class="page-item {{ (i == paginacao.paginaAtual) ? "active" }}" aria-current="page">
+                                <button type="button" class="page-link" data-pagina="{{ i }}">{{ i + 1 }}</button>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled" aria-current="page">
+                                <button type="button" class="page-link">1</button>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    {% if paginacao is empty or paginacao.paginaUltima %}                                                
+                        <li class="page-item disabled">
+                            <button type="button" class="page-link">Próximo <i class="bi bi-chevron-compact-right"></i></button>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <button type="button" class="page-link" data-pagina="{{ paginacao.paginaProxima }}">Próximo <i class="bi bi-chevron-compact-right"></i></button>
+                        </li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
         <div class="col-12 col-sm-4 text-sm-end text-center">
-            {{ registros|number_format(0, ',', '.') }} registro(s) encontrado(s).
+            {{ paginacao.count|default(0)|number_format(0, ',', '.') }} registro(s) encontrado(s).
         </div>
     </div>
 </div>

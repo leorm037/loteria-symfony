@@ -26,11 +26,14 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/concurso', name: 'app_concurso_', methods: ['GET'])]
 class ConcursoController extends AbstractController
 {
+
     public function __construct(
-        private ConcursoRepository $concursoRepository,
-        private LoteriaRepository $loteriaRepository,
-        private KernelInterface $kernel
-    ) {
+            private ConcursoRepository $concursoRepository,
+            private LoteriaRepository $loteriaRepository,
+            private KernelInterface $kernel
+    )
+    {
+        
     }
 
     #[Route('/', name: 'index')]
@@ -43,9 +46,9 @@ class ConcursoController extends AbstractController
         $loterias = $this->loteriaRepository->findAllOrderByNome();
 
         return $this->render('concurso/index.html.twig', [
-            'concursos' => $concursos,
-            'loterias' => $loterias,
-            'loteria' => $loteria,
+                    'concursos' => $concursos,
+                    'loterias' => $loterias,
+                    'loteria' => $loteria,
         ]);
     }
 
@@ -53,15 +56,16 @@ class ConcursoController extends AbstractController
     public function loteria(Request $request, Loteria $loteria): Response
     {
         $registrosPorPaginas = $request->get('registros-por-pagina', 10);
+        $pagina = $request->get('pagina', 0);
 
         $loterias = $this->loteriaRepository->findAllOrderByNome();
 
-        $concursos = $this->concursoRepository->findByLoteria($loteria, $registrosPorPaginas);
+        $concursos = $this->concursoRepository->findByLoteria($loteria, $registrosPorPaginas, $pagina);
 
         return $this->render('concurso/index.html.twig', [
-            'concursos' => $concursos,
-            'loterias' => $loterias,
-            'loteria' => $loteria,
+                    'concursos' => $concursos,
+                    'loterias' => $loterias,
+                    'loteria' => $loteria,
         ]);
     }
 

@@ -11,6 +11,7 @@
 
 namespace App\Repository;
 
+use App\DTO\PaginacaoDTO;
 use App\Entity\Aposta;
 use App\Entity\Bolao;
 use App\Entity\Loteria;
@@ -58,19 +59,25 @@ class ApostaRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Paginator<Aposta>|null
+     * @return PaginacaoDTO|null
      */
-    public function findApostasByUuidBolao(Uuid $uuid)
+    public function findApostasByUuidBolao(Uuid $uuid, int $registrosPorPagina = 10, int $paginaAtual = 0)
     {
+        $registros = (!in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
+        
+        $pagina = $paginaAtual * $registrosPorPagina;
+        
         $query = $this->createQueryBuilder('a')
                 ->select('a,b')
                 ->where('b.uuid = :uuid')
                 ->setParameter('uuid', $uuid->toBinary())
                 ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
                 ->addOrderBy('a.quantidadeAcertos', 'DESC')
+                ->setFirstResult($pagina)
+                ->setMaxResults($registros)
         ;
 
-        return new Paginator($query);
+        return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
     }
 
     public function deleteByBolao(Bolao $bolao): void

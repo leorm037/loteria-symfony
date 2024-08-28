@@ -77,7 +77,7 @@
             </div>
         </div>
 
-        {{ include('_tableFooter.html.twig', {'registros': apostas.count}) }}
+        {{ include('_tableFooter.html.twig', {'paginacao': apostas}) }}
 
     </div>
     {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_apostas_delete')}) }}

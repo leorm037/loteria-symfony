@@ -34,9 +34,13 @@ class BolaoApostaController extends AbstractController
     #[Route('/{uuid:bolao}/apostas', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
     public function index(Request $request, Bolao $bolao): Response
     {
+        $registrosPorPaginas = $request->get('registros-por-pagina', 10);
+        
+        $pagina = $request->get('pagina', 0);
+        
         $this->denyAccessUnlessGranted(ApostaVoter::LIST, $bolao);
 
-        $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
+        $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid(), $registrosPorPaginas, $pagina);
 
         return $this->render('bolao_aposta/index.html.twig', [
             'apostas' => $apostas,

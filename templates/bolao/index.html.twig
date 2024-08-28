@@ -91,7 +91,7 @@
             </div>
         </div>
         
-        {{ include('_tableFooter.html.twig', {'registros': boloes.count}) }}
+        {{ include('_tableFooter.html.twig', {'paginacao': boloes}) }}
                     
     </div>
     {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_delete')}) }}

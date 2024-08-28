@@ -58,13 +58,17 @@ class BolaoController extends AbstractController
     }
 
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $registrosPorPaginas = $request->get('registros-por-pagina', 10);
+        
+        $pagina = $request->get('pagina', 0);
+        
         $usuarioEmail = $this->getUser()->getUserIdentifier();
 
         $usuario = $this->usuarioRepository->findByEmail($usuarioEmail);
 
-        $boloes = $this->bolaoRepository->list($usuario);
+        $boloes = $this->bolaoRepository->list($usuario, $registrosPorPaginas, $pagina);
 
         return $this->render('bolao/index.html.twig', [
             'boloes' => $boloes,
