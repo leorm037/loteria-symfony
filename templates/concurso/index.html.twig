@@ -39,9 +39,9 @@
                             <th>Concurso</th>
                             <th>Apuração</th>
                             <th>Dezenas</th>
-                            <th>Local</th>
-                            <th>Município</th>
-                            <th>UF</th>
+                            <th class="d-none d-lg-table-cell">Local</th>
+                            <th class="d-none d-lg-table-cell">Município</th>
+                            <th class="d-none d-lg-table-cell">UF</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
@@ -54,9 +54,9 @@
                                 <td>Não apurado</td>
                             {% endif %}
                             <td class="text-end">{{ concurso.dezenas|join(', ') }}</td>
-                            <td>{{ concurso.local }}</td>
-                            <td>{{ concurso.municipio }}</td>
-                            <td>{{ concurso.uf }}</td>
+                            <td class="d-none d-lg-table-cell">{{ concurso.local }}</td>
+                            <td class="d-none d-lg-table-cell">{{ concurso.municipio }}</td>
+                            <td class="d-none d-lg-table-cell">{{ concurso.uf }}</td>
                         </tr>
                     {% else %}
                         <tr>

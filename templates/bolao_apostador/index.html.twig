@@ -31,10 +31,10 @@
                     <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>E-mail</th>
+                            <th class="d-none d-xl-table-cell">E-mail</th>
                             <th>Cota paga</th>
-                            <th>Quantidade de cotas</th>
-                            <th>Atualizado</th>
+                            <th>Cotas</th>
+                            <th class="d-none d-lg-table-cell">Atualizado</th>
                             <th class="text-center d-print-none">Ações</th>
                         </tr>
                     </thead>
@@ -42,10 +42,10 @@
                         {% for apostador in apostadores %}
                             <tr>
                                 <td>{{ apostador.nome }}</td>
-                                <td>{{ apostador.email }}</td>
+                                <td class="d-none d-xl-table-cell">{{ apostador.email }}</td>
                                 <td>{{ apostador.cotaPaga ? 'Sim' : 'Não' }}</td>
                                 <td class="text-end">{{ apostador.cotaQuantidade }}</td>
-                                <td>{{ apostador.updatedAt ? apostador.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : apostador.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
+                                <td class="d-none d-lg-table-cell">{{ apostador.updatedAt ? apostador.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : apostador.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
                                 <td class="text-center d-print-none">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
                                         {% if is_granted('BOLAO_APOSTADOR_EDIT', apostador) %}
