@@ -46,10 +46,10 @@ class ConcursoRepository extends ServiceEntityRepository
     /**
      * @return PaginacaoDTO<Concurso>|null
      */
-    public function findByLoteria(Loteria $loteria, int $registrosPorPagina = 10, int $paginaAtual = 0)
+    public function findByLoteria(Loteria $loteria, int $registrosPorPagina = 10, int $paginaAtual = 1)
     {
         $registros = (!in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
-        $pagina = $paginaAtual * $registrosPorPagina;
+        $pagina = ($paginaAtual - 1) * $registrosPorPagina;
 
         $query = $this->createQueryBuilder('c')
                 ->andWhere('c.loteria = :loteria')

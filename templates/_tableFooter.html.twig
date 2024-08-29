@@ -29,7 +29,7 @@
                     {% else %}                    
                         {% for i in paginacao.paginas %}
                             <li class="page-item {{ (i == paginacao.paginaAtual) ? "active" }}" aria-current="page">
-                                <button type="button" class="page-link" data-pagina="{{ i }}">{{ i + 1 }}</button>
+                                <button type="button" class="page-link" data-pagina="{{ i }}">{{ i }}</button>
                             </li>
                         {% else %}
                             <li class="page-item disabled" aria-current="page">

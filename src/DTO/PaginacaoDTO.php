@@ -28,6 +28,11 @@ class PaginacaoDTO implements Countable, IteratorAggregate
         return 0;
     }
 
+    public function getRegistrosPorPagina(): int
+    {
+        return $this->registrosPorPagina;
+    }
+
     public function getIterator(): Traversable
     {
         return $this->paginator->getIterator();
@@ -36,29 +41,24 @@ class PaginacaoDTO implements Countable, IteratorAggregate
     public function getPaginaQuantidade(): int
     {
         $registros = $this->count();
-        
-        if ($registros == 0) {
-            return 0;
-        }
-        
-        $registrosPorPagina = $this->registrosPorPagina;
 
-        $paginas = intval($registros / $registrosPorPagina);
-        
-        if ($registros % $registrosPorPagina > 0) {
-            $paginas++;
-        }
-        
-        return $paginas;
+        $registrosPorPagina = $this->getRegistrosPorPagina();
+
+        return ceil($registros / $registrosPorPagina);
     }
 
     public function getPaginas(): array
     {
-        if ($this->getPaginaQuantidade() == 0) {
-            return [];
-        }
+        $paginaAutal = $this->getPaginaAtual();
+        $registrosPorPagina = $this->registrosPorPagina;
+        $paginacaoAtual = intval(($paginaAutal - 1) / $registrosPorPagina);
+        $paginasQuantidade = $this->getPaginaQuantidade();
         
-        return range(0, $this->getPaginaQuantidade() - 1, 1);
+        $inicio = ($paginacaoAtual * $registrosPorPagina) + 1;
+        
+        $fim = min($inicio + $registrosPorPagina - 1, $paginasQuantidade);
+        
+        return range($inicio, $fim, 1);
     }
 
     public function getPaginaAtual(): int
@@ -76,16 +76,17 @@ class PaginacaoDTO implements Countable, IteratorAggregate
         if (count($this->getPaginas()) == 0) {
             return true;
         }
-        
+
         return (max($this->getPaginas())) === $this->getPaginaAtual();
     }
-    
-    public function getPaginaProxima(): int {
+
+    public function getPaginaProxima(): int
+    {
         return $this->getPaginaAtual() + 1;
     }
-    
-    public function getPaginaAnterior(): int {
+
+    public function getPaginaAnterior(): int
+    {
         return $this->getPaginaAtual() - 1;
     }
-
 }

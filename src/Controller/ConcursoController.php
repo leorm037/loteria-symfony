@@ -56,7 +56,7 @@ class ConcursoController extends AbstractController
     public function loteria(Request $request, Loteria $loteria): Response
     {
         $registrosPorPaginas = $request->get('registros-por-pagina', 10);
-        $pagina = $request->get('pagina', 0);
+        $pagina = $request->get('pagina', 1);
 
         $loterias = $this->loteriaRepository->findAllOrderByNome();
 

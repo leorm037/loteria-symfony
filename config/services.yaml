@@ -6,7 +6,8 @@
 parameters:
     aposta_planilha_csv: '%kernel.project_dir%/upload/aposta/planilha_csv'
     aposta_comprovante_pdf: '%kernel.project_dir%/upload/aposta/comprovante_pdf'
-    apostador_comprovante_jpg: '%kernel.project_dir%/upload/apostador/comprovante_jpg'
+    apostador_comprovante_jpg: '%kernel.project_dir%/upload/apostador/comprovante_jpg'    
+    paginas_por_paginacao: 3
 
 services:
     # default configuration for services in *this* file
@@ -37,3 +38,7 @@ services:
     App\Service\ApostadorComprovanteJpgService:
         arguments:
             $targetDirectory: '%apostador_comprovante_jpg%'
+            
+    App\DTO\PaginacaoDTO:
+        calls:
+            - setPaginasPorPaginacao: ['%paginas_por_paginacao%']
