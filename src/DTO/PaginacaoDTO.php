@@ -53,11 +53,11 @@ class PaginacaoDTO implements Countable, IteratorAggregate
         $registrosPorPagina = $this->registrosPorPagina;
         $paginacaoAtual = intval(($paginaAutal - 1) / $registrosPorPagina);
         $paginasQuantidade = $this->getPaginaQuantidade();
-        
+
         $inicio = ($paginacaoAtual * $registrosPorPagina) + 1;
-        
+
         $fim = min($inicio + $registrosPorPagina - 1, $paginasQuantidade);
-        
+
         return range($inicio, $fim, 1);
     }
 
@@ -73,11 +73,14 @@ class PaginacaoDTO implements Countable, IteratorAggregate
 
     public function isPaginaUltima(): bool
     {
-        if (count($this->getPaginas()) == 0) {
+        $paginaQuantida = $this->getPaginaQuantidade();
+        $paginaAtual = $this->getPaginaAtual();
+
+        if ($paginaQuantida === 0) {
             return true;
         }
 
-        return (max($this->getPaginas())) === $this->getPaginaAtual();
+        return $paginaQuantida === $paginaAtual;
     }
 
     public function getPaginaProxima(): int
