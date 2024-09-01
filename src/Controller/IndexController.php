@@ -23,7 +23,7 @@ class IndexController extends AbstractController
 {
     public function __construct(
         private BolaoRepository $bolaoRepository,
-        private ApostaRepository $apostaRepository
+        private ApostaRepository $apostaRepository,
     ) {
     }
 

@@ -27,7 +27,7 @@ use Symfony\Component\Uid\Uuid;
 class BolaoApostaController extends AbstractController
 {
     public function __construct(
-        private ApostaRepository $apostaRepository
+        private ApostaRepository $apostaRepository,
     ) {
     }
 
@@ -35,9 +35,9 @@ class BolaoApostaController extends AbstractController
     public function index(Request $request, Bolao $bolao): Response
     {
         $registrosPorPaginas = $request->get('registros-por-pagina', 10);
-        
+
         $pagina = $request->get('pagina', 0);
-        
+
         $this->denyAccessUnlessGranted(ApostaVoter::LIST, $bolao);
 
         $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid(), $registrosPorPaginas, $pagina);

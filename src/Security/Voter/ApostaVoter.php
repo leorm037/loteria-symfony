@@ -51,7 +51,7 @@ class ApostaVoter extends Voter
             self::LIST => $this->canList($bolao, $usuario),
             self::EDIT => $this->canEdit($bolao, $usuario),
             self::DELETE => $this->canDelete($bolao, $usuario),
-            default => false
+            default => false,
         };
     }
 

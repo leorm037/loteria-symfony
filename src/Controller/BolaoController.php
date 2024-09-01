@@ -53,7 +53,7 @@ class BolaoController extends AbstractController
         private ApostadorRepository $apostadorRepository,
         private EntityManagerInterface $entityManager,
         private ValidatorInterface $validator,
-        private UsuarioRepository $usuarioRepository
+        private UsuarioRepository $usuarioRepository,
     ) {
     }
 
@@ -61,9 +61,9 @@ class BolaoController extends AbstractController
     public function index(Request $request): Response
     {
         $registrosPorPaginas = $request->get('registros-por-pagina', 10);
-        
+
         $pagina = $request->get('pagina', 0);
-        
+
         $usuarioEmail = $this->getUser()->getUserIdentifier();
 
         $usuario = $this->usuarioRepository->findByEmail($usuarioEmail);
@@ -283,6 +283,7 @@ class BolaoController extends AbstractController
             if (\count($apostasCadastradas) > 0) {
                 $diferenca = [];
 
+                /** @var Aposta $apostaCadastrada */
                 foreach ($apostasCadastradas as $apostaCadastrada) {
                     if (\count($dezenas) == \count($apostaCadastrada->getDezenas())) {
                         $diferenca = array_diff($dezenas, $apostaCadastrada->getDezenas());

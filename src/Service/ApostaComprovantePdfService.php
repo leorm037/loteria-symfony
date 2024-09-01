@@ -19,7 +19,7 @@ class ApostaComprovantePdfService extends AbstractFileUploadService
     public function __construct(
         string $targetDirectory,
         SluggerInterface $slugger,
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ) {
         parent::__construct($targetDirectory, $slugger, $logger);
     }

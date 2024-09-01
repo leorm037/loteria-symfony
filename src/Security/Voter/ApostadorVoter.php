@@ -51,7 +51,7 @@ class ApostadorVoter extends Voter
             return match ($attribute) {
                 self::NEW => $this->canNew($bolao, $usuario),
                 self::LIST => $this->canList($bolao, $usuario),
-                default => false
+                default => false,
             };
         }
 
@@ -61,7 +61,7 @@ class ApostadorVoter extends Voter
             return match ($attribute) {
                 self::EDIT => $this->canEdit($apostador, $usuario),
                 self::DELETE => $this->canDelete($apostador, $usuario),
-                default => false
+                default => false,
             };
         }
 

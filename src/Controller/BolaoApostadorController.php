@@ -38,7 +38,7 @@ class BolaoApostadorController extends AbstractController
         private BolaoRepository $bolaoRepository,
         private ApostadorRepository $apostadorRepository,
         private ApostadorComprovanteJpgService $apostadorComprovante,
-        private ArquivoRepository $arquivoRepository
+        private ArquivoRepository $arquivoRepository,
     ) {
     }
 
@@ -46,9 +46,9 @@ class BolaoApostadorController extends AbstractController
     public function index(Request $request): Response
     {
         $registrosPorPaginas = $request->get('registros-por-pagina', 10);
-        
+
         $pagina = $request->get('pagina', 0);
-        
+
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);

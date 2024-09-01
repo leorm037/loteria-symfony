@@ -12,6 +12,8 @@
 namespace App\Entity;
 
 use App\Repository\ConcursoRepository;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -32,7 +34,7 @@ class Concurso extends AbstractEntity
     private ?int $numero = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $apuracao = null;
+    private ?DateTimeInterface $apuracao = null;
 
     #[ORM\Column(length: 60, nullable: true)]
     private ?string $local = null;
@@ -44,10 +46,10 @@ class Concurso extends AbstractEntity
     private ?string $uf = null;
 
     #[ORM\Column(options: ['default' => 'CURRENT_TIMESTAMP'])]
-    protected ?\DateTimeImmutable $createdAt = null;
+    protected ?DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    protected ?\DateTimeInterface $updatedAt = null;
+    protected ?DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'uuid', unique: true)]
     protected ?Uuid $uuid = null;
@@ -85,12 +87,12 @@ class Concurso extends AbstractEntity
         return $this;
     }
 
-    public function getApuracao(): ?\DateTimeInterface
+    public function getApuracao(): ?DateTimeInterface
     {
         return $this->apuracao;
     }
 
-    public function setApuracao(?\DateTimeInterface $apuracao): static
+    public function setApuracao(?DateTimeInterface $apuracao): static
     {
         $this->apuracao = $apuracao;
 
@@ -133,24 +135,24 @@ class Concurso extends AbstractEntity
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
 

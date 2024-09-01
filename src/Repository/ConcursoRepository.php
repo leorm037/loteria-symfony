@@ -48,7 +48,7 @@ class ConcursoRepository extends ServiceEntityRepository
      */
     public function findByLoteria(Loteria $loteria, int $registrosPorPagina = 10, int $paginaAtual = 1)
     {
-        $registros = (!in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
+        $registros = (!\in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
         $pagina = ($paginaAtual - 1) * $registrosPorPagina;
 
         $query = $this->createQueryBuilder('c')
@@ -58,7 +58,7 @@ class ConcursoRepository extends ServiceEntityRepository
                 ->setFirstResult($pagina)
                 ->setMaxResults($registros)
         ;
-        
+
         return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
     }
 

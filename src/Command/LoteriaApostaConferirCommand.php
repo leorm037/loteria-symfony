@@ -11,6 +11,7 @@
 
 namespace App\Command;
 
+use App\Entity\Apostador;
 use App\Entity\Bolao;
 use App\Entity\Loteria;
 use App\Repository\ApostadorRepository;
@@ -43,7 +44,7 @@ class LoteriaApostaConferirCommand extends Command
         private ApostaRepository $apostaRepository,
         private BolaoRepository $bolaoRepository,
         private EntityManagerInterface $manager,
-        private MailerInterface $mailer
+        private MailerInterface $mailer,
     ) {
         parent::__construct();
     }
@@ -183,6 +184,7 @@ class LoteriaApostaConferirCommand extends Command
             $email->attachFromPath($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal());
         }
 
+        /** @var Apostador $apostador */
         foreach ($apostadores as $apostador) {
             if (!$apostador->getEmail()) {
                 continue;

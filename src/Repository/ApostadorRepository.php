@@ -57,14 +57,14 @@ class ApostadorRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Paginacao|null
+     * @return PaginacaoDTO|null
      */
     public function findByBolao(Bolao $bolao, int $registrosPorPagina = 10, int $paginaAtual = 0)
     {
-        $registros = (!in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
-        
+        $registros = (!\in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
+
         $pagina = $paginaAtual * $registrosPorPagina;
-        
+
         $query = $this->createQueryBuilder('a')
                 ->where('a.bolao = :bolao')
                 ->setParameter('bolao', $bolao)

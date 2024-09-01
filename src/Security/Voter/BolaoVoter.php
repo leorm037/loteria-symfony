@@ -38,7 +38,7 @@ class BolaoVoter extends Voter
 
         return match ($attribute) {
             self::EDIT => $this->canEdit($bolao, $usuario),
-            default => false
+            default => false,
         };
     }
 

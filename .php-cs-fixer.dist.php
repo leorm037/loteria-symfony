@@ -23,7 +23,12 @@ return (new PhpCsFixer\Config())
         'phpdoc_to_comment' => false,
         'header_comment' => ['header' => $header,],
         'protected_to_private' => false,
-        'modernize_strpos' => true
+        'modernize_strpos' => true,
+        'global_namespace_import' => [
+            'import_classes' => true, 
+            'import_constants' => false, 
+            'import_functions' => false
+        ]
     ])
     ->setFinder($finder)
 ;

@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 class BolaoType extends AbstractType
 {
     public function __construct(
-        private LoteriaRepository $loteriaRepository
+        private LoteriaRepository $loteriaRepository,
     ) {
     }
 

@@ -28,7 +28,7 @@ class InscricaoController extends AbstractController
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
         private UsuarioRepository $usuarioRepository,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
     ) {
     }
 

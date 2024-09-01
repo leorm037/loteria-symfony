@@ -29,7 +29,7 @@ class UsuarioController extends AbstractController
     public function __construct(
         private LoggerInterface $logger,
         private UsuarioRepository $usuarioRepository,
-        private UserPasswordHasherInterface $userPasswordHasher
+        private UserPasswordHasherInterface $userPasswordHasher,
     ) {
     }
 

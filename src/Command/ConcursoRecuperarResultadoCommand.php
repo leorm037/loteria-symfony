@@ -38,7 +38,7 @@ class ConcursoRecuperarResultadoCommand extends Command
     public function __construct(
         private LoggerInterface $logger,
         private LoteriaRepository $loteriaRepository,
-        private ConcursoRepository $concursoRepository
+        private ConcursoRepository $concursoRepository,
     ) {
         parent::__construct();
     }
