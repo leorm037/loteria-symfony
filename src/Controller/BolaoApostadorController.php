@@ -47,7 +47,7 @@ class BolaoApostadorController extends AbstractController
     {
         $registrosPorPaginas = $request->get('registros-por-pagina', 10);
 
-        $pagina = $request->get('pagina', 0);
+        $pagina = $request->get('pagina', 1);
 
         $uuid = Uuid::fromString($request->get('uuid'));
 

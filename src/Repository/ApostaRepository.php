@@ -61,7 +61,7 @@ class ApostaRepository extends ServiceEntityRepository
     /**
      * @return PaginacaoDTO|null
      */
-    public function findApostasByUuidBolao(Uuid $uuid, int $registrosPorPagina = 10, int $paginaAtual = 0)
+    public function findApostasByUuidBolao(Uuid $uuid, int $registrosPorPagina = 10, int $paginaAtual = 1)
     {
         $registros = (!\in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
 
