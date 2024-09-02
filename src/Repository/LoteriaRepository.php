@@ -11,8 +11,10 @@
 
 namespace App\Repository;
 
+use App\DTO\PaginacaoDTO;
 use App\Entity\Loteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -21,6 +23,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class LoteriaRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Loteria::class);
@@ -33,6 +36,24 @@ class LoteriaRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    /**
+     * @return Loteria[]|null
+     */
+    public function list(int $registrosPorPagina = 10, int $paginaAtual = 1)
+    {
+        $registros = (!\in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
+
+        $pagina = ($paginaAtual - 1) * $registrosPorPagina;
+
+        $query = $this->createQueryBuilder('l')
+                        ->orderBy('l.nome', 'ASC')
+                        ->setFirstResult($pagina)
+                        ->setMaxResults($registros)
+        ;
+        
+        return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
     }
 
     /**

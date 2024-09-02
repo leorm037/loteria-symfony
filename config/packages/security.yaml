@@ -45,6 +45,7 @@ security:
     access_control:
         - { path: ^/bolao, roles: ROLE_USER }
         - { path: ^/concurso, roles: ROLE_USER }
+        - { path: ^/loteria, roles: ROLE_ADMIN }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
