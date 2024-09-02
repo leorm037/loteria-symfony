@@ -59,6 +59,9 @@ class Usuario extends AbstractEntity implements UserInterface, PasswordAuthentic
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     protected ?DateTimeInterface $updatedAt = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $ip = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -178,6 +181,18 @@ class Usuario extends AbstractEntity implements UserInterface, PasswordAuthentic
     public function setUpdatedAt(?DateTimeInterface $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getIp(): ?array
+    {
+        return $this->ip;
+    }
+
+    public function setIp(?array $ip): static
+    {
+        $this->ip = $ip;
 
         return $this;
     }

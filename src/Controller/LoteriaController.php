@@ -53,6 +53,8 @@ class LoteriaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->loteriaRepository->save($loteria, true);
+            
             $this->addFlash('success', sprintf('Loteria "%s" cadastrada com sucesso!', $loteria->getNome()));
             
             return $this->redirectToRoute('app_loteria_index', [], Response::HTTP_SEE_OTHER);
@@ -70,6 +72,8 @@ class LoteriaController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->loteriaRepository->save($loteria, true);
+            
             $this->addFlash('success', sprintf('Loteria "%s" alterada com sucesso.', $loteria->getNome()));
 
             return $this->redirectToRoute('app_loteria_index', [], Response::HTTP_SEE_OTHER);
