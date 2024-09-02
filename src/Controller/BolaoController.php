@@ -62,7 +62,7 @@ class BolaoController extends AbstractController
     {
         $registrosPorPaginas = $request->get('registros-por-pagina', 10);
 
-        $pagina = $request->get('pagina', 0);
+        $pagina = $request->get('pagina', 1);
 
         $usuarioEmail = $this->getUser()->getUserIdentifier();
 
