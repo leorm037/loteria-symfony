@@ -63,7 +63,7 @@ class ApostadorRepository extends ServiceEntityRepository
     {
         $registros = (!\in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
 
-        $pagina = $paginaAtual * $registrosPorPagina;
+        $pagina = ($paginaAtual - 1) * $registrosPorPagina;
 
         $query = $this->createQueryBuilder('a')
                 ->where('a.bolao = :bolao')
