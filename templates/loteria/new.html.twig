@@ -5,14 +5,14 @@
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a data-loading="true" href="{{ path('app_loteria_index') }}" class="text-decoration-none"><i class="fa-solid fa-clover icon-rotate-45"></i> Loterias</a></li>
-    <li class="breadcrumb-item active"><i class="fa-solid fa-clover icon-rotate-45"></i> Loteria</li>
+    <li class="breadcrumb-item active"><i class="bi bi-plus"></i> Novo</li>
 {% endblock %}
 
 {% block body %}
     {{ form_start(form, {'attr': {'data-loading': 'true'}}) }}
     <div class="card shadow-sm">
         <div class="card-header bg-gradient">
-            <h1 class="h4 m-0"><i class="fa-solid fa-clover icon-rotate-45"></i> Loteria</h1>
+            <h1 class="h4 m-0"><i class="bi bi-plus"></i> Novo</h1>
         </div>
         
         <div class="card-body">

@@ -43,9 +43,10 @@ class ApostadorType extends AbstractType
                     'label' => 'Cota paga',
                     'required' => true,
                     'choices' => [
-                        'Sim' => true,
-                        'Não' => false,
+                        '<i class="bi bi-hand-thumbs-up"></i> Sim' => true,
+                        '<i class="bi bi-hand-thumbs-down"></i> Não' => false,
                     ],
+                    'label_html' => true,
                     'expanded' => true,
                     'multiple' => false,
                     'label_attr' => [

@@ -10,17 +10,28 @@
         </a>
     </li>
     {% if is_granted('ROLE_ADMIN') %}
-    <li class="nav-item">
-        <a data-loading="true" class="nav-link{% if app.request.get('_route') starts with 'app_loteria' %} active{% endif %}" href="{{ path('app_loteria_index') }}">
-            <i class="fa-solid fa-clover icon-rotate-45"></i> Loteria
-        </a>
-    </li>
+        <li class="nav-item">
+            <a data-loading="true" class="nav-link{% if app.request.get('_route') starts with 'app_loteria' %} active{% endif %}" href="{{ path('app_loteria_index') }}">
+                <i class="fa-solid fa-clover icon-rotate-45"></i> Loteria
+            </a>
+        </li>
     {% endif %}
     <li class="nav-item dropdown">
         <a href="#" class="nav-link dropdown-toggle pb-0 pt-1" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
             <img src="{{ gravatarUrl(app.user.email, 32) }}" class="border border-loteria rounded-circle mx-1" alt="{{ app.user.nome }}"> {{ app.user.nome }}
         </a>
         <ul class="dropdown-menu dropdown-menu-dark border-loteria bg-loteria shadow dropdown-menu-lg-end">
+            <li>
+                <span class="dropdown-item">
+                    <i class="bi bi-modem"></i> IP: {{ app.user.ip|first }}
+                </span>
+            </li>
+            <li>
+                <span class="dropdown-item">
+                    <i class="bi bi-calendar-event"></i> Acesso: {{ app.user.lastAccess|date('d/m/Y H:i', 'America/Sao_Paulo') }}
+                </span>
+            </li>
+            <li><hr class="dropdown-divider border-loteria"></li>
             <li>
                 <a class="dropdown-item" href="{{ path('app_usuario_dados') }}">
                     <i class="bi bi-file-person-fill"></i> Alterar dados do usuário

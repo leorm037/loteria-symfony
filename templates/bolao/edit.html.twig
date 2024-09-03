@@ -1,4 +1,4 @@
-{# templates/aposta/importar.html.twig #}
+{# templates/bolao/edit.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ parent() }} :: Bolão :: Alter{% endblock %}
@@ -12,7 +12,7 @@
     {{ form_start(form, {'attr': {'data-loading': 'true'}}) }}
     <div class="card shadow-sm">
         <div class="card-header bg-gradient">
-            <h1 class="h4 m-0"><i class="fa-regular fa-futbol"></i> Alterar</h1>
+            <h1 class="h4 m-0"><i class="bi bi-pencil-square"></i> Alterar</h1>
         </div>
         <div class="card-body">
             {{ include('bolao/_form.html.twig') }}

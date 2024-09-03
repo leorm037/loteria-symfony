@@ -1,6 +1,64 @@
-{# template/loteria/_form.html.twig #}
-{{ form_row(form.nome) }}
-{{ form_row(form.slugUrl) }}
-{{ form_row(form.apiUrl) }}
-{{ form_row(form.aposta) }}
-{{ form_row(form.dezenas) }}
+{# templates/loteria/_form.html.twig #}
+<div class="row">
+    <div class="col-12 col-md-8">
+        <div class="mb-3">
+            {{ form_label(form.nome) }}
+            <div class="input-group">
+                <div class="input-group-text">
+                    <i class="bi bi-alphabet"></i>
+                </div>
+                {{ form_widget(form.nome) }}
+            </div>
+            {{ form_errors(form.nome) }}
+            {{ form_help(form.nome) }}
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="mb-3">
+            {{ form_label(form.slugUrl) }}
+            <div class="input-group">
+                <div class="input-group-text">
+                    <i class="bi bi-alphabet"></i>
+                </div>
+                {{ form_widget(form.slugUrl) }}
+            </div>
+            {{ form_errors(form.slugUrl) }}
+            {{ form_help(form.slugUrl) }}
+        </div>
+    </div>
+</div>
+<div class="mb-3">
+    {{ form_label(form.apiUrl) }}
+    <div class="input-group">
+        <div class="input-group-text">
+            <i class="bi bi-link-45deg"></i>
+        </div>
+        {{ form_widget(form.apiUrl) }}
+    </div>
+    {{ form_errors(form.apiUrl) }}
+    {{ form_help(form.apiUrl) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.aposta) }}
+    <div class="input-group">
+        <div class="input-group-text">
+            <i class="bi bi-123"></i>
+        </div>
+        {{ form_widget(form.aposta) }}
+    </div>
+    {{ form_errors(form.aposta) }}
+    {{ form_help(form.aposta) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.dezenas) }}
+    <div class="input-group">
+        <div class="input-group-text">
+            <i class="bi bi-123"></i>
+        </div>
+        {{ form_widget(form.dezenas) }}
+    </div>
+    {{ form_errors(form.dezenas) }}
+    {{ form_help(form.dezenas) }}
+</div>

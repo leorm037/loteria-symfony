@@ -28,9 +28,9 @@
                             <th>Loteria</th>
                             <th>Concurso</th>
                             <th>Apuração</th>
-                            <th class="d-none d-md-table-cell">Apostas</th>
-                            <th class="d-none d-md-table-cell">Apostadores</th>
-                            <th class="d-none d-md-table-cell">Maior acerto em aposta</th>
+                            <th class="d-none d-xl-table-cell">Apostas</th>
+                            <th class="d-none d-xl-table-cell">Apostadores</th>
+                            <th class="d-none d-xl-table-cell">Acerto</th>
                             <th class="text-center d-print-none">Ações</th>
                         </tr>
                     </thead>
@@ -46,9 +46,9 @@
                                 {% else %}
                                     <td class="text-start">Não apurado</td>
                                 {% endif %}
-                                <td class="text-end d-none d-md-table-cell">{{ item.apostas|number_format(0, ',', '.') }}</td>
-                                <td class="text-end d-none d-md-table-cell">{{ item.apostadores|number_format(0, ',', '.') }}</td>
-                                <td class="text-end d-none d-md-table-cell">{{ item.apostasMax|number_format(0, ',', '.') }}</td>
+                                <td class="text-end d-none d-xl-table-cell">{{ item.apostas|number_format(0, ',', '.') }}</td>
+                                <td class="text-end d-none d-xl-table-cell">{{ item.apostadores|number_format(0, ',', '.') }}</td>
+                                <td class="text-end d-none d-xl-table-cell">{{ item.apostasMax|number_format(0, ',', '.') }}</td>
                                 <td class="text-center p-0 align-middle d-print-none">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
                                         <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}">
