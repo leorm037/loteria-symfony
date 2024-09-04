@@ -160,7 +160,7 @@ class LoteriaApostaConferirCommand extends Command
 
     private function notificarApostadores(Bolao $bolao): void
     {
-        $apostas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
+        $apostas = $this->apostaRepository->findAllApostasByUuidBolao($bolao->getUuid());
         $apostadores = $this->apostadorRepository->findByBolao($bolao);
 
         $assunto = \sprintf('Bolão: %s', $bolao->getNome());

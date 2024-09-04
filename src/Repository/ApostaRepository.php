@@ -26,6 +26,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class ApostaRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Aposta::class);
@@ -78,6 +79,22 @@ class ApostaRepository extends ServiceEntityRepository
         ;
 
         return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
+    }
+
+    /**
+     * @return Aposta[]|null
+     */
+    public function findAllApostasByUuidBolao(Uuid $uuid)
+    {
+        return $this->createQueryBuilder('a')
+                ->select('a,b')
+                ->where('b.uuid = :uuid')
+                ->setParameter('uuid', $uuid->toBinary())
+                ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
+                ->addOrderBy('a.quantidadeAcertos', 'DESC')
+                ->getQuery()
+                ->getResult()
+        ;
     }
 
     public function deleteByBolao(Bolao $bolao): void
