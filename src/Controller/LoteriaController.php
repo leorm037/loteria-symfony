@@ -22,12 +22,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/loteria', name: 'app_loteria_')]
 class LoteriaController extends AbstractController
 {
-
     public function __construct(
-            private LoteriaRepository $loteriaRepository
-    )
-    {
-        
+        private LoteriaRepository $loteriaRepository,
+    ) {
     }
 
     #[Route('', name: 'index')]
@@ -40,7 +37,7 @@ class LoteriaController extends AbstractController
         $loterias = $this->loteriaRepository->list($registrosPorPaginas, $pagina);
 
         return $this->render('loteria/index.html.twig', [
-                    'loterias' => $loterias
+            'loterias' => $loterias,
         ]);
     }
 
@@ -54,14 +51,14 @@ class LoteriaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->loteriaRepository->save($loteria, true);
-            
-            $this->addFlash('success', sprintf('Loteria "%s" cadastrada com sucesso!', $loteria->getNome()));
-            
+
+            $this->addFlash('success', \sprintf('Loteria "%s" cadastrada com sucesso!', $loteria->getNome()));
+
             return $this->redirectToRoute('app_loteria_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('loteria/new.html.twig', [
-                    'form' => $form
+            'form' => $form,
         ]);
     }
 
@@ -70,17 +67,17 @@ class LoteriaController extends AbstractController
     {
         $form = $this->createForm(LoteriaType::class, $loteria);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->loteriaRepository->save($loteria, true);
-            
-            $this->addFlash('success', sprintf('Loteria "%s" alterada com sucesso.', $loteria->getNome()));
+
+            $this->addFlash('success', \sprintf('Loteria "%s" alterada com sucesso.', $loteria->getNome()));
 
             return $this->redirectToRoute('app_loteria_index', [], Response::HTTP_SEE_OTHER);
         }
-        
+
         return $this->render('loteria/edit.html.twig', [
-            'form' => $form
+            'form' => $form,
         ]);
     }
 }

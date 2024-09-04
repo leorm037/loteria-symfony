@@ -8,13 +8,13 @@
 <p class="label">Loteria</p>
 <p class="value">{{ bolao.concurso.loteria.nome }}</p>
 
-<p class="label">Concurso</p>
+<p class="label">Concurso número</p>
 <p class="value">{{ bolao.concurso.numero }}</p>
 
-<p class="label">Apuração</p>
+<p class="label">Data da apuração</p>
 <p class="value">{{ bolao.concurso.apuracao|date('d/m/Y', 'America/Sao_Paulo') }}</p>
 
-<p class="label">Dezenas</p>
+<p class="label">Dezenas sorteadas</p>
 <p class="value">{{ bolao.concurso.dezenas|join(', ') }}</p>
 
 <br>
@@ -26,7 +26,7 @@
         </tr>
         <tr class="table-border-bottom">
             <th class="table-title text-center">Dezenas</th>
-            <th class="table-title text-center">Quantidade de acertos</th>
+            <th class="table-title text-center">Acertos</th>
         </tr>
     </thead>
     <tbody class="">

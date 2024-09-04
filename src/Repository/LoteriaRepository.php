@@ -23,7 +23,6 @@ use Symfony\Component\Uid\Uuid;
  */
 class LoteriaRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Loteria::class);
@@ -39,7 +38,7 @@ class LoteriaRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Loteria[]|null
+     * @return PaginacaoDTO|null
      */
     public function list(int $registrosPorPagina = 10, int $paginaAtual = 1)
     {
@@ -52,7 +51,7 @@ class LoteriaRepository extends ServiceEntityRepository
                         ->setFirstResult($pagina)
                         ->setMaxResults($registros)
         ;
-        
+
         return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
     }
 

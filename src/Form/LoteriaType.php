@@ -20,7 +20,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LoteriaType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -30,20 +29,20 @@ class LoteriaType extends AbstractType
                     'label' => 'Abreviação',
                     'required' => false,
                     'help' => 'Campo gerado automaticamente',
-                    'disabled' => true
+                    'disabled' => true,
                 ])
                 ->add('apiUrl', TextType::class, [
                     'label' => 'Endereço da API',
-                    'required' => true
+                    'required' => true,
                 ])
                 ->add('aposta', TextType::class, [
                     'label' => 'Apostas',
                     'required' => true,
-                    'help' => 'Quantidade de dezenas permitidas em uma única aposta'
+                    'help' => 'Quantidade de dezenas permitidas em uma única aposta',
                 ])
                 ->add('dezenas', TextType::class, [
                     'label' => 'Dezenas',
-                    'required' => true
+                    'required' => true,
                 ])
         ;
 

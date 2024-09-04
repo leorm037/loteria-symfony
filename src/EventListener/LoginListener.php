@@ -19,13 +19,11 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 final class LoginListener
 {
-
     public function __construct(
-            private UsuarioRepository $usuarioRepository
-    )
-    {
+        private UsuarioRepository $usuarioRepository,
+    ) {
     }
-    
+
     #[AsEventListener(event: InteractiveLoginEvent::class)]
     public function onLoginSuccessEvent(InteractiveLoginEvent $event): void
     {
@@ -39,7 +37,7 @@ final class LoginListener
                 ->setIp($ip)
                 ->setLastAccess(DateTimeHelper::currentDateTime())
         ;
-        
+
         $this->usuarioRepository->save($usuario, true);
     }
 }
