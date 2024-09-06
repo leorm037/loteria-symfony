@@ -91,7 +91,7 @@ class BolaoType extends AbstractType
                     ],
                     'constraints' => [
                         new File([
-                            'maxSize' => '10240k',
+                            'maxSize' => '8M',
                             'mimeTypes' => [
                                 'application/pdf',
                                 'application/x-pdf',
