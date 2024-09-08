@@ -35,3 +35,8 @@ upload/apostador/comprovante_jpg/*
 upload/aposta/comprovante_pdf/*
 upload/aposta/planilha_csv/*
 ###< upload ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
