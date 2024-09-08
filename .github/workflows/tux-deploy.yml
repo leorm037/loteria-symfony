@@ -36,4 +36,5 @@ jobs:
             sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
             cd /var/www/loteria
             APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear
+            APP_ENV=prod APP_DEBUG=0 sudo php bin/console asset-map:compile
             sudo chown -R www-data: .
