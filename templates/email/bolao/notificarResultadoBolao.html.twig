@@ -22,28 +22,23 @@
 <table class="table"style="min-width: 640px; width: 80%;">
     <thead>
         <tr>
-            <th colspan="2"class="table-title text-center bg-verde">Apostas</th>
-        </tr>
-        <tr class="table-border-bottom">
-            <th class="table-title text-center">Dezenas</th>
-            <th class="table-title text-center">Acertos</th>
+            <th class="table-title text-center bg-verde">Apostas</th>
         </tr>
     </thead>
-    <tbody class="">
+    <tbody>
         {% for key, aposta in apostas %}
             {% if key is even %}
             <tr class="bg-verde-claro">
             {% else %}
             <tr>        
             {% endif %}
-                <td class="text-end">{{ aposta.dezenas|dezenasSorteadas(bolao.concurso.dezenas) }}</td>
-                <td class="text-end">{{ aposta.quantidadeAcertos }}</td>
+                <td class="text-center">{{ aposta.dezenas|dezenasSorteadas(bolao.concurso.dezenas) }}</td>
             </tr>
         {% endfor %}
     </tbody>
     <tfoot>
         <tr class="table-border-top">
-            <th colspan="2" class="text-end bg-verde">{{ apostas|length }} aposta(s).</th>
+            <th class="text-end bg-verde">{{ apostas|length }} aposta(s).</th>
         </tr>
     </tfoot>
 </table>

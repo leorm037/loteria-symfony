@@ -31,7 +31,13 @@ phpstan.neon
 ###< phpstan/phpstan ###
 
 ###> upload ###
-upload/apostador/comprovante_jpg/*
-upload/aposta/comprovante_pdf/*
-upload/aposta/planilha_csv/*
+upload/apostador/comprovante_jpg/
+upload/aposta/comprovante_pdf/
+upload/aposta/comprovante_jpg/
+upload/aposta/planilha_csv/
 ###< upload ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###

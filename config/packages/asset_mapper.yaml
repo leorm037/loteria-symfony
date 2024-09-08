@@ -1,0 +1,8 @@
+framework:
+    asset_mapper:
+        # The paths to make available to the asset mapper.
+        paths:
+            assets/: ''
+            assets/bootstrap-5.3.3-dist/: 'bootstrap'
+            assets/bootstrap-icons-1.11.3/: 'bootstrap-icon'
+            assets/jquery-loading-overlay-2.1.7/dist/: 'jquery-loading-overlay'

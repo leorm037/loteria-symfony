@@ -8,23 +8,25 @@
         <meta name="author" content="">
         <meta name="generator" content="">
         
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
-        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+        <link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
         
         <title>{% block title %}Loteria{% endblock %}</title>
 
         {% block stylesheets %}
-            <link href="{{ asset('css/bootstrap.min.css', 'bootstrap') }}" rel="stylesheet">
-            <link href="{{ asset('font/bootstrap-icons.min.css', 'bootstrap-icon') }}" rel="stylesheet">            
-            <link href="{{ asset('app.css', 'css') }}" rel="stylesheet">
+            <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('bootstrap-icon/font/bootstrap-icons.min.css') }}" rel="stylesheet">
+            <link href="{{ asset('styles/app.css') }}" rel="stylesheet">
         {% endblock %}
         {% block javascripts_header %}
 
             <script type="text/javascript">
                 const BASE_URL = "{{ app.request.schemeAndHttpHost ~ app.request.baseUrl }}";
             </script>
+            
+{#            {% block importmap %}{{ importmap('app') }}{% endblock %}#}
         {% endblock %}
     </head>
     <body class="d-flex flex-column min-vh-100">
@@ -70,11 +72,11 @@
         </footer>
         {% block javascripts_footer %}
             
-            <script src="{{ asset('jquery-3.7.1.min.js', 'jquery') }}"></script>
-            <script src="{{ asset('loadingoverlay.min.js', 'jquery-loading-overlay') }}"></script>
-            <script src="{{ asset('loading.overlay.setup.js', 'js') }}"></script>
-            <script src="{{ asset('app.js', 'js') }}"></script>
-            <script src="{{ asset('js/bootstrap.bundle.min.js', 'bootstrap') }}"></script>
+            <script src="{{ asset('jquery/jquery-3.7.1.min.js') }}"></script>
+            <script src="{{ asset('jquery-loading-overlay/loadingoverlay.min.js') }}"></script>
+            <script src="{{ asset('js/loading.overlay.setup.js') }}"></script>
+            <script src="{{ asset('js/app.js') }}"></script>
+            <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
             <script type="text/javascript" src="https://kit.fontawesome.com/403477f2af.js" crossorigin="anonymous"></script>
         {% endblock %}
     </body>
