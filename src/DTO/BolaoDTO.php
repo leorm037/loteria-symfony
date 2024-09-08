@@ -18,7 +18,7 @@ class BolaoDTO
     private Loteria $loteria;
     private int $concursoNumero;
     private string $nome;
-    private string $cotaValor;
+    private ?string $cotaValor = null;
 
     public function getLoteria(): Loteria
     {
@@ -56,12 +56,12 @@ class BolaoDTO
         return $this;
     }
 
-    public function getCotaValor(): string
+    public function getCotaValor(): ?string
     {
         return $this->cotaValor;
     }
 
-    public function setCotaValor(string $cotaValor): static
+    public function setCotaValor(?string $cotaValor): static
     {
         $this->cotaValor = $cotaValor;
 
