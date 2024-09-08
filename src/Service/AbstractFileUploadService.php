@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use function dd;
 
 class AbstractFileUploadService
 {
@@ -45,7 +46,7 @@ class AbstractFileUploadService
         $filename = $safeFilename.'_'.uniqid().'.'.$file->getClientOriginalExtension();
 
         try {
-            $file->move($this->getTargetDirectory(), $filename);
+            $file->move($this->getTargetDirectory(), $filename, $safeFilename, $filename);
         } catch (FileException $e) {
             $this->logger->error(
                 'Erro ao tentar mover o arquivo '.$originalFilename, [

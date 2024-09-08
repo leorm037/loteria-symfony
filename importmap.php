@@ -1,16 +1,14 @@
 <?php
 
-/**
- * Returns the importmap for this application.
+/*
+ *     This file is part of Loteria.
  *
- * - "path" is a path inside the asset mapper system. Use the
- *     "debug:asset-map" command to see the full list of paths.
+ *     (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
  *
- * - "entrypoint" (JavaScript only) set to true for any module that will
- *     be used as an "entrypoint" (and passed to the importmap() Twig function).
- *
- * The "importmap:require" command can be used to add new entries to this file.
+ *     This source file is subject to the MIT license that is bundled
+ *     with this source code in the file LICENSE.
  */
+
 return [
     'app' => [
         'path' => './assets/app.js',
