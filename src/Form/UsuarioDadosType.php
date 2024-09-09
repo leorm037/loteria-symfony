@@ -20,17 +20,21 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UsuarioDadosType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nome', TextType::class, [
-                'label' => 'Nome completo',
-                'required' => true,
-            ])
-            ->add('email', EmailType::class, [
-                'label' => 'E-mail',
-                'required' => true,
-            ])
+                ->add('nome', TextType::class, [
+                    'label' => 'Nome completo',
+                    'required' => true,
+                    'attr' => [
+                        'autofocus' => true,
+                    ],
+                ])
+                ->add('email', EmailType::class, [
+                    'label' => 'E-mail',
+                    'required' => true,
+                ])
         ;
     }
 

@@ -22,7 +22,7 @@
                 <label for="loteria" class="form-label">Loteria</label>
                 <div class="input-group">
                     <span class="input-group-text" id="loteria_icon"><i class="fa-solid fa-clover icon-rotate-45"></i></span>
-                    <select name="loteria" id="loteria" class="form-select" aria-label="Loteria" aria-describedby="loteria_icon">
+                    <select name="loteria" id="loteria" class="form-select" aria-label="Loteria" aria-describedby="loteria_icon" autofocus="true">
                         <option value{% if not app.request.get('loteria') %} selected{% endif %}>Selecione uma loteria</option>
                         {% for lot in loterias %}
                             <option value="{{ lot.uuid }}"{% if (loteria) and lot.uuid == loteria.uuid %} selected{% endif %}>{{ lot.nome }}</option>

@@ -24,6 +24,7 @@ use Symfony\Component\Validator\Constraints\PasswordStrength;
 
 class UsuarioSenhaType extends AbstractType
 {
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -39,16 +40,19 @@ class UsuarioSenhaType extends AbstractType
                     'invalid_message' => 'A confirmação de senha não corresponde com a senha.',
                     'first_options' => [
                         'label' => 'Senha',
+                        'attr' => [
+                            'autofocus' => true,
+                        ],
                         'constraints' => [
                             new NotBlank([
                                 'message' => 'Por favor, informe um senha',
-                            ]),
+                                    ]),
                             new Length([
                                 'min' => 6,
                                 'minMessage' => 'Sua senha deve ter no mínimo {{ limit }} caracteres',
                                 // max length allowed by Symfony for security reasons
                                 'max' => 4096,
-                            ]),
+                                    ]),
                             new PasswordStrength(),
                             new NotCompromisedPassword(),
                         ],

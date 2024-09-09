@@ -27,9 +27,9 @@
                     <thead>
                         <tr>
                             <th>Nome</th>
-                            <th>Slug</th>
+                            <th class="d-none d-xl-table-cell">Slug</th>
                             <th class="d-none d-xl-table-cell">API</th>
-                            <th>Atualização</th>
+                            <th class="d-none d-xl-table-cell">Atualização</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
@@ -37,9 +37,9 @@
                         {% for loteria in loterias %}
                             <tr>
                                 <td>{{ loteria.nome }}</td>
-                                <td>{{ loteria.slugUrl }}</td>
+                                <td class="d-none d-xl-table-cell">{{ loteria.slugUrl }}</td>
                                 <td class="d-none d-xl-table-cell">{{ loteria.apiUrl }}</td>
-                                <td class="text-end">{{ loteria.updatedAt ? loteria.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : loteria.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
+                                <td class="text-end d-none d-xl-table-cell">{{ loteria.updatedAt ? loteria.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : loteria.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
                                         <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_loteria_edit', {'uuid': loteria.uuid}) }}">

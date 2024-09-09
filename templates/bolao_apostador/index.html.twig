@@ -32,7 +32,7 @@
                         <tr>
                             <th>Nome</th>
                             <th class="d-none d-xl-table-cell">E-mail</th>
-                            <th>Cota paga</th>
+                            <th class="d-none d-xl-table-cell">Cota paga</th>
                             <th class="d-none d-xl-table-cell">Cotas</th>
                             <th class="d-none d-xl-table-cell">Atualizado</th>
                             <th class="text-center d-print-none">Ações</th>
@@ -43,7 +43,7 @@
                             <tr>
                                 <td>{{ apostador.nome }}</td>
                                 <td class="d-none d-xl-table-cell">{{ apostador.email }}</td>
-                                <td>{{ apostador.cotaPaga ? 'Sim' : 'Não' }}</td>
+                                <td class="d-none d-xl-table-cell">{{ apostador.cotaPaga ? 'Sim' : 'Não' }}</td>
                                 <td class="text-end d-none d-xl-table-cell">{{ apostador.cotaQuantidade }}</td>
                                 <td class="text-end d-none d-lg-table-cell">{{ apostador.updatedAt ? apostador.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : apostador.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
                                 <td class="text-center d-print-none">

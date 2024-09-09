@@ -41,6 +41,9 @@ class BolaoType extends AbstractType
                     'choice_label' => 'nome',
                     'placeholder' => 'Selecione uma Loteria',
                     'required' => true,
+                    'attr' => [
+                        'autofocus' => true,
+                    ],
                 ])
                 ->add('concursoNumero', IntegerType::class, [
                     'label' => 'Número do Concurso',

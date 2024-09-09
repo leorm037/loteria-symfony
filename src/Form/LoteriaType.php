@@ -24,6 +24,11 @@ class LoteriaType extends AbstractType
     {
         $builder
                 ->add('nome', TextType::class, [
+                    'label' => 'Nome',
+                    'required' => true,
+                    'attr' => [
+                        'autofocus' => true,
+                    ],
                 ])
                 ->add('slugUrl', TextType::class, [
                     'label' => 'Abreviação',

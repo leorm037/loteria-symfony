@@ -27,6 +27,9 @@ class ApostaType extends AbstractType
                     'label' => 'Dezenas',
                     'required' => true,
                     'help' => 'Separe as dezenas por vírgula.',
+                    'attr' => [
+                        'autofocus' => true,
+                    ],
                 ])
         ;
 

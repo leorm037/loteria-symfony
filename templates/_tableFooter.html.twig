@@ -9,7 +9,7 @@
                 <option value="100"{{ app.request.query.get('registros-por-pagina') == 100 ? ' selected' : '' }}>100</option>
             </select>
         </div>
-        <div class="col-12 col-sm-7 text-center">
+        <div class="col-12 col-sm-6 text-center">
             <nav aria-label="Paginação">
                 <ul class="pagination justify-content-center pagination-sm m-0">
                                         
@@ -25,11 +25,11 @@
                     
                     {% if paginacao is empty or paginacao.paginaPrimeira %}
                         <li class="page-item disabled">
-                            <button type="button" class="page-link" title="Página anterior"><i class="bi bi-chevron-compact-left"></i> Anterior</button>
+                            <button type="button" class="page-link" title="Página anterior"><i class="bi bi-chevron-compact-left"></i><span class="d-none d-xl-inline-block"> Anterior</span></button>
                         </li>                            
                     {% else %}
                         <li class="page-item">
-                            <button type="button" class="page-link" title="Página anterior" data-pagina="{{ paginacao.paginaAnterior }}"><i class="bi bi-chevron-compact-left"></i> Anterior</button>
+                            <button type="button" class="page-link" title="Página anterior" data-pagina="{{ paginacao.paginaAnterior }}"><i class="bi bi-chevron-compact-left"></i><span class="d-none d-xl-inline-block">  Anterior</span></button>
                         </li>
                     {% endif %}    
                     
@@ -47,11 +47,11 @@
                     
                     {% if paginacao is empty or paginacao.paginaUltima %}                                                
                         <li class="page-item disabled">
-                            <button type="button" class="page-link" title="Próxima página">Próximo <i class="bi bi-chevron-compact-right"></i></button>
+                            <button type="button" class="page-link" title="Próxima página"><span class="d-none d-xl-inline-block">Próximo </span><i class="bi bi-chevron-compact-right"></i></button>
                         </li>
                     {% else %}
                         <li class="page-item">
-                            <button type="button" class="page-link" title="Próxima página" data-pagina="{{ paginacao.paginaProxima }}">Próximo <i class="bi bi-chevron-compact-right"></i></button>
+                            <button type="button" class="page-link" title="Próxima página" data-pagina="{{ paginacao.paginaProxima }}"><span class="d-none d-xl-inline-block">Próximo </span><i class="bi bi-chevron-compact-right"></i></button>
                         </li>
                     {% endif %}
                     
@@ -67,7 +67,7 @@
                 </ul>
             </nav>
         </div>
-        <div class="col-12 col-sm-3 text-sm-end text-center">
+        <div class="col-12 col-sm-4 text-sm-end text-center">
             {{ paginacao.count|default(0)|number_format(0, ',', '.') }} registro(s) encontrado(s).
         </div>
     </div>

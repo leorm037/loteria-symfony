@@ -31,9 +31,9 @@
                     <thead>
                         <tr>
                             <th>Dezenas</th>
-                            <th>Conferida</th>
-                            <th>Acertos</th>
-                            <th>Atualização</th>
+                            <th class="d-none d-xl-table-cell">Conferida</th>
+                            <th class="d-none d-xl-table-cell">Acertos</th>
+                            <th class="d-none d-xl-table-cell">Atualização</th>
                                 {% if is_granted('BOLAO_APOSTA_EDIT', bolao) %}
                                 <th class="text-center">Ações</th>
                                 {% endif %}
@@ -43,13 +43,13 @@
                         {% for aposta in apostas %}
                             <tr>
                                 <td class="text-end">{{ aposta.dezenas|dezenasSorteadas(bolao.concurso.dezenas) }}</td>
-                                <td class="text-start">{{ aposta.conferida ? 'Sim' : 'Não' }}</td>
+                                <td class="text-start d-none d-xl-table-cell">{{ aposta.conferida ? 'Sim' : 'Não' }}</td>
                                 {% if aposta.quantidadeAcertos is not null %}
-                                    <td class="text-end">{{ aposta.quantidadeAcertos }}</td>
+                                    <td class="text-end d-none d-xl-table-cell">{{ aposta.quantidadeAcertos }}</td>
                                 {% else %}
-                                    <td>Não apurado</td>
+                                    <td class="d-none d-xl-table-cell">Não apurado</td>
                                 {% endif %}
-                                <td class="text-end">{{ aposta.updatedAt ? aposta.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : aposta.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
+                                <td class="text-end d-none d-xl-table-cell">{{ aposta.updatedAt ? aposta.updatedAt|date('d/m/Y H:i', 'America/Sao_Paulo') : aposta.createdAt|date('d/m/Y H:i', 'America/Sao_Paulo') }}</td>
                                 {% if is_granted('BOLAO_APOSTA_EDIT', bolao) %}
                                     <td class="text-center d-print-none">
                                         <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
