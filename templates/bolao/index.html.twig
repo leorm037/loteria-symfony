@@ -52,31 +52,31 @@
                                 <td class="text-center p-0 align-middle d-print-none">
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Ações">
                                         <a data-loading="true" title="Apostas" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}">
-                                            <i class="bi bi-ticket-perforated-fill"></i> <span class="d-none d-xl-inline-block">Apostas</span>
+                                            <i class="bi bi-ticket-perforated-fill"></i> <span class="d-none d-lg-inline-block">Apostas</span>
                                         </a>
                                         <a data-loading="true" title="Apostadores" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_index', {'uuid': bolao.uuid}) }}">
-                                            <i class="bi bi-people-fill"></i> <span class="d-none d-xl-inline-block">Apostadores</span>
+                                            <i class="bi bi-people-fill"></i> <span class="d-none d-lg-inline-block">Apostadores</span>
                                         </a>
                                             
                                         {% if bolao.comprovanteJogosPdf %}
-                                            <a role="button" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
-                                                <i class="bi bi-filetype-jpg"></i> <span class="d-none d-xl-inline-block">Comprovante</span>
+                                            <a role="button" title="Comprovante" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
+                                                <i class="bi bi-filetype-jpg"></i> <span class="d-none d-lg-inline-block">Comprovante</span>
                                             </a>
                                         {% endif %}
                                         
                                         {% if bolao.planilhaJogosCsv %}
-                                            <a role="button" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_planilha_download', {'uuid': bolao.uuid}) }}">
-                                                <i class="bi bi-filetype-csv"></i> <span class="d-none d-xl-inline-block">Planilha</span>
+                                            <a role="button" title="Planilha" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_planilha_download', {'uuid': bolao.uuid}) }}">
+                                                <i class="bi bi-filetype-csv"></i> <span class="d-none d-lg-inline-block">Planilha</span>
                                             </a>
                                         {% endif %}
                                             
                                         {% if is_granted('BOLAO_EDIT', bolao) %}
-                                            <a data-loading="true" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
-                                                <i class="bi bi-pencil-fill"></i> <span class="d-none d-xl-inline-block">Alterar</span>
+                                            <a data-loading="true"  title="Alterar" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
+                                                <i class="bi bi-pencil-fill"></i> <span class="d-none d-lg-inline-block">Alterar</span>
                                             </a>
                                         {% endif %}
                                         <button type="button" title="Excluir" class="btn btn-danger" data-delete="{{ bolao.uuid }}">
-                                            <i class="bi bi-trash"></i> <span class="d-none d-xl-inline-block">Excluir</span>
+                                            <i class="bi bi-trash"></i> <span class="d-none d-lg-inline-block">Excluir</span>
                                         </button>
                                     </div>
                                 </td>
