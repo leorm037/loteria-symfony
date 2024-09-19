@@ -1,14 +1,31 @@
 {# bolao/bolao_apostador/_form.html.twig #}
 {{ form_row(form.nome) }}
-{{ form_row(form.email) }}
+<div class="mb-3">
+    {{ form_label(form.email) }}
+    <div class="input-group">
+        <div class="input-group-text"><i class="bi bi-envelope-at"></i></div>
+            {{ form_widget(form.email) }}
+    </div>
+    {{ form_errors(form.email) }}
+    {{ form_help(form.email) }}
+</div>
 <div class="row">
-    <div class="col-4">
+    <div class="col-12 col-md-4">
         {{ form_row(form.cotaPaga) }}
     </div>
-    <div class="col-4">
+    <div class="col-12 col-md-4">
         {{ form_row(form.cotaQuantidade) }}
     </div>
-    <div class="col-4">
+    <div class="col-12 col-md-4">
         {{ form_row(form.arquivoComprovanteJpg) }}
     </div>
+</div>
+<div class="mb-3">
+    {{ form_label(form.pix) }}
+    <div class="input-group">
+        <div class="input-group-text"><i class="fa-brands fa-pix"></i></div>
+            {{ form_widget(form.pix) }}
+    </div>
+    {{ form_errors(form.pix) }}
+    {{ form_help(form.pix) }}
 </div>

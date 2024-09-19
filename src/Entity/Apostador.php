@@ -57,6 +57,9 @@ class Apostador extends AbstractEntity
     #[ORM\ManyToOne(cascade: ['remove'])]
     private ?Arquivo $arquivo = null;
 
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $pix = null;
+
     public function getBolaoUsuario(): Usuario
     {
         return $this->getBolao()->getUsuario();
@@ -184,6 +187,18 @@ class Apostador extends AbstractEntity
         if (!$this->isCotaPaga() && null !== $this->arquivo) {
             $this->setCotaPaga(true);
         }
+
+        return $this;
+    }
+
+    public function getPix(): ?string
+    {
+        return $this->pix;
+    }
+
+    public function setPix(?string $pix): static
+    {
+        $this->pix = $pix;
 
         return $this;
     }

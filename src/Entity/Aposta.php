@@ -60,7 +60,7 @@ class Aposta extends AbstractEntity
     public function isQuantidadeDezenasMenor(): bool
     {
         $min = min($this->getBolao()->getConcurso()->getLoteria()->getAposta());
-        
+
         if (\count($this->getDezenas()) >= $min) {
             return true;
         }

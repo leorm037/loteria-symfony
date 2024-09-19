@@ -84,6 +84,10 @@ class ApostadorType extends AbstractType
                         ]),
                     ],
                 ])
+                ->add('pix', TextType::class, [
+                    'label' => 'Chave PIX',
+                    'required' => false,
+                ])
         ;
     }
 
