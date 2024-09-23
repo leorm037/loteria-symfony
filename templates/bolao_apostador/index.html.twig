@@ -17,6 +17,9 @@
                 </div>
                 {% if is_granted('BOLAO_APOSTADOR_NEW', bolao) %}
                     <div>
+                        <a data-loading="true" href="{{ path('app_bolao_apostador_importar_apostadores_selecionar_bolao', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                            <i class="bi bi-person-down"></i> Importar
+                        </a>
                         <a data-loading="true" href="{{ path('app_bolao_apostador_new', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
                             <i class="bi bi-plus"></i> Novo
                         </a>
