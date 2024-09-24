@@ -24,6 +24,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class ApostadorRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Apostador::class);
@@ -74,6 +75,22 @@ class ApostadorRepository extends ServiceEntityRepository
         ;
 
         return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
+    }
+
+    /**
+     * 
+     * @param Bolao $bolao
+     * @return Apostador[]|null
+     */
+    public function findByBolaoParaSelecionarParaImportar(Bolao $bolao)
+    {
+        return $this->createQueryBuilder('a')
+                        ->where('a.bolao = :bolao')
+                        ->setParameter('bolao', $bolao)
+                        ->orderBy('a.nome', 'ASC')
+                        ->getQuery()
+                        ->getResult()
+        ;
     }
 
     public function findByUuid(Uuid $uuid): ?Apostador

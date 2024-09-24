@@ -1,0 +1,37 @@
+{# templates/bolao_apostador/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} :: Bolão :: Apostador :: Importar {% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a data-loading="true" href="{{ path('app_bolao_index') }}" class="text-decoration-none"><i class="fa-regular fa-futbol"></i> Bolão</a></li>
+    <li class="breadcrumb-item"><a data-loading="true" href="{{ path('app_bolao_apostador_index', {'uuid': bolao.uuid}) }}" class="text-decoration-none"><i class="bi bi-people-fill"></i> Apostadores</a></li>
+    <li class="breadcrumb-item active"><i class="bi bi-person-down"></i> Importar apostadores</li>
+    {% endblock %}
+
+{% block body %}
+    {{ form_start(form, {'attr': {'data-loading': 'true'}}) }}
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h4 m-0"><i class="bi bi-person-down"></i> Importar apostadores</h1>
+                </div>
+            </div>
+        </div>        
+        {{ include('bolao/_bolao.html.twig') }}
+        <div class="card-body">
+            <h5 class="card-title">Bolão</h5>
+            {{ form_row(form.bolao) }}
+        </div>
+        <div class="card-footer bg-gradient d-flex justify-content-between">
+            <div>
+                <a data-loading="true" class="btn btn-outline-secondary bg-gradient btn-sm shadow" href="{{ path('app_bolao_apostador_index', {'uuid': bolao.uuid}) }}"><i class="bi bi-arrow-left"></i> Voltar</a>
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary bg-gradient btn-sm shadow">Próximo <i class="bi bi-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

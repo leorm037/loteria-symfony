@@ -25,6 +25,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class BolaoRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bolao::class);
@@ -78,6 +79,40 @@ class BolaoRepository extends ServiceEntityRepository
         ;
 
         return new PaginacaoDTO(new Paginator($query), $registrosPorPagina, $paginaAtual);
+    }
+
+    /**
+     * 
+     * @param Bolao $bolao
+     * @return Bolao[]|null
+     */
+    public function findByBolaoComApostadoresDiferenteDoBolaoAtual(Bolao $bolao)
+    {
+        return $this->createQueryBuilder('b')
+                        ->select('b')
+                        ->where('b.usuario = :usuario')
+                        ->setParameter('usuario', $bolao->getUsuario())
+                        ->andWhere('(Select COUNT(ap.id) From App\Entity\Apostador ap Where ap.bolao = b.id) > 0')
+                        ->andWhere('b.id <> :bolao')
+                        ->setParameter('bolao', $bolao)
+                        ->orderBy('b.nome', 'ASC')
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
+
+    /**
+     * @return Bolao[]|null
+     */
+    public function findByLoteria(Bolao $bolao)
+    {
+        return $this->createQueryBuilder('b')
+                        ->andWhere('b.id <> :id')
+                        ->setParameter('id', $bolao->getId())
+                        ->orderBy('b.nome', 'ASC')
+                        ->getQuery()
+                        ->getResult()
+        ;
     }
 
     public function delete(Bolao $bolao): void

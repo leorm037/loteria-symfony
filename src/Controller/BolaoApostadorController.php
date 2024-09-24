@@ -15,12 +15,15 @@ use App\Entity\Apostador;
 use App\Entity\Arquivo;
 use App\Entity\Bolao;
 use App\Enum\TokenEnum;
+use App\Form\ApostadorSelecionarType;
 use App\Form\ApostadorType;
+use App\Form\BolaoSelecionarType;
 use App\Repository\ApostadorRepository;
 use App\Repository\ArquivoRepository;
 use App\Repository\BolaoRepository;
 use App\Security\Voter\ApostadorVoter;
 use App\Service\ApostadorComprovanteJpgService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -30,16 +33,21 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
+use function dd;
 
 #[Route(name: 'app_bolao_apostador_')]
 class BolaoApostadorController extends AbstractController
 {
+
     public function __construct(
-        private BolaoRepository $bolaoRepository,
-        private ApostadorRepository $apostadorRepository,
-        private ApostadorComprovanteJpgService $apostadorComprovante,
-        private ArquivoRepository $arquivoRepository,
-    ) {
+            private BolaoRepository $bolaoRepository,
+            private ApostadorRepository $apostadorRepository,
+            private ApostadorComprovanteJpgService $apostadorComprovante,
+            private ArquivoRepository $arquivoRepository,
+            private EntityManagerInterface $entityManager,
+    )
+    {
+        
     }
 
     #[Route('/bolao/{uuid}/apostador', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
@@ -58,8 +66,8 @@ class BolaoApostadorController extends AbstractController
         $apostadores = $this->apostadorRepository->findByBolao($bolao, $registrosPorPaginas, $pagina);
 
         return $this->render('bolao_apostador/index.html.twig', [
-            'bolao' => $bolao,
-            'apostadores' => $apostadores,
+                    'bolao' => $bolao,
+                    'apostadores' => $apostadores,
         ]);
     }
 
@@ -89,8 +97,8 @@ class BolaoApostadorController extends AbstractController
         }
 
         return $this->render('bolao_apostador/new.html.twig', [
-            'form' => $form,
-            'bolao' => $bolao,
+                    'form' => $form,
+                    'bolao' => $bolao,
         ]);
     }
 
@@ -126,8 +134,8 @@ class BolaoApostadorController extends AbstractController
         }
 
         return $this->render('bolao_apostador/edit.html.twig', [
-            'form' => $form,
-            'bolao' => $apostador->getBolao(),
+                    'form' => $form,
+                    'bolao' => $apostador->getBolao(),
         ]);
     }
 
@@ -172,6 +180,75 @@ class BolaoApostadorController extends AbstractController
         }
 
         return $this->file($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal(), ResponseHeaderBag::DISPOSITION_INLINE);
+    }
+
+    #[Route('/bolao/{uuid:bolao}/apostador/importar-apostadores-selecionar-bolao', name: 'importar_apostadores_selecionar_bolao', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
+    public function importarApostadoresSeleconarBolao(Request $request, Bolao $bolao): Response
+    {
+        $form = $this->createForm(BolaoSelecionarType::class, null, ['bolao' => $bolao]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Bolao $bolaoSelecionado */
+            $bolaoSelecionado = $form->get('bolao')->getData();
+
+            return $this->redirectToRoute(
+                            'app_bolao_apostador_importar_apostadores_selecionar_apostadores',
+                            [
+                                'uuidBolao' => $bolao->getUuid(),
+                                'uuidBolaoSelecionado' => $bolaoSelecionado->getUuid()
+                            ],
+                            Response::HTTP_SEE_OTHER
+                    );
+        }
+
+        return $this->render('bolao_apostador/importar-apostadores-selecionar-bolao.html.twig', [
+                    'bolao' => $bolao,
+                    'form' => $form,
+        ]);
+    }
+
+    #[Route('/bolao/{uuidBolao}/apostador/importar-apostadores-selecionar-apostadores/{uuidBolaoSelecionado}', name: 'importar_apostadores_selecionar_apostadores', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}', 'uuidSelecionado' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
+    public function apostadorImportarSelecionarApostadores(Request $request): Response
+    {
+        $uuidBolao = $request->get('uuidBolao');
+        $uuidBolaoSelecionado = $request->get('uuidBolaoSelecionado');
+
+        $bolao = $this->bolaoRepository->findOneByUuid(Uuid::fromString($uuidBolao));
+        $bolaoSelecionado = $this->bolaoRepository->findOneByUuid(Uuid::fromString($uuidBolaoSelecionado));
+
+        $form = $this->createForm(ApostadorSelecionarType::class, null, ['bolaoSelecionado' => $bolaoSelecionado]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $apostadores = $form->get('apostador')->getData();
+
+            /** @var Apostador $apostador */
+            foreach ($apostadores as $apostador) {
+
+                $apostadorNovo = new Apostador();
+                $apostadorNovo
+                        ->setNome($apostador->getNome())
+                        ->setEmail($apostador->getEmail())
+                        ->setPix($apostador->getPix())
+                        ->setBolao($bolao)
+                ;
+
+                $this->entityManager->persist($apostadorNovo);
+            }
+
+            $this->entityManager->flush();
+
+            $this->addFlash('success', sprintf('%s apostadores importados.', count($apostadores)));
+
+            return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('bolao_apostador/importar-apostadores-selecionar-apostadores.html.twig', [
+                    'bolao' => $bolao,
+                    'bolaoSelecionado' => $bolaoSelecionado,
+                    'form' => $form,
+        ]);
     }
 
     private function arquivarComprovante(?UploadedFile $arquivoComprovanteJpg): ?Arquivo
