@@ -38,3 +38,15 @@ git merge nome-da-branch
 '''
 git branch -d hotfix
 '''
+
+## Excluir branch (forçar)
+
+'''
+git branch -D hotfix
+'''
+
+## Excluir branch remota
+
+'''
+git push origin --delete hotfix
+'''
