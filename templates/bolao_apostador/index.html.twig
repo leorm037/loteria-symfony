@@ -33,7 +33,12 @@
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>Nome</th>
+                            <th>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>Nome</div>
+                                    <div><i class="bi bi-sort-alpha-down"></i></div>
+                                </div>
+                            </th>
                             <th class="d-none d-xl-table-cell">E-mail</th>
                             <th class="d-none d-xl-table-cell">Cota paga</th>
                             <th class="d-none d-xl-table-cell">Cotas</th>
@@ -78,9 +83,9 @@
                 </table>
             </div>
         </div>
-        
+
         {{ include('_tableFooter.html.twig', {'paginacao': apostadores}) }}
-        
+
     </div>
     {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_apostador_delete')}) }}
 {% endblock %}

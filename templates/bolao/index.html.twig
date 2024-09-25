@@ -19,14 +19,57 @@
                 </div>
             </div>
         </div>
+                        {#
+        <div class="card-body border-bottom">
+            <div class="row">
+                <div class="col-12 col-md-8">
+                    <div class="mb-3">
+                        <label for="loteria" class="form-label">Loteria</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="loteria_icon"><i class="fa-solid fa-clover icon-rotate-45"></i></span>
+                            <select name="loteria" id="loteria" class="form-select" aria-label="Loteria" aria-describedby="loteria_icon" autofocus="true">
+                                <option value{% if not app.request.get('loteria') %} selected{% endif %}>Selecione uma loteria</option>
+                                {% for lot in loterias %}
+                                    <option value="{{ lot.uuid }}"{% if app.request.get('loteria') and lot.uuid == app.request.get('loteria') %} selected{% endif %}>{{ lot.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="mb-3">
+                        <label for="apurado" class="form-label">Apurado</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="apurado_icon"><i class="bi bi-check-square-fill"></i></span>
+                            <select name="apurado" id="apurado" class="form-select" aria-label="Apurado" aria-describedby="apurado_icon">
+                                <option value{% if not app.request.get('apurado') %} selected{% endif %}>Selecione uma opção</option>
+                                <option value="1"{% if app.request.get('apurado') and 1 == app.request.get('apurado') %} selected{% endif %}>Sim</option>
+                                <option value="0"{% if app.request.get('apurado') and 0 == app.request.get('apurado') %} selected{% endif %}>Não</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                        #}
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>Bolão</th>
-                            <th>Loteria</th>
-                            <th>Concurso</th>
+                            <th>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>Loteria</div>
+                                    <div><i class="bi bi-sort-alpha-down"></i></div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>Concurso</div>
+                                    <div><i class="bi bi-sort-numeric-down-alt"></i></div>
+                                </div>
+                            </th>
                             <th>Apuração</th>
                             <th class="d-none d-xl-table-cell">Apostas</th>
                             <th class="d-none d-xl-table-cell">Apostadores</th>
@@ -57,26 +100,26 @@
                                         <a data-loading="true" title="Apostadores" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_apostador_index', {'uuid': bolao.uuid}) }}">
                                             <i class="bi bi-people-fill"></i> <span class="d-none d-xxl-inline-block">Apostadores</span>
                                         </a>
-                                            
+
                                         {% if bolao.comprovanteJogosPdf %}
                                             <a role="button" title="Comprovante" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
                                                 <i class="bi bi-filetype-jpg"></i> <span class="d-none d-xxl-inline-block">Comprovante</span>
                                             </a>
                                         {% endif %}
-                                        
+
                                         {% if bolao.planilhaJogosCsv %}
                                             <a role="button" title="Planilha" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_planilha_download', {'uuid': bolao.uuid}) }}">
                                                 <i class="bi bi-filetype-csv"></i> <span class="d-none d-xxl-inline-block">Planilha</span>
                                             </a>
                                         {% endif %}
-                                            
+
                                         {% if is_granted('BOLAO_EDIT', bolao) %}
                                             <a data-loading="true" title="Alterar" role="button" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
                                                 <i class="bi bi-pencil-fill"></i> <span class="d-none d-xxl-inline-block">Alterar</span>
                                             </a>
                                         {% endif %}
                                         <button title="Excluir" type="button" title="Excluir" class="btn btn-danger" data-delete="{{ bolao.uuid }}">
-                                            <i class="bi bi-trash"></i> <span class="d-none d-xxl-inline-block">Excluir</span>
+                                            <i class="bi bi-trash"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -90,9 +133,9 @@
                 </table>
             </div>
         </div>
-        
+
         {{ include('_tableFooter.html.twig', {'paginacao': boloes}) }}
-                    
+
     </div>
     {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_delete')}) }}
 {% endblock %}

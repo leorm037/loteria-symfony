@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/concurso', name: 'app_concurso_', methods: ['GET'])]
 class ConcursoController extends AbstractController
@@ -67,8 +68,9 @@ class ConcursoController extends AbstractController
     }
 
     #[Route('/conferir', name: 'conferir')]
+    #[IsGranted('ROLE_ADMIN')]
     public function conferir(): Response
-    {
+    {        
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
 
