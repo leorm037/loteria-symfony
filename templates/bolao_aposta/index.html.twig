@@ -15,16 +15,16 @@
                 <div>
                     <h1 class="h4 m-0"><i class="bi bi-ticket-perforated"></i> Apostas</h1>
                 </div>
-                {% if is_granted('BOLAO_APOSTA_NEW', bolao) %}
-                    <div>
-                        <a href="{{ path('app_bolao_apostas_exportar', {'uuid': bolao.uuid}) }}" target="_blank" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
-                            <i class="bi bi-cloud-download-fill"></i> Exportar
-                        </a>
+                <div>
+                    <a href="{{ path('app_bolao_apostas_exportar', {'uuid': bolao.uuid}) }}" target="_blank" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                        <i class="bi bi-cloud-download-fill"></i> Exportar
+                    </a>
+                    {% if is_granted('BOLAO_APOSTA_NEW', bolao) %}
                         <a data-loading="true" href="{{ path('app_bolao_apostas_new', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
                             <i class="bi bi-plus"></i> Novo
                         </a>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                </div>
             </div>
         </div>        
         {{ include('bolao/_bolao.html.twig') }}
