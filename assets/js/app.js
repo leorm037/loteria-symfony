@@ -82,7 +82,7 @@ $('#registros-por-pagina').on('change', function(){
    var url = $(location).attr('href');
    var registros_por_pagina = this.value;
       
-   redirectUrl(url, 'registros-por-pagina', registros_por_pagina, false);
+   redirectUrl(url, 'registros-por-pagina', registros_por_pagina, true);
 });
 
 $('button[data-pagina]').each(function(){
