@@ -20,12 +20,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ApostadorSelecionarType extends AbstractType
 {
-
     public function __construct(
-            private ApostadorRepository $apostadorRepository
-    )
-    {
-        
+        private ApostadorRepository $apostadorRepository,
+    ) {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -40,7 +37,7 @@ class ApostadorSelecionarType extends AbstractType
                     'required' => true,
                     'choice_value' => 'uuid',
                     'choice_label' => function (?Apostador $apostador): string {
-                        return ($apostador->getEmail()) ? sprintf('%s (%s)', $apostador->getNome(), $apostador->getEmail()) : $apostador->getNome();
+                        return ($apostador->getEmail()) ? \sprintf('%s (%s)', $apostador->getNome(), $apostador->getEmail()) : $apostador->getNome();
                     },
                     'multiple' => true,
                     'expanded' => true,

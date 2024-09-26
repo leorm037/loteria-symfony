@@ -11,7 +11,6 @@
 
 namespace App\Form;
 
-use App\Entity\Bolao;
 use App\Repository\BolaoRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -21,15 +20,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class BolaoSelecionarType extends AbstractType
 {
     public function __construct(
-            private BolaoRepository $bolaoRepository
-    )
-    {
+        private BolaoRepository $bolaoRepository,
+    ) {
     }
-    
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $bolao = $options['bolao'];
-        
+
         $builder
             ->add('bolao', ChoiceType::class, [
                 'label' => 'Selecione um Bolão',

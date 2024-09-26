@@ -25,7 +25,6 @@ use Symfony\Component\Uid\Uuid;
  */
 class BolaoRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bolao::class);
@@ -82,8 +81,6 @@ class BolaoRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
-     * @param Bolao $bolao
      * @return Bolao[]|null
      */
     public function findByBolaoComApostadoresDiferenteDoBolaoAtual(Bolao $bolao)

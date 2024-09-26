@@ -33,21 +33,17 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
-use function dd;
 
 #[Route(name: 'app_bolao_apostador_')]
 class BolaoApostadorController extends AbstractController
 {
-
     public function __construct(
-            private BolaoRepository $bolaoRepository,
-            private ApostadorRepository $apostadorRepository,
-            private ApostadorComprovanteJpgService $apostadorComprovante,
-            private ArquivoRepository $arquivoRepository,
-            private EntityManagerInterface $entityManager,
-    )
-    {
-        
+        private BolaoRepository $bolaoRepository,
+        private ApostadorRepository $apostadorRepository,
+        private ApostadorComprovanteJpgService $apostadorComprovante,
+        private ArquivoRepository $arquivoRepository,
+        private EntityManagerInterface $entityManager,
+    ) {
     }
 
     #[Route('/bolao/{uuid}/apostador', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
@@ -66,8 +62,8 @@ class BolaoApostadorController extends AbstractController
         $apostadores = $this->apostadorRepository->findByBolao($bolao, $registrosPorPaginas, $pagina);
 
         return $this->render('bolao_apostador/index.html.twig', [
-                    'bolao' => $bolao,
-                    'apostadores' => $apostadores,
+            'bolao' => $bolao,
+            'apostadores' => $apostadores,
         ]);
     }
 
@@ -97,8 +93,8 @@ class BolaoApostadorController extends AbstractController
         }
 
         return $this->render('bolao_apostador/new.html.twig', [
-                    'form' => $form,
-                    'bolao' => $bolao,
+            'form' => $form,
+            'bolao' => $bolao,
         ]);
     }
 
@@ -134,8 +130,8 @@ class BolaoApostadorController extends AbstractController
         }
 
         return $this->render('bolao_apostador/edit.html.twig', [
-                    'form' => $form,
-                    'bolao' => $apostador->getBolao(),
+            'form' => $form,
+            'bolao' => $apostador->getBolao(),
         ]);
     }
 
@@ -193,18 +189,18 @@ class BolaoApostadorController extends AbstractController
             $bolaoSelecionado = $form->get('bolao')->getData();
 
             return $this->redirectToRoute(
-                            'app_bolao_apostador_importar_apostadores_selecionar_apostadores',
-                            [
-                                'uuidBolao' => $bolao->getUuid(),
-                                'uuidBolaoSelecionado' => $bolaoSelecionado->getUuid()
-                            ],
-                            Response::HTTP_SEE_OTHER
-                    );
+                'app_bolao_apostador_importar_apostadores_selecionar_apostadores',
+                [
+                    'uuidBolao' => $bolao->getUuid(),
+                    'uuidBolaoSelecionado' => $bolaoSelecionado->getUuid(),
+                ],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('bolao_apostador/importar-apostadores-selecionar-bolao.html.twig', [
-                    'bolao' => $bolao,
-                    'form' => $form,
+            'bolao' => $bolao,
+            'form' => $form,
         ]);
     }
 
@@ -225,7 +221,6 @@ class BolaoApostadorController extends AbstractController
 
             /** @var Apostador $apostador */
             foreach ($apostadores as $apostador) {
-
                 $apostadorNovo = new Apostador();
                 $apostadorNovo
                         ->setNome($apostador->getNome())
@@ -239,15 +234,15 @@ class BolaoApostadorController extends AbstractController
 
             $this->entityManager->flush();
 
-            $this->addFlash('success', sprintf('%s apostadores importados.', count($apostadores)));
+            $this->addFlash('success', \sprintf('%s apostadores importados.', \count($apostadores)));
 
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('bolao_apostador/importar-apostadores-selecionar-apostadores.html.twig', [
-                    'bolao' => $bolao,
-                    'bolaoSelecionado' => $bolaoSelecionado,
-                    'form' => $form,
+            'bolao' => $bolao,
+            'bolaoSelecionado' => $bolaoSelecionado,
+            'form' => $form,
         ]);
     }
 

@@ -24,7 +24,6 @@ use Symfony\Component\Uid\Uuid;
  */
 class ApostadorRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Apostador::class);
@@ -78,8 +77,6 @@ class ApostadorRepository extends ServiceEntityRepository
     }
 
     /**
-     * 
-     * @param Bolao $bolao
      * @return Apostador[]|null
      */
     public function findByBolaoParaSelecionarParaImportar(Bolao $bolao)

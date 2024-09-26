@@ -70,7 +70,7 @@ class ConcursoController extends AbstractController
     #[Route('/conferir', name: 'conferir')]
     #[IsGranted('ROLE_ADMIN')]
     public function conferir(): Response
-    {        
+    {
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
 
