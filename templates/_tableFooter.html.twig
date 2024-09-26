@@ -1,7 +1,7 @@
 {# template/_tableFooter.html.twig #}
 <div class="card-footer">
     <div class="row">
-        <div class="col-12 col-sm-2">
+        <div class="col-12 col-sm-3">
             <select name="registros-por-pagina" id="registros-por-pagina" class="form-select form-select-sm" aria-label="Quantidade de registro por página"{{ paginacao is empty or paginacao.count == 0 ? ' disabled' }}>
                 <option value="10"{{ app.request.query.get('registros-por-pagina') == 10 ? ' selected' : '' }}>10</option>
                 <option value="25"{{ app.request.query.get('registros-por-pagina') == 25 ? ' selected' : '' }}>25</option>
@@ -67,8 +67,8 @@
                 </ul>
             </nav>
         </div>
-        <div class="col-12 col-sm-4 text-sm-end text-center">
-            {{ paginacao.count|default(0)|number_format(0, ',', '.') }} registro(s) encontrado(s).
+        <div class="col-12 col-sm-3 mt-1 text-sm-end text-center">
+            {{ paginacao.count|default(0)|number_format(0, ',', '.') }} registro(s).
         </div>
     </div>
 </div>
