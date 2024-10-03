@@ -25,6 +25,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class BolaoRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bolao::class);
@@ -55,7 +56,7 @@ class BolaoRepository extends ServiceEntityRepository
     /**
      * @return PaginacaoDTO|null
      */
-    public function list(Usuario $usuario, int $registrosPorPagina = 10, int $paginaAtual = 1)
+    public function list(Usuario $usuario, int $registrosPorPagina = 10, int $paginaAtual = 1, ?string $filter_loteria = null, ?int $filter_concurso = null, ?string $filter_bolao = null, ?bool $filter_apurado = null)
     {
         $registros = (!\in_array($registrosPorPagina, [10, 25, 50, 100])) ? 10 : $registrosPorPagina;
 
@@ -73,6 +74,36 @@ class BolaoRepository extends ServiceEntityRepository
                 ->addOrderBy('l.nome', 'ASC')
                 ->addOrderBy('c.numero', 'DESC')
                 ->addOrderBy('b.nome', 'ASC')
+        ;
+
+        if ($filter_loteria) {
+            $uuid_filter_loteria = Uuid::fromString($filter_loteria);
+
+            $query
+                    ->andWhere('l.uuid = :filter_loteria')
+                    ->setParameter('filter_loteria', $uuid_filter_loteria->toBinary())
+            ;
+        }
+
+        if ($filter_concurso) {
+            $query
+                    ->andWhere('c.numero = :filter_concurso')
+                    ->setParameter('filter_concurso', $filter_concurso)
+            ;
+        }
+
+        if ($filter_bolao) {
+            $query
+                    ->andWhere('b.nome = :filter_bolao')
+                    ->setParameter('filter_bolao', $filter_bolao)
+            ;
+        }
+
+        if (null !== $filter_apurado) {
+            ($filter_apurado) ? $query->andWhere('c.apuracao IS NOT NULL') : $query->andWhere('c.apuracao IS NULL');
+        }
+
+        $query
                 ->setFirstResult($pagina)
                 ->setMaxResults($registros)
         ;

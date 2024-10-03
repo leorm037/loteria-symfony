@@ -19,39 +19,67 @@
                 </div>
             </div>
         </div>
-                        {#
+
         <div class="card-body border-bottom">
-            <div class="row">
-                <div class="col-12 col-md-8">
-                    <div class="mb-3">
-                        <label for="loteria" class="form-label">Loteria</label>
-                        <div class="input-group">
-                            <span class="input-group-text" id="loteria_icon"><i class="fa-solid fa-clover icon-rotate-45"></i></span>
-                            <select name="loteria" id="loteria" class="form-select" aria-label="Loteria" aria-describedby="loteria_icon" autofocus="true">
-                                <option value{% if not app.request.get('loteria') %} selected{% endif %}>Selecione uma loteria</option>
-                                {% for lot in loterias %}
-                                    <option value="{{ lot.uuid }}"{% if app.request.get('loteria') and lot.uuid == app.request.get('loteria') %} selected{% endif %}>{{ lot.nome }}</option>
-                                {% endfor %}
-                            </select>
+            <form name="bolao_filtrar" method="get" data-loading="true">
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="mb-3">
+                            <label for="loteria" class="form-label">Loteria</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="loteria_icon"><i class="fa-solid fa-clover icon-rotate-45"></i></span>
+                                <select name="filter_loteria" id="filter_loteria" class="form-select" aria-label="Loteria" aria-describedby="loteria_icon" autofocus="true">
+                                    <option value{% if filter_loteria is null %} selected{% endif %}>Selecione uma loteria</option>
+                                    {% for lot in loterias %}
+                                        <option value="{{ lot.uuid }}"{% if lot.uuid == filter_loteria %} selected{% endif %}>{{ lot.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="mb-3">
+                            <label for="filter_concurso" class="form-label">Concurso</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="concurso_icon"><i class="bi bi-123"></i></span>
+                                <input type="text" name="filter_concurso" value="{{ filter_concurso }}" class="form-control" id="filter_concurso" aria-label="Concurso">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <div class="mb-3">
+                            <label for="filter_bolao" class="form-label">Nome do bolão</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="bolao_icon"><i class="fa-regular fa-futbol"></i></span>
+                                <input type="text" name="filter_bolao" value="{{ filter_bolao }}" class="form-control" id="filter_bolao" aria-label="Bolão">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="mb-3">
+                            <label for="filter_apurado" class="form-label">Apurado</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="apurado_icon"><i class="bi bi-check-square-fill"></i></span>
+                                <select name="filter_apurado" id="filter_apurado" class="form-select" aria-label="Apurado" aria-describedby="apurado_icon">
+                                    <option value{% if filter_apurado is null %} selected{% endif %}>Selecione uma opção</option>
+                                    <option value="1"{% if filter_apurado == 1 %} selected{% endif %}>Sim</option>
+                                    <option value="0"{% if filter_apurado == 0 %} selected{% endif %}>Não</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end align-items-end">
+                        <div>
+                            <button type="button" id="filter_button_limpar" class="btn btn-secondary btn-sm bg-gradient shadow-sm me-1"><i class="fa-solid fa-broom" aria-hidden="true"></i> Limpar</button>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-primary btn-sm bg-gradient shadow-sm"><i class="bi bi-funnel-fill"></i> Filtrar</button>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-4">
-                    <div class="mb-3">
-                        <label for="apurado" class="form-label">Apurado</label>
-                        <div class="input-group">
-                            <span class="input-group-text" id="apurado_icon"><i class="bi bi-check-square-fill"></i></span>
-                            <select name="apurado" id="apurado" class="form-select" aria-label="Apurado" aria-describedby="apurado_icon">
-                                <option value{% if not app.request.get('apurado') %} selected{% endif %}>Selecione uma opção</option>
-                                <option value="1"{% if app.request.get('apurado') and 1 == app.request.get('apurado') %} selected{% endif %}>Sim</option>
-                                <option value="0"{% if app.request.get('apurado') and 0 == app.request.get('apurado') %} selected{% endif %}>Não</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
-                        #}
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered">
@@ -138,4 +166,11 @@
 
     </div>
     {{ include('_delete.html.twig', {'deleteAction': path('app_bolao_delete')}) }}
+{% endblock %}
+
+{% block javascripts_footer %}
+    
+    {{ parent() }}
+    
+    <script type="text/javascript" src="{{ asset('js/bolao/index.js') }}"></script>
 {% endblock %}
