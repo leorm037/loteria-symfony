@@ -130,10 +130,15 @@
         "code:version-patch-increment": [
             "php bin/env-incrementar-patch"
         ],
+        "code:version-minor-increment": [
+            "php bin/env-incrementar-minor"
+        ],
+        "code:version-major-increment": [
+            "php bin/env-incrementar-major"
+        ],
         "code:ci": [
             "@code:fix",
-            "@code:analyze",
-            "@code:version-patch-increment"
+            "@code:analyze"
         ],
         "loteria:fixtures": [
             "bin/console doctrine:fixtures:load --purge-exclusions=PURGE-EXCLUSIONS -n --ansi"
