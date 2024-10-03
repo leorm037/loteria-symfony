@@ -146,7 +146,7 @@ class LoteriaApostaConferirCommand extends Command
      */
     private function enviarResultadoBolao(?array $boloesId): void
     {
-        if (!$boloesId || 0 == \count($boloesId)) {
+        if (null === $boloesId) {
             return;
         }
 

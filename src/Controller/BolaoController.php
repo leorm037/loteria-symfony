@@ -78,7 +78,8 @@ class BolaoController extends AbstractController
         $filter_apurado = $request->get('filter_apurado', null);
         $filter_apurado_sanitized = ('' !== $filter_apurado) ? $filter_apurado : null;
 
-        $usuario = $this->getUser();
+        $usuarioEmail = $this->getUser()->getUserIdentifier();
+        $usuario = $this->usuarioRepository->findByEmail($usuarioEmail);
 
         $boloes = $this->bolaoRepository->list(
             $usuario,
