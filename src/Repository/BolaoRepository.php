@@ -25,6 +25,7 @@ use Symfony\Component\Uid\Uuid;
  */
 class BolaoRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bolao::class);
@@ -93,7 +94,7 @@ class BolaoRepository extends ServiceEntityRepository
 
         if ($filter_bolao) {
             $query
-                    ->andWhere('b.nome = :filter_bolao')
+                    ->andWhere('MATCH (b.nome) AGAINST (:filter_bolao IN BOOLEAN MODE) > 0')
                     ->setParameter('filter_bolao', $filter_bolao)
             ;
         }
