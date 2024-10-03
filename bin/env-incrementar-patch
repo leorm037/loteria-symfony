@@ -4,7 +4,7 @@
 $envFile = __DIR__ . '/../.env';
 
 if (!file_exists($envFile)) {
-    $message = sprintf('Não foi possível encontrar o arquivo %s./n', $envFile);
+    $message = sprintf('Não foi possível encontrar o arquivo %s.', $envFile) . PHP_EOL;
 
     die($message);
 }
@@ -21,14 +21,14 @@ if (preg_match('/^APP_VERSION=([0-9\.]+)/m', $envContent, $matches)) {
     $envContentNew = preg_replace('/APP_VERSION=([0-9\.]+)/m', 'APP_VERSION=' . $versionNew, $envContent);
     
     if (file_put_contents($envFile, $envContentNew) === false) {
-        $message = sprintf('Não foi possível atualizar o arquivo %s./n', $envFile);
+        $message = sprintf('Não foi possível atualizar o arquivo %s.', $envFile) . PHP_EOL;
 
         die($message);
     }
     
-    $message = sprintf('APP_VERSION versão %s incrementado para %s!/n', $versionCurrent, $versionNew);
+    $message = sprintf('APP_VERSION versão %s incrementado para %s!', $versionCurrent, $versionNew) . PHP_EOL;
     
     echo $message;
 } else {
-    die('Não foi possível encontrar APP_ENV./n');
+    die('Não foi possível encontrar APP_ENV.' . PHP_EOL);
 }

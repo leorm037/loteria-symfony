@@ -63,7 +63,7 @@
                                 <select name="filter_apurado" id="filter_apurado" class="form-select" aria-label="Apurado" aria-describedby="apurado_icon">
                                     <option value{% if filter_apurado is null %} selected{% endif %}>Selecione uma opção</option>
                                     <option value="1"{% if filter_apurado == 1 %} selected{% endif %}>Sim</option>
-                                    <option value="0"{% if filter_apurado == 0 %} selected{% endif %}>Não</option>
+                                    <option value="0"{% if (filter_apurado is not null) and (filter_apurado == 0) %} selected{% endif %}>Não</option>
                                 </select>
                             </div>
                         </div>
