@@ -11,7 +11,7 @@
             {% for premio in rateio %}
             <tr>
                 <td>{{ premio.descricaoFaixa }}</td>
-                <td>{{ premio.numeroDeGanhadores }} ganhador(es)</td>
+                <td>{{ premio.numeroDeGanhadores|number_format(0, ',', '.') }} ganhador(es)</td>
                 <td>{{ premio.valorPremio|format_currency('BRL') }}</td>
             </tr>
             {% endfor %}
