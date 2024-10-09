@@ -47,4 +47,8 @@
             </div>
         </div>
     </div>
+    
+    {% if bolao.concurso.rateioPremio is not null %}
+         {% include 'concurso/_resumo.html.twig' with {'rateio': bolao.concurso.rateioPremio} %}
+    {% endif %}
 </div>
