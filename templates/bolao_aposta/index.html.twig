@@ -29,8 +29,13 @@
         </div>        
         
         {{ include('bolao/_bolao.html.twig') }}
-        
+                
         <div class="card-body">
+            {#
+            {% if bolao.concurso.rateioPremio is not null and apostas|length > 0 %}
+                {% include 'bolao_aposta/_resumo.html.twig' %}
+            {% endif %}
+            #}
             <div class="table-responsive">
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
