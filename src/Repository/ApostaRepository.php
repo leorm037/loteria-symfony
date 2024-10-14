@@ -86,13 +86,26 @@ class ApostaRepository extends ServiceEntityRepository
     public function findAllApostasByUuidBolao(Uuid $uuid)
     {
         return $this->createQueryBuilder('a')
-                ->select('a,b')
-                ->where('b.uuid = :uuid')
-                ->setParameter('uuid', $uuid->toBinary())
-                ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
-                ->addOrderBy('a.quantidadeAcertos', 'DESC')
-                ->getQuery()
-                ->getResult()
+                        ->select('a,b')
+                        ->where('b.uuid = :uuid')
+                        ->setParameter('uuid', $uuid->toBinary())
+                        ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
+                        ->getQuery()
+                        ->getResult()
+        ;
+    }
+
+    /**
+     * @return Aposta[]|null
+     */
+    public function findAllApostasByBolaoId(int $bolaoId)
+    {
+        return $this->createQueryBuilder('a')
+                        ->select('a')
+                        ->where('a.bolao = :bolaoId')
+                        ->setParameter('bolaoId', $bolaoId)
+                        ->getQuery()
+                        ->getResult()
         ;
     }
 

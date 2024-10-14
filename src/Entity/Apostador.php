@@ -55,7 +55,7 @@ class Apostador extends AbstractEntity
     private int $cotaQuantidade = 1;
 
     #[ORM\ManyToOne(cascade: ['remove'])]
-    private ?Arquivo $arquivo = null;
+    private ?Arquivo $comprovantePagamento = null;
 
     #[ORM\Column(length: 180, nullable: true)]
     private ?string $pix = null;
@@ -149,7 +149,7 @@ class Apostador extends AbstractEntity
 
     public function isCotaPaga(): bool
     {
-        if (null !== $this->getArquivo()) {
+        if (null !== $this->getComprovantePagamento()) {
             return true;
         }
 
@@ -175,16 +175,16 @@ class Apostador extends AbstractEntity
         return $this;
     }
 
-    public function getArquivo(): ?Arquivo
+    public function getComprovantePagamento(): ?Arquivo
     {
-        return $this->arquivo;
+        return $this->comprovantePagamento;
     }
 
-    public function setArquivo(?Arquivo $arquivo): static
+    public function setComprovantePagamento(?Arquivo $comprovantePagamento): static
     {
-        $this->arquivo = $arquivo;
+        $this->comprovantePagamento = $comprovantePagamento;
 
-        if (!$this->isCotaPaga() && null !== $this->arquivo) {
+        if (!$this->isCotaPaga() && null !== $this->omprovantePagamento) {
             $this->setCotaPaga(true);
         }
 

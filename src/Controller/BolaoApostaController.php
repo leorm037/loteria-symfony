@@ -14,9 +14,12 @@ namespace App\Controller;
 use App\Entity\Aposta;
 use App\Entity\Bolao;
 use App\Enum\TokenEnum;
+use App\Form\ApostaImportarType;
 use App\Form\ApostaType;
 use App\Repository\ApostaRepository;
+use App\Repository\BolaoRepository;
 use App\Security\Voter\ApostaVoter;
+use App\Service\ApostaService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -35,6 +38,8 @@ class BolaoApostaController extends AbstractController
     public function __construct(
         private ApostaRepository $apostaRepository,
         private SluggerInterface $slugger,
+        private BolaoRepository $bolaoRepository,
+        private ApostaService $apostaService,
     ) {
     }
 
@@ -101,6 +106,37 @@ class BolaoApostaController extends AbstractController
         return $this->render('bolao_aposta/edit.html.twig', [
             'form' => $form,
             'bolao' => $bolao,
+        ]);
+    }
+
+    #[Route('/apostas/{uuid:bolao}/importar', name: 'importar', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
+    public function importar(Request $request, Bolao $bolao): Response
+    {
+        $form = $this->createForm(ApostaImportarType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $arquivoPlanilhaCsv = $form->get('arquivoPlanilhaCsv')->getData();
+
+            $this->apostaService->excluirPlanilha($bolao->getPlanilhaJogosCsv());
+
+            $bolao->setPlanilhaJogosCsv(
+                $this->apostaService->anexarPlanilha($arquivoPlanilhaCsv)
+            );
+
+            $this->bolaoRepository->save($bolao, true);
+
+            $dezenasJaCadastradas = $this->apostaService->importarPlanilhaCsv($bolao);
+            $this->alertaApostasJaCadastradas($dezenasJaCadastradas);
+
+            $this->addFlash('success', 'Dezenas importadas com sucesso.');
+
+            return $this->redirectToRoute('app_bolao_apostas_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('bolao_aposta/importar.html.twig', [
+            'bolao' => $bolao,
+            'form' => $form,
         ]);
     }
 
@@ -186,5 +222,20 @@ class BolaoApostaController extends AbstractController
         $this->addFlash('success', \sprintf('Aposta "%s" foi removida com sucesso.', implode(', ', $aposta->getDezenas())));
 
         return $this->redirectToRoute('app_bolao_apostas_index', ['uuid' => $bolao->getUuid()], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @param array<int,array<string>>|null $listaDezenas
+     */
+    private function alertaApostasJaCadastradas(?array $listaDezenas): void
+    {
+        if (!$listaDezenas) {
+            return;
+        }
+
+        foreach ($listaDezenas as $dezenas) {
+            $message = \sprintf('Dezenas "%s" já cadastradas.', implode(', ', $dezenas));
+            $this->addFlash('warning', $message);
+        }
     }
 }

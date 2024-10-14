@@ -9,7 +9,7 @@
  *     with this source code in the file LICENSE.
  */
 
-namespace App\Service;
+namespace App\Service\Upload;
 
 use DateTime;
 use Exception;
@@ -36,7 +36,7 @@ class AbstractFileUploadService
         return $this->targetDirectory.'/'.$dateTimeDirectory;
     }
 
-    public function upload(UploadedFile $file): ?string
+    public function save(UploadedFile $file): ?string
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), \PATHINFO_FILENAME);
 
@@ -69,7 +69,7 @@ class AbstractFileUploadService
         try {
             return unlink($filename);
         } catch (Exception $e) {
-            $mensagem = \sprintf('Arquivo "%s" não encontrador', $filename);
+            $mensagem = \sprintf('Erro ao tentar excluir o arquivo "%s"', $filename);
 
             $this->logger->error($mensagem, $e->getTrace());
 

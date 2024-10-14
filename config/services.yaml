@@ -5,8 +5,8 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     aposta_planilha_csv: '%kernel.project_dir%/upload/aposta/planilha_csv'
-    aposta_comprovante_pdf: '%kernel.project_dir%/upload/aposta/comprovante_pdf'
-    apostador_comprovante_jpg: '%kernel.project_dir%/upload/apostador/comprovante_jpg'    
+    aposta_comprovante: '%kernel.project_dir%/upload/aposta/comprovante'
+    apostador_comprovante: '%kernel.project_dir%/upload/apostador/comprovante'    
     paginas_por_paginacao: 3
 
 services:
@@ -27,17 +27,17 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     
-    App\Service\ApostaPlanilhaCsvService:
+    App\Service\Upload\ApostaPlanilhaCsvService:
         arguments:
             $targetDirectory: '%aposta_planilha_csv%'
     
-    App\Service\ApostaComprovantePdfService:
+    App\Service\Upload\ApostaComprovanteService:
         arguments:
-            $targetDirectory: '%aposta_comprovante_pdf%'
+            $targetDirectory: '%aposta_comprovante%'
             
-    App\Service\ApostadorComprovanteJpgService:
+    App\Service\Upload\ApostadorComprovanteService:
         arguments:
-            $targetDirectory: '%apostador_comprovante_jpg%'
+            $targetDirectory: '%apostador_comprovante%'
             
     App\DTO\PaginacaoDTO:
         calls:

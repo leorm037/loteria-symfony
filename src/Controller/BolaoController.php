@@ -12,14 +12,12 @@
 namespace App\Controller;
 
 use App\DTO\BolaoDTO;
-use App\Entity\Aposta;
 use App\Entity\Arquivo;
 use App\Entity\Bolao;
 use App\Entity\Concurso;
 use App\Entity\Loteria;
 use App\Enum\TokenEnum;
 use App\Form\BolaoType;
-use App\Helper\CsvReaderHelper;
 use App\Repository\ApostadorRepository;
 use App\Repository\ApostaRepository;
 use App\Repository\BolaoRepository;
@@ -27,9 +25,9 @@ use App\Repository\ConcursoRepository;
 use App\Repository\LoteriaRepository;
 use App\Repository\UsuarioRepository;
 use App\Security\Voter\BolaoVoter;
-use App\Service\ApostaComprovantePdfService;
-use App\Service\ApostaPlanilhaCsvService;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\ApostaService;
+use App\Service\Upload\ApostaComprovanteService;
+use App\Service\Upload\ApostaPlanilhaCsvService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -39,8 +37,6 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/bolao', name: 'app_bolao_')]
 class BolaoController extends AbstractController
@@ -48,14 +44,12 @@ class BolaoController extends AbstractController
     public function __construct(
         private BolaoRepository $bolaoRepository,
         private ConcursoRepository $concursoRepository,
-        private ApostaComprovantePdfService $comprovantePdfService,
-        private ApostaPlanilhaCsvService $planilhaCsvService,
+        private ApostaComprovanteService $comprovanteService,
+        private ApostaService $apostaService,
         private ApostaRepository $apostaRepository,
         private ApostadorRepository $apostadorRepository,
-        private EntityManagerInterface $entityManager,
-        private ValidatorInterface $validator,
         private UsuarioRepository $usuarioRepository,
-        private LoteriaRepository $loteriaRepository,
+        private LoteriaRepository $loteriaRepository
     ) {
     }
 
@@ -117,7 +111,7 @@ class BolaoController extends AbstractController
                 $bolaoDTO->getConcursoNumero()
             );
 
-            $arquivoComprovantePdf = $form->get('arquivoComprovantePdf')->getData();
+            $arquivoComprovante = $form->get('arquivoComprovante')->getData();
             $arquivoPlanilhaCsv = $form->get('arquivoPlanilhaCsv')->getData();
 
             $usuarioEmail = $this->getUser()->getUserIdentifier();
@@ -131,18 +125,18 @@ class BolaoController extends AbstractController
                     ->setCotaValor($bolaoDTO->getCotaValor())
             ;
 
-            if ($arquivoComprovantePdf) {
-                $bolao->setComprovanteJogosPdf($this->anexarComprovante($arquivoComprovantePdf));
+            if ($arquivoComprovante) {
+                $bolao->setComprovanteJogos($this->anexarComprovante($arquivoComprovante));
             }
 
             if ($arquivoPlanilhaCsv) {
-                $bolao->setPlanilhaJogosCsv($this->anexarPlanilha($arquivoPlanilhaCsv));
+                $bolao->setPlanilhaJogosCsv($this->apostaService->anexarPlanilha($arquivoPlanilhaCsv));
             }
 
             $this->bolaoRepository->save($bolao, true);
 
             if ($arquivoPlanilhaCsv) {
-                $this->importarPlanilha($bolao);
+                $this->apostaService->importarPlanilhaCsv($bolao);
             }
 
             $this->addFlash('success', \sprintf('Bolão "%s" cadastrado com sucesso!', $bolao->getNome()));
@@ -181,7 +175,7 @@ class BolaoController extends AbstractController
                 $bolaoDTO->getConcursoNumero()
             );
 
-            $arquivoComprovantePdf = $form->get('arquivoComprovantePdf')->getData();
+            $arquivoComprovante = $form->get('arquivoComprovante')->getData();
             $arquivoPlanilhaCsv = $form->get('arquivoPlanilhaCsv')->getData();
 
             $bolao
@@ -190,24 +184,25 @@ class BolaoController extends AbstractController
                     ->setCotaValor($bolaoDTO->getCotaValor())
             ;
 
-            if ($arquivoComprovantePdf) {
-                $this->excluirComprovante($bolao->getComprovanteJogosPdf());
-                $bolao->setComprovanteJogosPdf(
-                    $this->anexarComprovante($arquivoComprovantePdf)
+            if ($arquivoComprovante) {
+                $this->excluirComprovante($bolao->getComprovanteJogos());
+                $bolao->setComprovanteJogos(
+                    $this->anexarComprovante($arquivoComprovante)
                 );
             }
 
             if ($arquivoPlanilhaCsv) {
-                $this->excluirPlanilha($bolao->getPlanilhaJogosCsv());
+                $this->apostaService->excluirPlanilha($bolao->getPlanilhaJogosCsv());
                 $bolao->setPlanilhaJogosCsv(
-                    $this->anexarPlanilha($arquivoPlanilhaCsv)
+                    $this->apostaService->anexarPlanilha($arquivoPlanilhaCsv)
                 );
             }
 
             $this->bolaoRepository->save($bolao, true);
 
             if ($arquivoPlanilhaCsv) {
-                $this->importarPlanilha($bolao);
+                $dezenasJaCadastradas = $this->apostaService->importarPlanilhaCsv($bolao);
+                $this->alertaApostasJaCadastradas($dezenasJaCadastradas);
             }
 
             $this->addFlash('success', \sprintf('Bolão "%s" alterado com sucesso!', $bolao->getNome()));
@@ -240,8 +235,8 @@ class BolaoController extends AbstractController
 
         if ($bolao) {
             $nomeBolao = $bolao->getNome();
-            $this->excluirComprovante($bolao->getComprovanteJogosPdf());
-            $this->excluirPlanilha($bolao->getPlanilhaJogosCsv());
+            $this->excluirComprovante($bolao->getComprovanteJogos());
+            $this->apostaService->excluirPlanilha($bolao->getPlanilhaJogosCsv());
             $this->apostaRepository->deleteByBolao($bolao);
             $this->apostadorRepository->deleteByBolao($bolao);
             $this->bolaoRepository->delete($bolao);
@@ -258,7 +253,7 @@ class BolaoController extends AbstractController
 
         $bolao = $this->bolaoRepository->findOneByUuid($uuid);
 
-        $arquivo = $bolao->getComprovanteJogosPdf();
+        $arquivo = $bolao->getComprovanteJogos();
 
         if (!file_exists($arquivo->getCaminhoNome())) {
             throw new NotFoundHttpException(\sprintf('Não foi possível encontrar o arquivo "%s".', $arquivo->getNomeOriginal()));
@@ -283,76 +278,9 @@ class BolaoController extends AbstractController
         return $this->file($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal(), ResponseHeaderBag::DISPOSITION_ATTACHMENT);
     }
 
-    private function anexarPlanilha(UploadedFile $arquivoPlanilhaCsv): Arquivo
-    {
-        $caminhoNome = $this->planilhaCsvService->upload($arquivoPlanilhaCsv);
-
-        $arquivo = new Arquivo();
-
-        return $arquivo
-                        ->setNomeOriginal($arquivoPlanilhaCsv->getClientOriginalName())
-                        ->setCaminhoNome($caminhoNome)
-        ;
-    }
-
-    public function importarPlanilha(Bolao $bolao): void
-    {
-        $csvReaderHelp = new CsvReaderHelper($bolao->getPlanilhaJogosCsv()->getCaminhoNome());
-
-        $apostasCadastradas = [];
-
-        if ($bolao->getUuid()) {
-            $apostasCadastradas = $this->apostaRepository->findApostasByUuidBolao($bolao->getUuid());
-        }
-
-        foreach ($csvReaderHelp->getIterator() as $row) {
-            $dezenas = array_map('strval', $row);
-
-            if (\count($apostasCadastradas) > 0) {
-                $diferenca = [];
-
-                /** @var Aposta $apostaCadastrada */
-                foreach ($apostasCadastradas as $apostaCadastrada) {
-                    if (\count($dezenas) == \count($apostaCadastrada->getDezenas())) {
-                        $diferenca = array_diff($dezenas, $apostaCadastrada->getDezenas());
-
-                        if (0 == \count($diferenca)) {
-                            $this->addFlash('danger', \sprintf('A aposta "%s" já está cadastrada.', implode(', ', $dezenas)));
-                            break;
-                        }
-                    }
-                }
-
-                if (0 == \count($diferenca)) {
-                    continue;
-                }
-            }
-
-            $aposta = new Aposta();
-            $aposta
-                    ->setDezenas($dezenas)
-                    ->setBolao($bolao)
-            ;
-
-            $errors = $this->validator->validate($aposta);
-
-            if (\count($errors) > 0) {
-                /** @var ConstraintViolation $error */
-                foreach ($errors as $error) {
-                    $this->addFlash('danger', \sprintf('A aposta "%s" é inválida. '.$error->getMessage(), implode(', ', $aposta->getDezenas())));
-                }
-                continue;
-            }
-
-            $this->entityManager->persist($aposta);
-        }
-
-        $this->entityManager->flush();
-    }
-
     private function anexarComprovante(UploadedFile $arquivoComprovantePdf): Arquivo
     {
-        $caminhoNome = $this->comprovantePdfService->upload($arquivoComprovantePdf);
+        $caminhoNome = $this->comprovanteService->save($arquivoComprovantePdf);
 
         $arquivo = new Arquivo();
 
@@ -385,15 +313,23 @@ class BolaoController extends AbstractController
             return;
         }
 
-        $this->comprovantePdfService->delete($arquivo->getCaminhoNome());
+        $this->comprovanteService->delete($arquivo->getCaminhoNome());
     }
 
-    private function excluirPlanilha(?Arquivo $arquivo): void
+    /**
+     * 
+     * @param array<int,array<string>>|null $listaDezenas
+     * @return void
+     */
+    private function alertaApostasJaCadastradas(?array $listaDezenas): void
     {
-        if (null === $arquivo) {
+        if (!$listaDezenas) {
             return;
         }
 
-        $this->planilhaCsvService->delete($arquivo->getCaminhoNome());
+        foreach ($listaDezenas as $dezenas) {
+            $message = \sprintf('Dezenas "%s" já cadastradas.', implode(', ', $dezenas));
+            $this->addFlash('warning', $message);
+        }
     }
 }

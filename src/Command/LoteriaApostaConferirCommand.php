@@ -179,8 +179,8 @@ class LoteriaApostaConferirCommand extends Command
                 ->context(['bolao' => $bolao, 'apostas' => $apostas])
         ;
 
-        if ($bolao->getComprovanteJogosPdf()) {
-            $arquivo = $bolao->getComprovanteJogosPdf();
+        if ($bolao->getComprovanteJogos()) {
+            $arquivo = $bolao->getComprovanteJogos();
             $email->attachFromPath($arquivo->getCaminhoNome(), $arquivo->getNomeOriginal());
         }
 

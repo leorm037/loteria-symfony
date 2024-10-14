@@ -9,12 +9,12 @@
  *     with this source code in the file LICENSE.
  */
 
-namespace App\Service;
+namespace App\Service\Upload;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class ApostaPlanilhaCsvService extends AbstractFileUploadService
+class ApostaComprovanteService extends AbstractFileUploadService
 {
     public function __construct(
         string $targetDirectory,

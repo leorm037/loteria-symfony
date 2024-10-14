@@ -129,7 +129,7 @@
                                             <i class="bi bi-people-fill"></i> <span class="d-none d-xxl-inline-block">Apostadores</span>
                                         </a>
 
-                                        {% if bolao.comprovanteJogosPdf %}
+                                        {% if bolao.comprovanteJogos %}
                                             <a role="button" title="Comprovante" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
                                                 <i class="bi bi-filetype-jpg"></i> <span class="d-none d-xxl-inline-block">Comprovante</span>
                                             </a>

@@ -85,7 +85,7 @@ class Aposta extends AbstractEntity
     {
         $fora = array_diff($this->getDezenas(), $this->getBolao()->getConcurso()->getLoteria()->getDezenas());
 
-        if (0 == \count($fora)) {
+        if (!$fora) {
             return true;
         }
 
@@ -102,11 +102,7 @@ class Aposta extends AbstractEntity
      */
     public function getDezenas(): array
     {
-        $func = function (string $value): string {
-            return str_pad($value, 2, '00', \STR_PAD_LEFT);
-        };
-
-        return array_map($func, $this->dezenas);
+        return $this->dezenas;
     }
 
     /**

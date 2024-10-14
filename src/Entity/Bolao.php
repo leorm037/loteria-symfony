@@ -57,7 +57,7 @@ class Bolao extends AbstractEntity
     private ?Arquivo $planilhaJogosCsv = null;
 
     #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
-    private ?Arquivo $comprovanteJogosPdf = null;
+    private ?Arquivo $comprovanteJogos = null;
 
     public function getId(): ?int
     {
@@ -148,6 +148,13 @@ class Bolao extends AbstractEntity
         return $this;
     }
 
+    /**
+     * Planilha com os jogos.
+     *
+     * Um jogo por linha e dezenas separadas por ";".
+     *
+     * @ Formato CSV.
+     */
     public function getPlanilhaJogosCsv(): ?Arquivo
     {
         return $this->planilhaJogosCsv;
@@ -160,14 +167,14 @@ class Bolao extends AbstractEntity
         return $this;
     }
 
-    public function getComprovanteJogosPdf(): ?Arquivo
+    public function getComprovanteJogos(): ?Arquivo
     {
-        return $this->comprovanteJogosPdf;
+        return $this->comprovanteJogos;
     }
 
-    public function setComprovanteJogosPdf(?Arquivo $comprovanteJogosPdf): static
+    public function setComprovanteJogos(?Arquivo $comprovanteJogos): static
     {
-        $this->comprovanteJogosPdf = $comprovanteJogosPdf;
+        $this->comprovanteJogos = $comprovanteJogos;
 
         return $this;
     }

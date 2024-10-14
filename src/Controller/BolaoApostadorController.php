@@ -22,7 +22,7 @@ use App\Repository\ApostadorRepository;
 use App\Repository\ArquivoRepository;
 use App\Repository\BolaoRepository;
 use App\Security\Voter\ApostadorVoter;
-use App\Service\ApostadorComprovanteJpgService;
+use App\Service\Upload\ApostadorComprovanteService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -40,7 +40,7 @@ class BolaoApostadorController extends AbstractController
     public function __construct(
         private BolaoRepository $bolaoRepository,
         private ApostadorRepository $apostadorRepository,
-        private ApostadorComprovanteJpgService $apostadorComprovante,
+        private ApostadorComprovanteService $apostadorComprovante,
         private ArquivoRepository $arquivoRepository,
         private EntityManagerInterface $entityManager,
     ) {
@@ -82,7 +82,7 @@ class BolaoApostadorController extends AbstractController
             $arquivoComprovanteJpg = $form->get('arquivoComprovanteJpg')->getData();
 
             $apostador
-                    ->setArquivo($this->arquivarComprovante($arquivoComprovanteJpg))
+                    ->setComprovantePagamento($this->arquivarComprovante($arquivoComprovanteJpg))
             ;
 
             $this->apostadorRepository->save($apostador, true);
@@ -115,11 +115,11 @@ class BolaoApostadorController extends AbstractController
             $arquivoComprovanteJpg = $form->get('arquivoComprovanteJpg')->getData();
 
             if ($arquivoComprovanteJpg) {
-                if ($apostador->getArquivo()) {
-                    $this->deleteComprovante($apostador->getArquivo());
+                if ($apostador->getComprovantePagamento()) {
+                    $this->deleteComprovante($apostador->getComprovantePagamento());
                 }
 
-                $apostador->setArquivo($this->arquivarComprovante($arquivoComprovanteJpg));
+                $apostador->setComprovantePagamento($this->arquivarComprovante($arquivoComprovanteJpg));
             }
 
             $this->apostadorRepository->save($apostador, true);
@@ -153,8 +153,8 @@ class BolaoApostadorController extends AbstractController
             return $this->redirectToRoute('app_bolao_apostador_index', ['uuid' => $apostador->getBolao()->getUuid()], Response::HTTP_SEE_OTHER);
         }
 
-        if ($apostador->getArquivo()) {
-            $this->deleteComprovante($apostador->getArquivo());
+        if ($apostador->getComprovantePagamento()) {
+            $this->deleteComprovante($apostador->getComprovantePagamento());
         }
 
         $this->apostadorRepository->delete($apostador);
@@ -252,7 +252,7 @@ class BolaoApostadorController extends AbstractController
             return null;
         }
 
-        $caminhoNome = $this->apostadorComprovante->upload($arquivoComprovanteJpg);
+        $caminhoNome = $this->apostadorComprovante->save($arquivoComprovanteJpg);
 
         $arquivo = new Arquivo();
         $arquivo

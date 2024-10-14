@@ -5,9 +5,9 @@
 
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{{ path('app_bolao_index') }}" class="text-decoration-none"><i class="fa-regular fa-futbol"></i> Bolão</a></li>
-    <li class="breadcrumb-item"><a href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}" class="text-decoration-none"><i class="bi bi-ticket-perforated"></i> Aposta</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}" class="text-decoration-none"><i class="bi bi-ticket-perforated"></i> Apostas</a></li>
     <li class="breadcrumb-item active"><i class="bi bi-upload"></i> Importar apostas</li>
-{% endblock %}
+    {% endblock %}
 
 {% block body %}
     {{ form_start(form, {'attr':{'data-loading':'true'}}) }}
@@ -15,12 +15,20 @@
         <div class="card-header bg-gradient">
             <h1 class="h4 m-0"><i class="bi bi-upload"></i> Importar apostas</h1>
         </div>
-        <div class="card-body border-bottom">
-            {{ include('bolao/_bolao.html.twig') }}
-        </div>
+
+        {{ include('bolao/_bolao.html.twig') }}
+
         <div class="card-body">
-            {{ include('bolaoAposta/_form.html.twig') }}
+            <div class="mb-3">
+                {{ form_label(form.arquivoPlanilhaCsv) }}
+                <div class="input-group">
+                    <div class="input-group-text"><i class="bi bi-filetype-csv"></i></div>
+                        {{ form_widget(form.arquivoPlanilhaCsv) }}
+                </div>
+                {{ form_errors(form.arquivoPlanilhaCsv) }}
+                {{ form_help(form.arquivoPlanilhaCsv) }}
+            </div>
         </div>
         {{ include('_formFooter.html.twig', {'voltar': path('app_bolao_apostas_index', {'uuid': bolao.uuid})}) }}
-    {{ form_end(form) }}
-{% endblock %}
+        {{ form_end(form) }}
+    {% endblock %}

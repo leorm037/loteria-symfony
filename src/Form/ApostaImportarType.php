@@ -14,7 +14,6 @@ namespace App\Form;
 use App\DTO\ApostaImportarDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -24,7 +23,6 @@ class ApostaImportarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-                ->add('bolao', HiddenType::class)
                 ->add('arquivoPlanilhaCsv', FileType::class, [
                     'label' => 'Planilhas com os jogos',
                     'help' => 'Cada linha deve ser uma aposta e as dezenas devem ser separadas por ponto e vírgula.',

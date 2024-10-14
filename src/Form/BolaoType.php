@@ -84,13 +84,13 @@ class BolaoType extends AbstractType
                         ]),
                     ],
                 ])
-                ->add('arquivoComprovantePdf', FileType::class, [
+                ->add('arquivoComprovante', FileType::class, [
                     'label' => 'Comprovantes dos jogos',
                     'help' => 'O arquivo PDF deve ter as imagens dos comprovantes.',
                     'mapped' => false,
                     'required' => false,
                     'attr' => [
-                        'accept' => 'application/pdf,application/x-pdf,image/png',
+                        'accept' => 'application/pdf,application/x-pdf,image/png,image/jpeg',
                     ],
                     'constraints' => [
                         new File([
@@ -99,6 +99,7 @@ class BolaoType extends AbstractType
                                 'application/pdf',
                                 'application/x-pdf',
                                 'image/png',
+                                'image/jpeg',
                             ],
                             'mimeTypesMessage' => 'Selecione um arquivo no formato PDF com os comprovantes.',
                         ]),
