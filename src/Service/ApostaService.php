@@ -32,8 +32,6 @@ class ApostaService
     }
 
     /**
-     * 
-     * @param Bolao $bolao
      * @return array<int,array<string>>
      */
     public function importarPlanilhaCsv(Bolao $bolao): array
@@ -64,7 +62,7 @@ class ApostaService
 
             $errors = $this->validator->validate($aposta);
 
-            if (count($errors) === 0) {
+            if (0 === \count($errors)) {
                 continue;
             }
 
@@ -98,17 +96,15 @@ class ApostaService
     }
 
     /**
-     * 
      * @param array<string> $dezenas
-     * @param Aposta[] $apostasCadastradas
-     * @return bool
+     * @param Aposta[]      $apostasCadastradas
      */
     private function isApostaCadastrada(array $dezenas, array $apostasCadastradas): bool
     {
         /** @var Aposta $apostaCadastrada */
         foreach ($apostasCadastradas as $apostaCadastrada) {
             $diff = [];
-            
+
             if (\count($dezenas) === \count($apostaCadastrada->getDezenas())) {
                 $diff = array_diff($dezenas, $apostaCadastrada->getDezenas());
             }

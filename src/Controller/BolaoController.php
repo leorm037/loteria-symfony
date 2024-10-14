@@ -27,7 +27,6 @@ use App\Repository\UsuarioRepository;
 use App\Security\Voter\BolaoVoter;
 use App\Service\ApostaService;
 use App\Service\Upload\ApostaComprovanteService;
-use App\Service\Upload\ApostaPlanilhaCsvService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -49,7 +48,7 @@ class BolaoController extends AbstractController
         private ApostaRepository $apostaRepository,
         private ApostadorRepository $apostadorRepository,
         private UsuarioRepository $usuarioRepository,
-        private LoteriaRepository $loteriaRepository
+        private LoteriaRepository $loteriaRepository,
     ) {
     }
 
@@ -317,9 +316,7 @@ class BolaoController extends AbstractController
     }
 
     /**
-     * 
      * @param array<int,array<string>>|null $listaDezenas
-     * @return void
      */
     private function alertaApostasJaCadastradas(?array $listaDezenas): void
     {
