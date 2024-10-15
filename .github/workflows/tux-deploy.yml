@@ -13,6 +13,28 @@ jobs:
     steps:      
       - name: "Obter o código"
         uses: actions/checkout@v4
+      - name: "Limpar diretório de deploy"
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            rm -R /deploy/loteria-symfony/assets
+            rm -R /deploy/loteria-symfony/bin
+            rm -R /deploy/loteria-symfony/config
+            rm -R /deploy/loteria-symfony/database
+            rm -R /deploy/loteria-symfony/docker
+            rm -R /deploy/loteria-symfony/migrations
+            rm -R /deploy/loteria-symfony/nbproject
+            rm -R /deploy/loteria-symfony/public
+            rm -R /deploy/loteria-symfony/src
+            rm -R /deploy/loteria-symfony/templates
+            rm -R /deploy/loteria-symfony/tests
+            rm -R /deploy/loteria-symfony/translations
+            rm -R /deploy/loteria-symfony/var
+            rm -R /deploy/loteria-symfony/vendor
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -33,6 +55,20 @@ jobs:
             cd /deploy/loteria-symfony
             composer install --no-dev --no-progress -a -o
             composer dump-env prod
+            rm -R /var/www/loteria/assets
+            rm -R /var/www/loteria/bin
+            rm -R /var/www/loteria/config
+            rm -R /var/www/loteria/database
+            rm -R /var/www/loteria/docker
+            rm -R /var/www/loteria/migrations
+            rm -R /var/www/loteria/nbproject
+            rm -R /var/www/loteria/public
+            rm -R /var/www/loteria/src
+            rm -R /var/www/loteria/templates
+            rm -R /var/www/loteria/tests
+            rm -R /var/www/loteria/translations
+            rm -R /var/www/loteria/var
+            rm -R /var/www/loteria/vendor
             sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
             cd /var/www/loteria
             APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear

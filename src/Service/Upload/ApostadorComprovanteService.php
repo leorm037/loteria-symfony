@@ -16,11 +16,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ApostadorComprovanteService extends AbstractFileUploadService
 {
+
     public function __construct(
-        string $targetDirectory,
-        SluggerInterface $slugger,
-        LoggerInterface $logger,
-    ) {
+            string $targetDirectory,
+            SluggerInterface $slugger,
+            LoggerInterface $logger,
+    )
+    {
         parent::__construct($targetDirectory, $slugger, $logger);
     }
 }
