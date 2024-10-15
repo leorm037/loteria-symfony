@@ -131,13 +131,13 @@
 
                                         {% if bolao.comprovanteJogos %}
                                             <a role="button" title="Comprovante" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
-                                                <i class="bi bi-filetype-jpg"></i> <span class="d-none d-xxl-inline-block">Comprovante</span>
+                                                <i class="bi bi-filetype-jpg"></i>
                                             </a>
                                         {% endif %}
 
                                         {% if bolao.planilhaJogosCsv %}
                                             <a role="button" title="Planilha" target="_blank" class="btn btn-sm btn-secondary" href="{{ path('app_bolao_planilha_download', {'uuid': bolao.uuid}) }}">
-                                                <i class="bi bi-filetype-csv"></i> <span class="d-none d-xxl-inline-block">Planilha</span>
+                                                <i class="bi bi-filetype-csv"></i>
                                             </a>
                                         {% endif %}
 
