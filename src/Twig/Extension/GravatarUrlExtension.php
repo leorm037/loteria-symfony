@@ -25,6 +25,10 @@ class GravatarUrlExtension extends AbstractExtension
         ];
     }
 
+    /**
+     * 
+     * @return array
+     */
     public function getFunctions()
     {
         return [

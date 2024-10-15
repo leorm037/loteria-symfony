@@ -4,6 +4,10 @@ RUN apt update -y
 
 RUN apt install -y libicu-dev zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev
 
+RUN pecl install redis
+
+RUN docker-php-ext-enable redis
+
 RUN docker-php-ext-install intl
 
 RUN docker-php-ext-install pdo

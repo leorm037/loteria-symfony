@@ -20,6 +20,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ConcursoRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'write_rare_cache')]
 #[ORM\HasLifecycleCallbacks]
 class Concurso extends AbstractEntity
 {
