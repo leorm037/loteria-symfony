@@ -63,7 +63,6 @@ class LoteriaRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('l')
                         ->orderBy('l.nome', 'ASC')
-                        ->setCacheable(true)
                         ->getQuery()
                         ->getResult()
         ;
