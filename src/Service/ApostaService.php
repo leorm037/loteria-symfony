@@ -62,7 +62,7 @@ class ApostaService
 
             $errors = $this->validator->validate($aposta);
 
-            if (0 === \count($errors)) {
+            if (count($errors) > 0) {
                 continue;
             }
 
