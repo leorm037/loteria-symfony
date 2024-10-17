@@ -90,6 +90,7 @@ class ApostaRepository extends ServiceEntityRepository
                         ->where('b.uuid = :uuid')
                         ->setParameter('uuid', $uuid->toBinary())
                         ->innerJoin('a.bolao', 'b', Join::WITH, 'a.bolao = b.id')
+                        ->addOrderBy('a.quantidadeAcertos', 'DESC')
                         ->getQuery()
                         ->getResult()
         ;
@@ -104,6 +105,7 @@ class ApostaRepository extends ServiceEntityRepository
                         ->select('a')
                         ->where('a.bolao = :bolaoId')
                         ->setParameter('bolaoId', $bolaoId)
+                        ->addOrderBy('a.quantidadeAcertos', 'DESC')
                         ->getQuery()
                         ->getResult()
         ;
@@ -132,6 +134,7 @@ class ApostaRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
                         ->where('a.uuid = :uuid')
                         ->setParameter('uuid', $uuid->toBinary())
+                        ->addOrderBy('a.quantidadeAcertos', 'DESC')
                         ->getQuery()
                         ->getOneOrNullResult()
         ;
