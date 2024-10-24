@@ -24,6 +24,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ConcursoRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Concurso::class);
@@ -69,6 +70,19 @@ class ConcursoRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findUltimoConcursoByLoteria(Loteria $loteria): ?Concurso
+    {
+        return $this->createQueryBuilder('c')
+                        ->where('c.loteria = :loteria')
+                        ->setParameter('loteria', $loteria)
+                        ->andWhere('c.dezenas IS NOT NULL')
+                        ->orderBy('c.numero', 'DESC')
+                        ->setMaxResults(1)
+                        ->getQuery()
+                        ->getOneOrNullResult()
+        ;
     }
 
     //    /**

@@ -3,7 +3,7 @@
     "description": "Bolão da loteria da família escrito em PHP e Symfony",
     "type": "project",
     "license": "MIT",
-    "version": "0.20.0-dev",
+    "version": "1.0.0",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "authors": [
@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-ctype": "*",
         "ext-dom": "*",
         "ext-fileinfo": "*",

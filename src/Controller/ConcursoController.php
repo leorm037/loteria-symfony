@@ -18,6 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -27,11 +28,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/concurso', name: 'app_concurso_', methods: ['GET'])]
 class ConcursoController extends AbstractController
 {
+
     public function __construct(
-        private ConcursoRepository $concursoRepository,
-        private LoteriaRepository $loteriaRepository,
-        private KernelInterface $kernel,
-    ) {
+            private ConcursoRepository $concursoRepository,
+            private LoteriaRepository $loteriaRepository,
+            private KernelInterface $kernel,
+    )
+    {
+        
     }
 
     #[Route('/', name: 'index')]
@@ -44,9 +48,9 @@ class ConcursoController extends AbstractController
         $loterias = $this->loteriaRepository->findAllOrderByNome();
 
         return $this->render('concurso/index.html.twig', [
-            'concursos' => $concursos,
-            'loterias' => $loterias,
-            'loteria' => $loteria,
+                    'concursos' => $concursos,
+                    'loterias' => $loterias,
+                    'loteria' => $loteria,
         ]);
     }
 
@@ -61,9 +65,9 @@ class ConcursoController extends AbstractController
         $concursos = $this->concursoRepository->findByLoteria($loteria, $registrosPorPaginas, $pagina);
 
         return $this->render('concurso/index.html.twig', [
-            'concursos' => $concursos,
-            'loterias' => $loterias,
-            'loteria' => $loteria,
+                    'concursos' => $concursos,
+                    'loterias' => $loterias,
+                    'loteria' => $loteria,
         ]);
     }
 
@@ -96,5 +100,23 @@ class ConcursoController extends AbstractController
         $this->addFlash('success', $content);
 
         return $this->redirectToRoute('app_concurso_index');
+    }
+
+    #[Route('/{uuid:loteria}/ultimo', name: 'loteria_ultimo', methods: ['GET'], requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
+    public function ultimo(Loteria $loteria): JsonResponse
+    {
+        $concurso = $this->concursoRepository->findUltimoConcursoByLoteria($loteria);
+
+        if (null === $concurso) {
+            return $this->json([
+                        'concurso' => ''
+                            ], Response::HTTP_NOT_FOUND
+                    );
+        }
+
+        return $this->json([
+                    'concurso' => $concurso->getNumero()
+                        ], Response::HTTP_OK
+                );
     }
 }

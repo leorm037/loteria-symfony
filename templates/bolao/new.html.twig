@@ -21,3 +21,9 @@
     </div>
     {{ form_end(form) }}
 {% endblock %}
+
+{% block javascripts_footer %}
+    
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/bolao/new_form.js') }}"></script>
+{% endblock %}
