@@ -4,7 +4,7 @@ $("select[name='bolao[loteria]']").on('change', function () {
 
     $.get(url).done(function (data, textStatus, jqXHR) {
         let concurso = parseInt(data.concurso);
-        let concursoProximo = concurso++;
+        let concursoProximo = concurso + 1;
         $("input[name='bolao[concursoNumero]']").val(concursoProximo);
     }).fail(function (jqXHR, textStatus, errorThrown) {
         $("input[name='bolao[concursoNumero]']").val(null);
