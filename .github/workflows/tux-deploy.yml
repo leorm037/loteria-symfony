@@ -53,8 +53,8 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /deploy/loteria-symfony
-            sudo composer install --no-dev --no-progress -a -o
-            sudo composer dump-env prod
+            composer install --no-dev --no-progress -a -o
+            composer dump-env prod
             sudo rm -Rf /var/www/loteria/assets
             sudo rm -Rf /var/www/loteria/bin
             sudo rm -Rf /var/www/loteria/config
@@ -71,6 +71,6 @@ jobs:
             sudo rm -Rf /var/www/loteria/vendor
             sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
             cd /var/www/loteria
-            APP_ENV=prod sudo php bin/console cache:clear
+            APP_ENV=prod sudo php bin/console cache:warmup
             APP_ENV=prod sudo php bin/console asset-map:compile
             sudo chown -R www-data: .
