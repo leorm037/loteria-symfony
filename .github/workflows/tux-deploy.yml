@@ -34,7 +34,7 @@ jobs:
             rm -Rf /deploy/loteria-symfony/tests
             rm -Rf /deploy/loteria-symfony/translations
             rm -Rf /deploy/loteria-symfony/var
-            rm -Rf /deploy/loteria-symfony/vendor
+            sudo rm -Rf /deploy/loteria-symfony/vendor
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -71,7 +71,6 @@ jobs:
             sudo rm -Rf /var/www/loteria/vendor
             sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
             cd /var/www/loteria
-            APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear
-            sudo rm -R public/assets
-            APP_ENV=prod APP_DEBUG=0 sudo php bin/console asset-map:compile
+            APP_ENV=prod sudo php bin/console cache:clear
+            APP_ENV=prod sudo php bin/console asset-map:compile
             sudo chown -R www-data: .
