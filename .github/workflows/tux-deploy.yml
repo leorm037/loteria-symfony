@@ -21,20 +21,20 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            rm -R /deploy/loteria-symfony/assets
-            rm -R /deploy/loteria-symfony/bin
-            rm -R /deploy/loteria-symfony/config
-            rm -R /deploy/loteria-symfony/database
-            rm -R /deploy/loteria-symfony/docker
-            rm -R /deploy/loteria-symfony/migrations
-            rm -R /deploy/loteria-symfony/nbproject
-            rm -R /deploy/loteria-symfony/public
-            rm -R /deploy/loteria-symfony/src
-            rm -R /deploy/loteria-symfony/templates
-            rm -R /deploy/loteria-symfony/tests
-            rm -R /deploy/loteria-symfony/translations
-            rm -R /deploy/loteria-symfony/var
-            rm -R /deploy/loteria-symfony/vendor
+            rm -Rf /deploy/loteria-symfony/assets
+            rm -Rf /deploy/loteria-symfony/bin
+            rm -Rf /deploy/loteria-symfony/config
+            rm -Rf /deploy/loteria-symfony/database
+            rm -Rf /deploy/loteria-symfony/docker
+            rm -Rf /deploy/loteria-symfony/migrations
+            rm -Rf /deploy/loteria-symfony/nbproject
+            rm -Rf /deploy/loteria-symfony/public
+            rm -Rf /deploy/loteria-symfony/src
+            rm -Rf /deploy/loteria-symfony/templates
+            rm -Rf /deploy/loteria-symfony/tests
+            rm -Rf /deploy/loteria-symfony/translations
+            rm -Rf /deploy/loteria-symfony/var
+            rm -Rf /deploy/loteria-symfony/vendor
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -53,22 +53,22 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd /deploy/loteria-symfony
-            composer install --no-dev --no-progress -a -o
-            composer dump-env prod
-            rm -R /var/www/loteria/assets
-            rm -R /var/www/loteria/bin
-            rm -R /var/www/loteria/config
-            rm -R /var/www/loteria/database
-            rm -R /var/www/loteria/docker
-            rm -R /var/www/loteria/migrations
-            rm -R /var/www/loteria/nbproject
-            rm -R /var/www/loteria/public
-            rm -R /var/www/loteria/src
-            rm -R /var/www/loteria/templates
-            rm -R /var/www/loteria/tests
-            rm -R /var/www/loteria/translations
-            rm -R /var/www/loteria/var
-            rm -R /var/www/loteria/vendor
+            sudo composer install --no-dev --no-progress -a -o
+            sudo composer dump-env prod
+            sudo rm -Rf /var/www/loteria/assets
+            sudo rm -Rf /var/www/loteria/bin
+            sudo rm -Rf /var/www/loteria/config
+            sudo rm -Rf /var/www/loteria/database
+            sudo rm -Rf /var/www/loteria/docker
+            sudo rm -Rf /var/www/loteria/migrations
+            sudo rm -Rf /var/www/loteria/nbproject
+            sudo rm -Rf /var/www/loteria/public
+            sudo rm -Rf /var/www/loteria/src
+            sudo rm -Rf /var/www/loteria/templates
+            sudo rm -Rf /var/www/loteria/tests
+            sudo rm -Rf /var/www/loteria/translations
+            sudo rm -Rf /var/www/loteria/var
+            sudo rm -Rf /var/www/loteria/vendor
             sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
             cd /var/www/loteria
             APP_ENV=prod APP_DEBUG=0 sudo php bin/console cache:clear
