@@ -55,6 +55,8 @@ jobs:
             cd /deploy/loteria-symfony
             composer install --no-dev --no-progress -a -o
             composer dump-env prod
+            APP_ENV=prod sudo php bin/console cache:warmup
+            APP_ENV=prod sudo php bin/console asset-map:compile
             sudo rm -Rf /var/www/loteria/assets
             sudo rm -Rf /var/www/loteria/bin
             sudo rm -Rf /var/www/loteria/config
@@ -70,7 +72,5 @@ jobs:
             sudo rm -Rf /var/www/loteria/var
             sudo rm -Rf /var/www/loteria/vendor
             sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
-            cd /var/www/loteria
-            APP_ENV=prod sudo php bin/console cache:warmup
-            APP_ENV=prod sudo php bin/console asset-map:compile
+            cd /var/www/loteria           
             sudo chown -R www-data: .
