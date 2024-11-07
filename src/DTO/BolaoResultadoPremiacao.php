@@ -1,10 +1,18 @@
 <?php
 
+/*
+ *     This file is part of Loteria.
+ *
+ *     (c) Leonardo Rodrigues Marques <leonardo@rodriguesmarques.com.br>
+ *
+ *     This source file is subject to the MIT license that is bundled
+ *     with this source code in the file LICENSE.
+ */
+
 namespace App\DTO;
 
 class BolaoResultadoPremiacao
 {
-
     private int $acertos = 0;
     private int $quantidaDeJogos = 0;
     private float $valorPremio = 0.0;
@@ -28,7 +36,7 @@ class BolaoResultadoPremiacao
 
     public function sumQuantidaDeJogos(int $quantidaDeJogos): static
     {
-        $this->quantidaDeJogos = $this->quantidaDeJogos + $quantidaDeJogos;
+        $this->quantidaDeJogos += $quantidaDeJogos;
 
         return $this;
     }

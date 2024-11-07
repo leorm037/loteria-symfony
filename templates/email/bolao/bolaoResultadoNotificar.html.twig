@@ -1,0 +1,115 @@
+{# templates/email/bolao/bolaoResultadoNotificar.html.twig #}
+{% apply inline_css(source('@assets_styles/email.css')) %}
+<h1 class="h1">Resultado do bolão</h1>
+
+
+<table class="table"style="min-width: 640px; width: 80%;">
+    <tr>
+        <td class="table-title bg-verde">Nome do bolão</td>
+        <td>{{ bolao.nome }}</td>
+    </tr>
+    <tr>
+        <td class="table-title bg-verde">Loteria</td>
+        <td>{{ bolao.concurso.loteria.nome }}</td>
+    </tr>
+    <tr>
+        <td class="table-title bg-verde">Concurso número</td>
+        <td class='text-end'>{{ bolao.concurso.numero }}</td>
+    </tr>
+    <tr>
+        <td class="table-title bg-verde">Data da apuração</td>
+        <td class='text-end'>{{ bolao.concurso.apuracao|date('d/m/Y', 'America/Sao_Paulo') }}</td>
+    </tr>
+    <tr>
+        <td class="table-title bg-verde">Dezenas sorteadas</td>
+        <td class='text-end'>{{ bolao.concurso.dezenas|join(', ') }}</td>
+    </tr>
+</table>
+
+<br>
+
+<table class="table"style="min-width: 640px; width: 80%;">
+    <thead>
+        <tr>
+            <th class="table-title text-center bg-verde" colspan='4'>Rateio do prêmio da {{ bolao.concurso.loteria.nome }}</th>
+        </tr>
+        <tr class='table-border-top'>
+            <th class="table-title text-center bg-verde">Acertos</th>
+            <th class="table-title text-center bg-verde">Quantidade de ganhadores</th>
+            <th class="table-title text-center bg-verde">Valor do prémio</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for premio in bolao.concurso.rateioPremio %}
+            <tr>
+                <td class='text-end'>{{ premio.descricaoFaixa }}</td>
+                <td class='text-end'>{{ premio.numeroDeGanhadores|number_format(0, ',', '.') }} ganhador(es)</td>
+                <td class='text-end'>{{ premio.valorPremio|format_currency('BRL') }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+
+<table class="table"style="min-width: 640px; width: 80%;">
+    <thead>
+        <tr>
+            <th class="table-title text-center bg-verde" colspan='4'>Prêmio do bolão</th>
+        </tr>
+        <tr class='table-border-top'>
+            <th class="table-title text-center bg-verde">Acertos</th>
+            <th class="table-title text-center bg-verde">Quantidade de jogos</th>
+            <th class="table-title text-center bg-verde">Valor do prémio</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% set total = 0 %}
+        
+        {% for premio in bolao.concurso.rateioPremio %}
+            
+            {% set qtdApostas = contarApostas(bolao.apostas, premio.descricaoFaixa) %}
+            {% set total = total + (qtdApostas * premio.valorPremio) %}
+            
+            <tr>
+                <td class='text-end'>{{ premio.descricaoFaixa }}</td>
+                <td class='text-end'>{{ qtdApostas }} aposta(s)</td>
+                <td class='text-end'>{{ (qtdApostas * premio.valorPremio)|format_currency('BRL')}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr class="table-border-top">
+            <th class="bg-verde">Total</th>
+            <th class="text-end bg-verde" colspan='2'>{{ total|format_currency('BRL') }}.</th>
+        </tr>
+    </tfoot>
+</table>
+
+<br>
+
+<table class="table"style="min-width: 640px; width: 80%;">
+    <thead>
+        <tr>
+            <th class="table-title text-center bg-verde">Apostas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for key, aposta in bolao.apostas %}
+            {% if key is even %}
+                <tr class="bg-verde-claro">
+                {% else %}
+                <tr>        
+                {% endif %}
+                <td class="text-center">{{ aposta.dezenas|dezenasSorteadas(bolao.concurso.dezenas) }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr class="table-border-top">
+            <th class="text-end bg-verde">{{ bolao.apostas|length }} aposta(s).</th>
+        </tr>
+    </tfoot>
+</table>
+
+{% endapply %}

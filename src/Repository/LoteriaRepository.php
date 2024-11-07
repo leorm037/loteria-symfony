@@ -23,7 +23,6 @@ use Symfony\Component\Uid\Uuid;
  */
 class LoteriaRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Loteria::class);

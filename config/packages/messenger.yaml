@@ -18,6 +18,7 @@ framework:
 
         routing:
             Symfony\Component\Mailer\Messenger\SendEmailMessage: sync
+            App\Message\BolaoResultadoNotificarMessage: sync
             
 when@dev:
     framework:

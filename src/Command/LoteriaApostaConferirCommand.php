@@ -160,7 +160,7 @@ class LoteriaApostaConferirCommand extends Command
 
     private function notificarApostadores(Bolao $bolao): void
     {
-        $apostas = $this->apostaRepository->findAllApostasByUuidBolao($bolao->getUuid());
+        //$apostas = $this->apostaRepository->findAllApostasByUuidBolao($bolao->getUuid());
         $apostadores = $this->apostadorRepository->findByBolao($bolao);
 
         $assunto = \sprintf('Bolão: %s', $bolao->getNome());
@@ -174,9 +174,9 @@ class LoteriaApostaConferirCommand extends Command
                 // ->replyTo('fabien@example.com')
                 // ->priority(Email::PRIORITY_HIGH)
                 ->subject($assunto)
-                ->htmlTemplate('email/bolao/notificarResultadoBolao.html.twig')
+                ->htmlTemplate('email/bolao/bolaoResultadoNotificar.html.twig')
                 ->locale('pt-br')
-                ->context(['bolao' => $bolao, 'apostas' => $apostas])
+                ->context(['bolao' => $bolao])
         ;
 
         if ($bolao->getComprovanteJogos()) {

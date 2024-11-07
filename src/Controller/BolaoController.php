@@ -40,16 +40,29 @@ use Symfony\Component\Uid\Uuid;
 #[Route('/bolao', name: 'app_bolao_')]
 class BolaoController extends AbstractController
 {
+
     public function __construct(
-        private BolaoRepository $bolaoRepository,
-        private ConcursoRepository $concursoRepository,
-        private ApostaComprovanteService $comprovanteService,
-        private ApostaService $apostaService,
-        private ApostaRepository $apostaRepository,
-        private ApostadorRepository $apostadorRepository,
-        private UsuarioRepository $usuarioRepository,
-        private LoteriaRepository $loteriaRepository,
-    ) {
+            private BolaoRepository $bolaoRepository,
+            private ConcursoRepository $concursoRepository,
+            private ApostaComprovanteService $comprovanteService,
+            private ApostaService $apostaService,
+            private ApostaRepository $apostaRepository,
+            private ApostadorRepository $apostadorRepository,
+            private UsuarioRepository $usuarioRepository,
+            private LoteriaRepository $loteriaRepository,
+    )
+    {
+        
+    }
+
+    #[Route('/teste', name: 'teste', methods: ['GET'])]
+    public function teste(Request $request): Response
+    {
+        $bolao = $this->bolaoRepository->find(1);
+        
+        return $this->render('email/bolao/bolaoResultadoNotificar.html.twig', [
+            'bolao' => $bolao
+        ]);
     }
 
     #[Route('/', name: 'index', methods: ['GET'])]
@@ -75,24 +88,24 @@ class BolaoController extends AbstractController
         $usuario = $this->usuarioRepository->findByEmail($usuarioEmail);
 
         $boloes = $this->bolaoRepository->list(
-            $usuario,
-            $registrosPorPaginas,
-            $pagina,
-            $filter_loteria_sanitized,
-            $filter_concurso_sanitized,
-            $filter_bolao_sanitized,
-            $filter_apurado_sanitized
+                $usuario,
+                $registrosPorPaginas,
+                $pagina,
+                $filter_loteria_sanitized,
+                $filter_concurso_sanitized,
+                $filter_bolao_sanitized,
+                $filter_apurado_sanitized
         );
 
         $loterias = $this->loteriaRepository->findAllOrderByNome();
 
         return $this->render('bolao/index.html.twig', [
-            'boloes' => $boloes,
-            'loterias' => $loterias,
-            'filter_loteria' => $filter_loteria,
-            'filter_concurso' => $filter_concurso,
-            'filter_bolao' => $filter_bolao,
-            'filter_apurado' => $filter_apurado,
+                    'boloes' => $boloes,
+                    'loterias' => $loterias,
+                    'filter_loteria' => $filter_loteria,
+                    'filter_concurso' => $filter_concurso,
+                    'filter_bolao' => $filter_bolao,
+                    'filter_apurado' => $filter_apurado,
         ]);
     }
 
@@ -106,8 +119,8 @@ class BolaoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $concurso = $this->cadastraConcursoSeNaoExistir(
-                $bolaoDTO->getLoteria(),
-                $bolaoDTO->getConcursoNumero()
+                    $bolaoDTO->getLoteria(),
+                    $bolaoDTO->getConcursoNumero()
             );
 
             $arquivoComprovante = $form->get('arquivoComprovante')->getData();
@@ -144,7 +157,7 @@ class BolaoController extends AbstractController
         }
 
         return $this->render('bolao/new.html.twig', [
-            'form' => $form,
+                    'form' => $form,
         ]);
     }
 
@@ -170,8 +183,8 @@ class BolaoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $concurso = $this->cadastraConcursoSeNaoExistir(
-                $bolaoDTO->getLoteria(),
-                $bolaoDTO->getConcursoNumero()
+                    $bolaoDTO->getLoteria(),
+                    $bolaoDTO->getConcursoNumero()
             );
 
             $arquivoComprovante = $form->get('arquivoComprovante')->getData();
@@ -186,14 +199,14 @@ class BolaoController extends AbstractController
             if ($arquivoComprovante) {
                 $this->excluirComprovante($bolao->getComprovanteJogos());
                 $bolao->setComprovanteJogos(
-                    $this->anexarComprovante($arquivoComprovante)
+                        $this->anexarComprovante($arquivoComprovante)
                 );
             }
 
             if ($arquivoPlanilhaCsv) {
                 $this->apostaService->excluirPlanilha($bolao->getPlanilhaJogosCsv());
                 $bolao->setPlanilhaJogosCsv(
-                    $this->apostaService->anexarPlanilha($arquivoPlanilhaCsv)
+                        $this->apostaService->anexarPlanilha($arquivoPlanilhaCsv)
                 );
             }
 
@@ -210,7 +223,7 @@ class BolaoController extends AbstractController
         }
 
         return $this->render('bolao/edit.html.twig', [
-            'form' => $form,
+                    'form' => $form,
         ]);
     }
 

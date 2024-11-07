@@ -24,7 +24,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ConcursoRepository extends ServiceEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Concurso::class);

@@ -14,8 +14,11 @@ namespace App\Entity;
 use App\Repository\BolaoRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,6 +26,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 class Bolao extends AbstractEntity
 {
+    public function __construct()
+    {
+        $this->apostas = new ArrayCollection();
+        $this->apostadores = new ArrayCollection();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -58,6 +67,22 @@ class Bolao extends AbstractEntity
 
     #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
     private ?Arquivo $comprovanteJogos = null;
+
+    /**
+     * 
+     * @var Collection<int, Aposta>
+     */
+    #[ORM\OneToMany(targetEntity: Aposta::class, mappedBy: 'bolao')]
+    #[ORM\OrderBy(["quantidadeAcertos" => 'DESC'])]
+    #[Ignore]
+    private Collection $apostas;
+
+    /**
+     * @var Collection<int,Apostador>
+     */
+    #[ORM\OneToMany(targetEntity: Apostador::class, mappedBy: 'bolao')]
+    #[Ignore]
+    private Collection $apostadores;
 
     public function getId(): ?int
     {
@@ -175,6 +200,54 @@ class Bolao extends AbstractEntity
     public function setComprovanteJogos(?Arquivo $comprovanteJogos): static
     {
         $this->comprovanteJogos = $comprovanteJogos;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int,Aposta>
+     */
+    public function getApostas(): Collection
+    {
+        return $this->apostas;
+    }
+
+    /**
+     * @param Collection<int,Aposta> $apostas
+     */
+    public function setApostas(Collection $apostas): static
+    {
+        $this->apostas = $apostas;
+
+        return $this;
+    }
+
+    public function addApota(Aposta $aposta): static
+    {
+        $this->apostas[] = $aposta;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int,Apostador>
+     */
+    public function getApostadores(): Collection
+    {
+        return $this->apostadores;
+    }
+
+    /**
+     * @param Collection<int,Apostador> $apostadores
+     */
+    public function setApostadores(Collection $apostadores): static
+    {
+        return $this;
+    }
+
+    public function addApostador(Apostador $apostador): static
+    {
+        $this->apostadores[] = $apostador;
 
         return $this;
     }

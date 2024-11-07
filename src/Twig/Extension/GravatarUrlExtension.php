@@ -26,8 +26,7 @@ class GravatarUrlExtension extends AbstractExtension
     }
 
     /**
-     * 
-     * @return array
+     * @return array<int,TwigFunction>
      */
     public function getFunctions()
     {
