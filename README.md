@@ -18,6 +18,12 @@ mysqldump loteria loteria concurso --result-file=dump.sql
 
 # GIT
 
+## Salvar credenciais no git
+
+'''
+git config --global credential.helper store
+'''
+
 ## Criar nova branch
 
 Criar nova branch para desenvolvimento de novo recurso.

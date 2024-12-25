@@ -21,18 +21,18 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            rm -Rf /deploy/loteria-symfony/assets
-            rm -Rf /deploy/loteria-symfony/bin
-            rm -Rf /deploy/loteria-symfony/config
-            rm -Rf /deploy/loteria-symfony/database
-            rm -Rf /deploy/loteria-symfony/docker
-            rm -Rf /deploy/loteria-symfony/migrations
-            rm -Rf /deploy/loteria-symfony/nbproject
-            rm -Rf /deploy/loteria-symfony/public
-            rm -Rf /deploy/loteria-symfony/src
-            rm -Rf /deploy/loteria-symfony/templates
-            rm -Rf /deploy/loteria-symfony/tests
-            rm -Rf /deploy/loteria-symfony/translations
+            sudo rm -Rf /deploy/loteria-symfony/assets
+            sudo rm -Rf /deploy/loteria-symfony/bin
+            sudo rm -Rf /deploy/loteria-symfony/config
+            sudo rm -Rf /deploy/loteria-symfony/database
+            sudo rm -Rf /deploy/loteria-symfony/docker
+            sudo rm -Rf /deploy/loteria-symfony/migrations
+            sudo rm -Rf /deploy/loteria-symfony/nbproject
+            sudo rm -Rf /deploy/loteria-symfony/public
+            sudo rm -Rf /deploy/loteria-symfony/src
+            sudo rm -Rf /deploy/loteria-symfony/templates
+            sudo rm -Rf /deploy/loteria-symfony/tests
+            sudo rm -Rf /deploy/loteria-symfony/translations
             sudo rm -Rf /deploy/loteria-symfony/var
             sudo rm -Rf /deploy/loteria-symfony/vendor
       - name: "Copiar código"
