@@ -33,7 +33,7 @@ jobs:
             rm -Rf /deploy/loteria-symfony/templates
             rm -Rf /deploy/loteria-symfony/tests
             rm -Rf /deploy/loteria-symfony/translations
-            rm -Rf /deploy/loteria-symfony/var
+            sudo rm -Rf /deploy/loteria-symfony/var
             sudo rm -Rf /deploy/loteria-symfony/vendor
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
