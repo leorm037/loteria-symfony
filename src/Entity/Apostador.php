@@ -185,7 +185,7 @@ class Apostador extends AbstractEntity
     {
         $this->comprovantePagamento = $comprovantePagamento;
 
-        if (!$this->isCotaPaga() && null !== $this->omprovantePagamento) {
+        if (!$this->isCotaPaga() && null !== $this->comprovantePagamento) {
             $this->setCotaPaga(true);
         }
 

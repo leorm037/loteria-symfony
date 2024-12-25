@@ -24,31 +24,37 @@ use App\Repository\BolaoRepository;
 use App\Security\Voter\ApostadorVoter;
 use App\Service\Upload\ApostadorComprovanteService;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[Route(name: 'app_bolao_apostador_')]
-class BolaoApostadorController extends AbstractController
-{
+class BolaoApostadorController extends AbstractController {
+
     public function __construct(
-        private BolaoRepository $bolaoRepository,
-        private ApostadorRepository $apostadorRepository,
-        private ApostadorComprovanteService $apostadorComprovante,
-        private ArquivoRepository $arquivoRepository,
-        private EntityManagerInterface $entityManager,
+            private BolaoRepository $bolaoRepository,
+            private SluggerInterface $slugger,
+            private ApostadorRepository $apostadorRepository,
+            private ApostadorComprovanteService $apostadorComprovante,
+            private ArquivoRepository $arquivoRepository,
+            private EntityManagerInterface $entityManager,
     ) {
+        
     }
 
     #[Route('/bolao/{uuid}/apostador', name: 'index', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'])]
-    public function index(Request $request): Response
-    {
+    public function index(Request $request): Response {
         $registrosPorPaginas = $request->get('registros-por-pagina', 10);
 
         $pagina = $request->get('pagina', 1);
@@ -62,14 +68,13 @@ class BolaoApostadorController extends AbstractController
         $apostadores = $this->apostadorRepository->findByBolao($bolao, $registrosPorPaginas, $pagina);
 
         return $this->render('bolao_apostador/index.html.twig', [
-            'bolao' => $bolao,
-            'apostadores' => $apostadores,
+                    'bolao' => $bolao,
+                    'apostadores' => $apostadores,
         ]);
     }
 
     #[Route('/bolao/{uuid:bolao}/apostador/new', name: 'new', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
-    public function new(Request $request, Bolao $bolao): Response
-    {
+    public function new(Request $request, Bolao $bolao): Response {
         $this->denyAccessUnlessGranted(ApostadorVoter::NEW, $bolao);
 
         $apostador = new Apostador();
@@ -93,14 +98,13 @@ class BolaoApostadorController extends AbstractController
         }
 
         return $this->render('bolao_apostador/new.html.twig', [
-            'form' => $form,
-            'bolao' => $bolao,
+                    'form' => $form,
+                    'bolao' => $bolao,
         ]);
     }
 
     #[Route('/bolao/apostador/{uuid}/edit', name: 'edit', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
-    public function edit(Request $request): Response
-    {
+    public function edit(Request $request): Response {
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $apostador = $this->apostadorRepository->findByUuid($uuid);
@@ -120,6 +124,7 @@ class BolaoApostadorController extends AbstractController
                 }
 
                 $apostador->setComprovantePagamento($this->arquivarComprovante($arquivoComprovanteJpg));
+                $apostador->setCotaPaga(true);
             }
 
             $this->apostadorRepository->save($apostador, true);
@@ -130,14 +135,13 @@ class BolaoApostadorController extends AbstractController
         }
 
         return $this->render('bolao_apostador/edit.html.twig', [
-            'form' => $form,
-            'bolao' => $apostador->getBolao(),
+                    'form' => $form,
+                    'bolao' => $apostador->getBolao(),
         ]);
     }
 
     #[Route('/bolao/apostador/delete', name: 'delete', methods: ['POST'])]
-    public function delete(Request $request): Response
-    {
+    public function delete(Request $request): Response {
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $apostador = $this->apostadorRepository->findByUuid($uuid);
@@ -165,8 +169,7 @@ class BolaoApostadorController extends AbstractController
     }
 
     #[Route('/bolao/apostador/comprovante/{uuid}/download', name: 'comprovante_download', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
-    public function comprovateDownload(Request $request): BinaryFileResponse
-    {
+    public function comprovateDownload(Request $request): BinaryFileResponse {
         $uuid = Uuid::fromString($request->get('uuid'));
 
         $arquivo = $this->arquivoRepository->findByUuid($uuid);
@@ -179,8 +182,7 @@ class BolaoApostadorController extends AbstractController
     }
 
     #[Route('/bolao/{uuid:bolao}/apostador/importar-apostadores-selecionar-bolao', name: 'importar_apostadores_selecionar_bolao', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
-    public function importarApostadoresSeleconarBolao(Request $request, Bolao $bolao): Response
-    {
+    public function importarApostadoresSeleconarBolao(Request $request, Bolao $bolao): Response {
         $form = $this->createForm(BolaoSelecionarType::class, null, ['bolao' => $bolao]);
         $form->handleRequest($request);
 
@@ -189,24 +191,99 @@ class BolaoApostadorController extends AbstractController
             $bolaoSelecionado = $form->get('bolao')->getData();
 
             return $this->redirectToRoute(
-                'app_bolao_apostador_importar_apostadores_selecionar_apostadores',
-                [
-                    'uuidBolao' => $bolao->getUuid(),
-                    'uuidBolaoSelecionado' => $bolaoSelecionado->getUuid(),
-                ],
-                Response::HTTP_SEE_OTHER
-            );
+                            'app_bolao_apostador_importar_apostadores_selecionar_apostadores',
+                            [
+                                'uuidBolao' => $bolao->getUuid(),
+                                'uuidBolaoSelecionado' => $bolaoSelecionado->getUuid(),
+                            ],
+                            Response::HTTP_SEE_OTHER
+                    );
         }
 
         return $this->render('bolao_apostador/importar-apostadores-selecionar-bolao.html.twig', [
-            'bolao' => $bolao,
-            'form' => $form,
+                    'bolao' => $bolao,
+                    'form' => $form,
         ]);
     }
 
+    #[Route('/bolao/{uuid:bolao}/apostador/exportar', name: 'exportar', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET'])]
+    public function exportar(Bolao $bolao): StreamedResponse {
+        $planilha = new Spreadsheet();
+        $aba = $planilha->getActiveSheet();
+        $aba->setCellValue('A1', 'Nome')
+                ->setCellValue('B1', 'Pago')
+                ->setCellValue('C1', 'Cotas')
+                ->setCellValue('D1', 'Valor (R$)')
+        ;
+
+        $apostadores = $bolao->getApostadores();
+        $valorCota = $bolao->getCotaValor();
+        $numeroApostadores = count($apostadores);
+        $totalApostador = 0;
+        $linha = 0;
+
+        for ($i = 0; $i < $numeroApostadores; $i++) {
+            $linha = $i + 2;
+            $valorApostado = 0;
+
+            /** @var Apostador $apostador */
+            $apostador = $apostadores[$i];
+
+            if ($valorCota > 0) {
+                $valorApostado = $valorCota * $apostador->getCotaQuantidade();
+            }
+
+
+            $aba
+                    ->setCellValue('A' . $linha, $apostador->getNome())
+                    ->setCellValue('B' . $linha, ($apostador->isCotaPaga()) ? 'Sim' : 'Não')
+                    ->setCellValue('C' . $linha, $apostador->getCotaQuantidade())
+                    ->setCellValue('D' . $linha, $valorApostado)
+            ;
+
+            $totalApostador += $valorApostado;
+        }
+
+        $linha++;
+
+        $aba
+                ->setCellValue('A' . $linha, 'Total')
+                ->setCellValue('C' . $linha, $numeroApostadores)
+                ->setCellValue('D' . $linha, $totalApostador)
+        ;
+
+        // Dimensionar colunas
+        $aba->getColumnDimension('A')->setAutoSize(true);
+        $aba->getColumnDimension('B')->setAutoSize(true);
+        $aba->getColumnDimension('C')->setAutoSize(true);
+        $aba->getColumnDimension('D')->setAutoSize(true);
+
+        // Centralizar coluna
+        $aba->getStyle('B:B')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $response = new StreamedResponse(function () use ($planilha) {
+                    $write = new Xlsx($planilha);
+                    $write->save('php://output');
+                });
+
+        $bolaoNome = $bolao->getNome();
+        $bolaoNomeArquivo = $this->slugger->slug($bolaoNome);
+        
+        $timeStamp = date('Y-m-d-His');
+
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
+                        ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                        $bolaoNomeArquivo . '_apostadores_' . $timeStamp . '.xlsx'
+                ));
+
+        $response->headers->set('Cache-Control', 'max-age=0');
+
+        return $response;
+    }
+
     #[Route('/bolao/{uuidBolao}/apostador/importar-apostadores-selecionar-apostadores/{uuidBolaoSelecionado}', name: 'importar_apostadores_selecionar_apostadores', requirements: ['uuid' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}', 'uuidSelecionado' => '[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[0-9a-f]{4}-[0-9a-f]{12}'], methods: ['GET', 'POST'])]
-    public function apostadorImportarSelecionarApostadores(Request $request): Response
-    {
+    public function apostadorImportarSelecionarApostadores(Request $request): Response {
         $uuidBolao = $request->get('uuidBolao');
         $uuidBolaoSelecionado = $request->get('uuidBolaoSelecionado');
 
@@ -240,14 +317,13 @@ class BolaoApostadorController extends AbstractController
         }
 
         return $this->render('bolao_apostador/importar-apostadores-selecionar-apostadores.html.twig', [
-            'bolao' => $bolao,
-            'bolaoSelecionado' => $bolaoSelecionado,
-            'form' => $form,
+                    'bolao' => $bolao,
+                    'bolaoSelecionado' => $bolaoSelecionado,
+                    'form' => $form,
         ]);
     }
 
-    private function arquivarComprovante(?UploadedFile $arquivoComprovanteJpg): ?Arquivo
-    {
+    private function arquivarComprovante(?UploadedFile $arquivoComprovanteJpg): ?Arquivo {
         if (!$arquivoComprovanteJpg) {
             return null;
         }
@@ -265,8 +341,7 @@ class BolaoApostadorController extends AbstractController
         return $arquivo;
     }
 
-    private function deleteComprovante(Arquivo $arquivo): void
-    {
+    private function deleteComprovante(Arquivo $arquivo): void {
         $this->apostadorComprovante->delete($arquivo->getCaminhoNome());
     }
 }
