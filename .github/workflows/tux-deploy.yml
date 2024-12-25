@@ -13,7 +13,6 @@ jobs:
     steps:      
       - name: "Obter o código"
         uses: actions/checkout@v4
-        
       - name: "Limpar diretório de deploy"
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -22,8 +21,20 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            sudo rm -Rf /deploy/loteria-symfony/public/assets
-            
+            sudo rm -Rf /deploy/loteria-symfony/assets
+            sudo rm -Rf /deploy/loteria-symfony/bin
+            sudo rm -Rf /deploy/loteria-symfony/config
+            sudo rm -Rf /deploy/loteria-symfony/database
+            sudo rm -Rf /deploy/loteria-symfony/docker
+            sudo rm -Rf /deploy/loteria-symfony/migrations
+            sudo rm -Rf /deploy/loteria-symfony/nbproject
+            sudo rm -Rf /deploy/loteria-symfony/public
+            sudo rm -Rf /deploy/loteria-symfony/src
+            sudo rm -Rf /deploy/loteria-symfony/templates
+            sudo rm -Rf /deploy/loteria-symfony/tests
+            sudo rm -Rf /deploy/loteria-symfony/translations
+            sudo rm -Rf /deploy/loteria-symfony/var
+            sudo rm -Rf /deploy/loteria-symfony/vendor
       - name: "Copiar código"
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -33,7 +44,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           source: "."
           target: "/deploy/loteria-symfony"
-          
       - name: "Construção da aplicação"
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -47,7 +57,20 @@ jobs:
             composer dump-env prod
             APP_ENV=prod sudo php bin/console cache:warmup
             APP_ENV=prod sudo php bin/console asset-map:compile
-            sudo rm -Rf /var/www/loteria/public/assets
+            sudo rm -Rf /var/www/loteria/assets
+            sudo rm -Rf /var/www/loteria/bin
+            sudo rm -Rf /var/www/loteria/config
+            sudo rm -Rf /var/www/loteria/database
+            sudo rm -Rf /var/www/loteria/docker
+            sudo rm -Rf /var/www/loteria/migrations
+            sudo rm -Rf /var/www/loteria/nbproject
+            sudo rm -Rf /var/www/loteria/public
+            sudo rm -Rf /var/www/loteria/src
+            sudo rm -Rf /var/www/loteria/templates
+            sudo rm -Rf /var/www/loteria/tests
+            sudo rm -Rf /var/www/loteria/translations
+            sudo rm -Rf /var/www/loteria/var
+            sudo rm -Rf /var/www/loteria/vendor
             sudo cp -RTf /deploy/loteria-symfony/ /var/www/loteria
             cd /var/www/loteria           
             sudo chown -R www-data: .
