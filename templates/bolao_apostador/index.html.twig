@@ -17,7 +17,7 @@
                 </div>
                 {% if is_granted('BOLAO_APOSTADOR_NEW', bolao) %}
                     <div>
-                        <a data-loading="true" href="{{ path('app_bolao_apostador_exportar', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
+                        <a href="{{ path('app_bolao_apostador_exportar', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
                             <i class="bi bi-cloud-download-fill" title="Exportar apostadores para planilha"></i> <span class="d-none d-sm-inline-block">Exportar</span>
                         </a>
                         <a data-loading="true" href="{{ path('app_bolao_apostador_importar_apostadores_selecionar_bolao', {'uuid': bolao.uuid}) }}" class="btn btn-secondary btn-sm bg-gradient shadow-sm">
