@@ -81,6 +81,7 @@ class Bolao extends AbstractEntity
      * @var Collection<int,Apostador>
      */
     #[ORM\OneToMany(targetEntity: Apostador::class, mappedBy: 'bolao')]
+    #[OrderBy(["nome" => "ASC"])]
     #[Ignore]
     private Collection $apostadores;
 
