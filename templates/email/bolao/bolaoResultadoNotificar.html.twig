@@ -60,7 +60,7 @@
         <tr class='table-border-top'>
             <th class="table-title text-center bg-verde">Acertos</th>
             <th class="table-title text-center bg-verde">Quantidade de jogos</th>
-            <th class="table-title text-center bg-verde">Valor do prémio</th>
+            {# <th class="table-title text-center bg-verde">Valor do prémio</th> #}
         </tr>
     </thead>
     <tbody>
@@ -74,16 +74,18 @@
             <tr>
                 <td class='text-end'>{{ premio.descricaoFaixa }}</td>
                 <td class='text-end'>{{ qtdApostas }} aposta(s)</td>
-                <td class='text-end'>{{ (qtdApostas * premio.valorPremio)|format_currency('BRL')}}</td>
+                {# <td class='text-end'>{{ (qtdApostas * premio.valorPremio)|format_currency('BRL')}}</td> #}
             </tr>
         {% endfor %}
     </tbody>
+    {#
     <tfoot>
         <tr class="table-border-top">
             <th class="bg-verde">Total</th>
             <th class="text-end bg-verde" colspan='2'>{{ total|format_currency('BRL') }}.</th>
         </tr>
     </tfoot>
+    #}
 </table>
 
 <br>

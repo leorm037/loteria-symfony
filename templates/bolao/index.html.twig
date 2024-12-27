@@ -81,7 +81,7 @@
         </div>
 
         <div class="card-body">
-            <div class="table-responsive">
+            {#<div class="table-responsive">#}
                 <table class="table table-striped table-hover table-bordered">
                     <thead>
                         <tr>
@@ -121,6 +121,54 @@
                                 <td class="text-end d-none d-xl-table-cell">{{ item.apostadores|number_format(0, ',', '.') }}</td>
                                 <td class="text-end d-none d-xxl-table-cell">{{ item.apostasMax|number_format(0, ',', '.') }}</td>
                                 <td class="text-center p-0 align-middle d-print-none">
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                          Ações
+                                        </button>
+                                        <ul class="dropdown-menu shadow">
+                                            <li>
+                                                <a data-loading="true" title="Apostas" class="dropdown-item" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}">
+                                                    <i class="bi bi-ticket-perforated-fill"></i>  <span class="d-none d-xxl-inline-block">Apostas</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a data-loading="true" title="Apostadores" class="dropdown-item" href="{{ path('app_bolao_apostador_index', {'uuid': bolao.uuid}) }}">
+                                                    <i class="bi bi-people-fill"></i>  <span class="d-none d-xxl-inline-block">Apostadores</span>
+                                                </a>
+                                            </li>
+                                            {% if bolao.comprovanteJogos %}
+                                                <li>
+                                                    <a role="button" title="Comprovante de apostas" target="_blank" class="dropdown-item" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
+                                                        <i class="bi bi-filetype-jpg"></i>  <span class="d-none d-xxl-inline-block">Comprovante</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% if bolao.planilhaJogosCsv %}
+                                                <li>
+                                                    <a role="button" title="Planilha de apostas" target="_blank" class="dropdown-item" href="{{ path('app_bolao_planilha_download', {'uuid': bolao.uuid}) }}">
+                                                        <i class="bi bi-filetype-csv"></i>  <span class="d-none d-xxl-inline-block">Planilha</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                            {% if is_granted('BOLAO_EDIT', bolao) %}
+                                                <li>
+                                                    <a data-loading="true" title="Alterar" class="dropdown-item" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
+                                                        <i class="bi bi-pencil-fill"></i>  <span class="d-none d-xxl-inline-block">Alterar</span>
+                                                    </a>
+                                                </li>    
+                                            {% endif %}
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <button title="Excluir" type="button" title="Excluir" class="dropdown-item text-bg-danger" data-delete="{{ bolao.uuid }}">
+                                                    <i class="bi bi-trash"></i>  <span class="d-none d-xxl-inline-block">Excluir</span>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    
+                                    
+                                    {#
                                     <a data-loading="true" title="Apostas" role="button" class="btn btn-sm shadow-sm btn-secondary" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}">
                                         <i class="bi bi-ticket-perforated-fill"></i>  <span class="d-none d-xxl-inline-block">Apostas</span>
                                     </a>
@@ -148,6 +196,7 @@
                                     <button title="Excluir" type="button" title="Excluir" class="btn btn-sm shadow-sm btn-danger" data-delete="{{ bolao.uuid }}">
                                         <i class="bi bi-trash"></i>  <span class="d-none d-xxl-inline-block">Excluir</span>
                                     </button>
+                                    #}
                                 </td>
                             </tr>
                         {% else %}
@@ -157,7 +206,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>
+            {#</div>#}
         </div>
 
         {{ include('_tableFooter.html.twig', {'paginacao': boloes}) }}
