@@ -110,15 +110,15 @@
                             {% set bolao = item[0] %}
                             <tr>
                                 <td>{{ bolao.nome }}</td>
-                                <td>{{ bolao.concurso.loteria.nome }}</td>
-                                <td class="text-end">{{ bolao.concurso.numero }}</td>
+                                <td class="d-none d-xl-table-cell">{{ bolao.concurso.loteria.nome }}</td>
+                                <td class="text-end d-none d-xxl-table-cell">{{ bolao.concurso.numero }}</td>
                                 {% if bolao.concurso.apuracao %}
-                                    <td class="text-end">{{ bolao.concurso.apuracao|date('d/m/Y') }}</td>
+                                    <td class="text-end d-none d-xl-table-cell">{{ bolao.concurso.apuracao|date('d/m/Y') }}</td>
                                 {% else %}
-                                    <td class="text-start">Não apurado</td>
+                                    <td class="text-start d-none d-xl-table-cell">Não apurado</td>
                                 {% endif %}
-                                <td class="text-end d-none d-xl-table-cell">{{ item.apostas|number_format(0, ',', '.') }}</td>
-                                <td class="text-end d-none d-xl-table-cell">{{ item.apostadores|number_format(0, ',', '.') }}</td>
+                                <td class="text-end d-none d-xxl-table-cell">{{ item.apostas|number_format(0, ',', '.') }}</td>
+                                <td class="text-end d-none d-xxl-table-cell">{{ item.apostadores|number_format(0, ',', '.') }}</td>
                                 <td class="text-end d-none d-xxl-table-cell">{{ item.apostasMax|number_format(0, ',', '.') }}</td>
                                 <td class="text-center p-0 align-middle d-print-none">
                                     <div class="dropdown">
@@ -139,7 +139,7 @@
                                             {% if bolao.comprovanteJogos %}
                                                 <li>
                                                     <a role="button" title="Comprovante de apostas" target="_blank" class="dropdown-item" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
-                                                        <i class="bi bi-filetype-jpg"></i>  <span class="d-none d-xxl-inline-block">Comprovante</span>
+                                                        <i class="bi bi-filetype-pdf"></i>  <span class="d-none d-xxl-inline-block">Comprovante</span>
                                                     </a>
                                                 </li>
                                             {% endif %}

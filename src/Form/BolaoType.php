@@ -90,7 +90,7 @@ class BolaoType extends AbstractType
                     'mapped' => false,
                     'required' => false,
                     'attr' => [
-                        'accept' => 'application/pdf,application/x-pdf,image/png,image/jpeg',
+                        'accept' => 'application/pdf,application/x-pdf',
                     ],
                     'constraints' => [
                         new File([
