@@ -128,39 +128,39 @@
                                         <ul class="dropdown-menu shadow">
                                             <li>
                                                 <a data-loading="true" title="Apostas" class="dropdown-item" href="{{ path('app_bolao_apostas_index', {'uuid': bolao.uuid}) }}">
-                                                    <i class="bi bi-ticket-perforated-fill"></i>  <span class="d-none d-xxl-inline-block">Apostas</span>
+                                                    <i class="bi bi-ticket-perforated-fill"></i> Apostas
                                                 </a>
                                             </li>
                                             <li>
                                                 <a data-loading="true" title="Apostadores" class="dropdown-item" href="{{ path('app_bolao_apostador_index', {'uuid': bolao.uuid}) }}">
-                                                    <i class="bi bi-people-fill"></i>  <span class="d-none d-xxl-inline-block">Apostadores</span>
+                                                    <i class="bi bi-people-fill"></i> Apostadores
                                                 </a>
                                             </li>
                                             {% if bolao.comprovanteJogos %}
                                                 <li>
                                                     <a role="button" title="Comprovante de apostas" target="_blank" class="dropdown-item" href="{{ path('app_bolao_comprovante_download', {'uuid': bolao.uuid}) }}">
-                                                        <i class="bi bi-filetype-pdf"></i>  <span class="d-none d-xxl-inline-block">Comprovante</span>
+                                                        <i class="bi bi-filetype-pdf"></i> Comprovante
                                                     </a>
                                                 </li>
                                             {% endif %}
                                             {% if bolao.planilhaJogosCsv %}
                                                 <li>
                                                     <a role="button" title="Planilha de apostas" target="_blank" class="dropdown-item" href="{{ path('app_bolao_planilha_download', {'uuid': bolao.uuid}) }}">
-                                                        <i class="bi bi-filetype-csv"></i>  <span class="d-none d-xxl-inline-block">Planilha</span>
+                                                        <i class="bi bi-filetype-csv"></i> Planilha
                                                     </a>
                                                 </li>
                                             {% endif %}
                                             {% if is_granted('BOLAO_EDIT', bolao) %}
                                                 <li>
                                                     <a data-loading="true" title="Alterar" class="dropdown-item" href="{{ path('app_bolao_edit', {'uuid': bolao.uuid}) }}">
-                                                        <i class="bi bi-pencil-fill"></i>  <span class="d-none d-xxl-inline-block">Alterar</span>
+                                                        <i class="bi bi-pencil-fill"></i> Alterar
                                                     </a>
                                                 </li>    
                                             {% endif %}
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <button title="Excluir" type="button" title="Excluir" class="dropdown-item text-bg-danger" data-delete="{{ bolao.uuid }}">
-                                                    <i class="bi bi-trash"></i>  <span class="d-none d-xxl-inline-block">Excluir</span>
+                                                    <i class="bi bi-trash"></i> Excluir
                                                 </button>
                                             </li>
                                         </ul>
